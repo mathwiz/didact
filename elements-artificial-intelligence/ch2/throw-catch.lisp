@@ -32,6 +32,3 @@
                          (manipulate)) 
     (turn-off-motor)))
 
-
-(print "Loaded")
-
