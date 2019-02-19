@@ -4,12 +4,12 @@ y = sin(theta);
 
 plot(x,y)
 
-axis('equal');
+axis('square');
 
 xlabel('x')
 
 ylabel('y')
 
-title('Circle of unit radius')
+title('Unit Circle')
 
-% print
+% Save as jpeg
