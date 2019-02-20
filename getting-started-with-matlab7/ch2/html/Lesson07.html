@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Publishing Reports - Example</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] },
+  TeX: { equationNumbers: { autoNumber: 'all' } }
+});
+</script>
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+<style>
+body > * {
+  max-width: 42em;
+}
+body {
+  font-family: "Roboto Condensed", sans-serif;
+  padding-left: 7.5em;
+  padding-right: 7.5em;
+}
+pre, code {
+  max-width: 50em;
+  font-family: monospace;
+}
+pre.oct-code {
+  border: 1px solid Grey;
+  padding: 5px;
+}
+pre.oct-code-output {
+  margin-left: 2em;
+}
+span.comment {
+  color: ForestGreen;
+}
+span.keyword {
+  color: Blue;
+}
+span.string {
+  color: DarkOrchid;
+}
+footer {
+  margin-top: 2em;
+  font-size: 80%;
+}
+a, a:visited {
+  color: Blue;
+}
+h2 {
+  font-family: "Roboto Condensed", serif;
+  margin-top: 1.5em;
+}
+h2 a, h2 a:visited {
+  color: Black;
+}
+</style>
+
+</head>
+<body>
+<h1>Publishing Reports - Example</h1>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#node1">Simple Spiral Plot</a></li>
+<li><a href="#node2">Create vectors theta and r</a></li>
+<li><a href="#node3">Plot theta vs r in polar</a></li>
+<li><a href="#node4">For publishing</a></li>
+</ul>
+<h2><a id="node1">Simple Spiral Plot</a></h2>
+<p>Let a spiral be given by
+r(t) = exp(-theta/10), 0&lt;=theta&lt;=10*pi)</p>
+<h2><a id="node2">Create vectors theta and r</a></h2>
+<pre class="oct-code">theta = linspace(0, 10*pi, 200);
+r = exp(-theta/10);</pre>
+<h2><a id="node3">Plot theta vs r in polar</a></h2>
+<pre class="oct-code">polar(theta, r)</pre>
+
+<pre class="oct-code-output">error: 'theta' undefined near line 3 column 7
+	in:
+
+polar(theta, r)
+</pre>
+<h2><a id="node4">For publishing</a></h2>
+<p>publish('Lesson07.m', 'html')
+open html/Lesson07.html</p>
+
+<footer>
+<hr>
+<a href="https://www.octave.org">Published with GNU Octave 4.4.0</a>
+</footer>
+<!--
+##### SOURCE BEGIN #####
+%% Publishing Reports - Example
+%% Simple Spiral Plot
+% Let a spiral be given by
+% r(t) = exp(-theta/10), 0<=theta<=10*pi)
+
+%% Create vectors theta and r
+theta = linspace(0, 10*pi, 200);
+r = exp(-theta/10);
+
+%% Plot theta vs r in polar
+polar(theta, r)
+
+%% For publishing
+% publish('Lesson07.m', 'html')
+% open html/Lesson07.html
+##### SOURCE END #####
+-->
+</body>
+</html>
