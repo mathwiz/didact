@@ -11,6 +11,8 @@
 
 (defvar all-ranks '(2 3 4 5 6 7 8 9 10 jack queen king ace))
 
+;;; Card Rank
+
 (defun rank (card)
   (first card))
 
@@ -44,3 +46,6 @@
     (if (funcall lower-card card1 card2)
         card2
         card1)))
+
+(defun high-card (hand)
+  (reduce #'higher-rank-p hand))
