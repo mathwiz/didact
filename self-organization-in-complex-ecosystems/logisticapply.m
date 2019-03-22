@@ -1,0 +1,1 @@
+function VAL = logisticapply(x0, b, iterations) 	acc = zeros(1,iterations);	acc(1) = x0;	for it = 1:(iterations-1)		acc(it+1) = b * acc(it) * (1-acc(it));	end  VAL = acc;endfunction
