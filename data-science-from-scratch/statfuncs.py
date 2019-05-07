@@ -1,5 +1,6 @@
 import math
 from collections import Counter
+import vecmat
 
 def mean(x):
 	return sum(x) / len(x)
@@ -33,4 +34,29 @@ def mode(x):
 	counts = Counter(x)
 	max_count = max(counts.values())
 	return [x_i for x_i, count in counts.items() if count == max_count]
+
+
+def data_range(x):
+	return max(x) - min(x)
+
+
+def de_mean(x):
+	"""
+	translate x by subtracting its mean (so the result has mean 0)
+	"""
+	x_bar = mean(x)
+	return [x_i - x_bar for x_i in x]
+
+
+def variance(x):
+	"""
+	assumes x has n >= 2
+	"""	
+	n  = len(x)
+	deviations = de_mean(x)
+	return vecmat.sum_of_squares(deviations) / (n - 1)
+
+
+
+
 
