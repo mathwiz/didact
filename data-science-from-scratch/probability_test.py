@@ -24,7 +24,11 @@ class MyTestCase(unittest.TestCase):
         np.testing.assert_almost_equal(funcs.normal_cdf(0), .5, 2)
         np.testing.assert_almost_equal(funcs.normal_cdf(-2), .03, 2)
 
+    def test5(self):
+        self.assertTrue(funcs.bernoulli_trial(.5) == 0 or funcs.bernoulli_trial(.5) == 1)
 
+    def test6(self):
+        self.assertTrue(funcs.binomial(1000, .5) > 400)
 
 
 if __name__ == '__main__':
