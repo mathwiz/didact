@@ -71,3 +71,12 @@ def make_hist(p, n, num_points):
 	plt.show()
 	return None
 
+
+def normal_approximation_to_binomial(n, p):
+	return p*n, math.sqrt(p*(1 - p)*n)
+
+
+# function defined as alias to existing function
+normal_probability_below = normal_cdf
+
+
