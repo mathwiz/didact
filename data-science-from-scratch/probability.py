@@ -92,4 +92,25 @@ def normal_probability_outside(lo, hi, mu=0, sigma=1):
 	return 1 - normal_probability_between(lo, hi, mu, sigma)
 
 
+def normal_upper_bound(probability, mu=0, sigma=1):
+	"""
+	return the z for which P(Z <= z) = probability
+	"""
+	return inverse_normal_cdf(probability, mu, sigma)
+
+
+def normal_lower_bound(probability, mu=0, sigma=1):
+	"""
+	return the z for which P(Z >= z) = probability
+	"""
+	return inverse_normal_cdf(1 - probability, mu, sigma)
+
+
+def normal_two_sided_bounds(probability, mu=0, sigma=1):
+	tail_probability = (1 - probability) / 2
+	upper_bound = normal_lower_bound(tail_probability, mu, sigma)
+	lower_bound = normal_upper_bound(tail_probability, mu, sigma)
+	return lower_bound, upper_bound
+
+
 
