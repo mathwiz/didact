@@ -34,9 +34,5 @@ class MyTestCase(unittest.TestCase):
         np.testing.assert_almost_equal(hi_99, 2.58, 2)
 
 
-    # def test6(self):
-    #     self.assertTrue(funcs.binomial(1000, .5) > 400)
-
-
 if __name__ == '__main__':
     unittest.main()
