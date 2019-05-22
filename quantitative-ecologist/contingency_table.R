@@ -8,3 +8,6 @@ data
 
 table(data)
 
+library(vcd)
+mosaic(table(data))
+
