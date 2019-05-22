@@ -46,6 +46,11 @@ class MyTestCase(unittest.TestCase):
         print(extreme_value_count / iterations)
 
 
+    def test7(self):
+        np.testing.assert_almost_equal(funcs.upper_p_value(1.69), .05, 2)
+        np.testing.assert_almost_equal(funcs.lower_p_value(1.69), .95, 2)
+
+
 if __name__ == '__main__':
     unittest.main()
 

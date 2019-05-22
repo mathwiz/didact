@@ -117,4 +117,8 @@ def two_sided_p_value(x, mu=0, sigma=1):
 	return 2 * (normal_probability_above(x, mu, sigma) if x >= mu else normal_probability_below(x, mu, sigma))
 
 
-	
+# more aliases
+upper_p_value = normal_probability_above	
+lower_p_value = normal_probability_below
+
+
