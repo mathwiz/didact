@@ -1,4 +1,5 @@
 import unittest
+import random
 import numpy as np
 import probability as funcs
 
@@ -34,5 +35,17 @@ class MyTestCase(unittest.TestCase):
         np.testing.assert_almost_equal(hi_99, 2.58, 2)
 
 
+    def test6(self):
+        iterations = 10000
+        extreme_value_count = 0
+        for _ in range(iterations):
+            num_heads = sum((1 if random.random() < 0.5 else 0) for _ in range(1000))
+            if num_heads >= 530 or num_heads <= 470:
+                extreme_value_count += 1
+
+        print(extreme_value_count / iterations)
+
+
 if __name__ == '__main__':
     unittest.main()
+

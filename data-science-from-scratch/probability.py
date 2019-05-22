@@ -113,4 +113,8 @@ def normal_two_sided_bounds(probability, mu=0, sigma=1):
 	return lower_bound, upper_bound
 
 
+def two_sided_p_value(x, mu=0, sigma=1):
+	return 2 * (normal_probability_above(x, mu, sigma) if x >= mu else normal_probability_below(x, mu, sigma))
 
+
+	
