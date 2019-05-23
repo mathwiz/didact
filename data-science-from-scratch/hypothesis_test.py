@@ -1,3 +1,4 @@
+import math
 import unittest
 import random
 import numpy as np
@@ -35,20 +36,19 @@ class MyTestCase(unittest.TestCase):
         np.testing.assert_almost_equal(hi_99, 2.58, 2)
 
 
-    def test6(self):
-        iterations = 10000
-        extreme_value_count = 0
-        for _ in range(iterations):
-            num_heads = sum((1 if random.random() < 0.5 else 0) for _ in range(1000))
-            if num_heads >= 530 or num_heads <= 470:
-                extreme_value_count += 1
-
-        print(extreme_value_count / iterations)
-
-
     def test7(self):
         np.testing.assert_almost_equal(funcs.upper_p_value(1.69), .05, 2)
         np.testing.assert_almost_equal(funcs.lower_p_value(1.69), .95, 2)
+
+
+    def test8(self):
+        p_hat = 525 / 1000.0
+        mu = p_hat
+        sigma = math.sqrt(p_hat*(1 - p_hat) / 1000)
+        lower, upper = funcs.normal_two_sided_bounds(0.95, mu, sigma)
+        np.testing.assert_almost_equal(lower, .49, 2)
+        np.testing.assert_almost_equal(upper, .56, 2)
+        
 
 
 if __name__ == '__main__':
