@@ -14,7 +14,8 @@ cm(40)
 
 
                                         # Examples of PDF, CDF, Quantiles, Random generators
-                                        # for Normal distribution
+
+                                        # Normal distribution
 
 dnorm(-2, 0, 1) # x, mu, sigma
 pnorm(0, 0, 1) # x, mu, sigma
@@ -37,4 +38,15 @@ runif(10, -1, 1) # n, min, max
 ## equivalent formulations for discrete
 round(runif(10, -1-.5, 1+.5))
 sample(-1:1, replace=T, 10)
+
+                                        # Binomial distribution
+
+choose(8, 4)
+factorial(8) / (factorial(4) * factorial(4))
+
+?dbinom
+dbinom(x=4, size=8, p=.8)
+pbinom(q=c(.25, .5, .75), size=8, p=.8)
+qbinom(p=.3, prob=.8, size=8, lower.tail=TRUE)
+rbinom(n=4, size=8, prob=.8)
 
