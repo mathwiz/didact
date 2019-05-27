@@ -50,3 +50,42 @@ pbinom(q=c(.25, .5, .75), size=8, p=.8)
 qbinom(p=.3, prob=.8, size=8, lower.tail=TRUE)
 rbinom(n=4, size=8, prob=.8)
 
+                                        # Multinomial distribution
+
+?dmultinom
+p<- c(0.4, 0.2, 0.1, 0.1, 0.15, 0.05)
+x<- c(.1, .1, .2, .2, .1, .1)
+sum(x)
+dmultinom(x=6, size=6, prob=.25) # not sure what this does
+rmultinom(1, 120, p)
+
+                                        # Poisson distribution
+
+?dpois
+dpois(x=16, lambda=12) 
+ppois(q=16, lambda=12) # lower tail
+qpois(p=.25, lambda=12) # lower tail
+rpois(n=10, lambda=12) 
+
+                                        # Discrete waiting distributions
+
+                                        # Geometric distribution
+                                        # Interp.: Number of trials until next success
+
+?dgeom
+failures = 4 # number of failures in Bernoulli trials before success
+psuccess = .25 # probability of success
+prob= .75 # probability of success
+dgeom(x=failures, prob=psuccess)
+pgeom(q=failures, prob=psuccess, lower.tail=TRUE)
+qgeom(p=prob, prob=psuccess, lower.tail=TRUE)
+rgeom(n=10, prob=psuccess)
+
+                                        # Negative binomal distribution
+                                        # Interp.: Number of trials until k successes
+
+?dnbinom
+
+
+
+
