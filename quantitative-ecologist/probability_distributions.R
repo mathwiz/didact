@@ -129,9 +129,33 @@ qgamma(p=.25, shape=lambda, lower.tail = TRUE, log.p = FALSE)
 rgamma(n=10, shape=lambda)
 
 
+                                        # Bayesian probabilities
+
+                                        # Beta and Dirichlet distributions
+
+?dbeta
+alpha <- 9
+beta <- 5
+dbeta(x=.75, shape1=alpha, shape2=beta, ncp = 0, log = FALSE)
+pbeta(q=.75, shape1=alpha, shape2=beta, ncp = 0, lower.tail = TRUE, log.p = FALSE)
+qbeta(p=.5, shape1=alpha, shape2=beta, ncp = 0, lower.tail = TRUE, log.p = FALSE)
+rbeta(n=10, shape1=alpha, shape2=beta, ncp = 0)
+
+library(gtools)
+?rdirichlet
+alpha <- 1
+ddirichlet(x=.75, alpha=alpha)
+rdirichlet(n=10, alpha=alpha)
 
 
 
+                                        # t distribution
+
+?dt
+dt(x=0, df=10, log = FALSE)
+pt(q=1, df=10, lower.tail = TRUE, log.p = FALSE)
+qt(p=.05, df=10, lower.tail = TRUE, log.p = FALSE)
+rt(n=10, df=10)
 
 
 
