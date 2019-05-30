@@ -158,4 +158,15 @@ qt(p=.05, df=10, lower.tail = TRUE, log.p = FALSE)
 rt(n=10, df=10)
 
 
+                                        # Log-normal distribution
+
+?dlnorm
+dlnorm(x=2, meanlog = 0, sdlog = 1, log = FALSE)
+plnorm(q=2, meanlog = 0, sdlog = 1, lower.tail = TRUE, log.p = FALSE)
+qlnorm(p=.05, meanlog = 0, sdlog = 1, lower.tail = TRUE, log.p = FALSE)
+rlnorm(n=10, meanlog = 0, sdlog = 1)
+
+
+                                        # Chi-square distribution
+
 
