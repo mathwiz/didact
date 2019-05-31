@@ -169,4 +169,11 @@ rlnorm(n=10, meanlog = 0, sdlog = 1)
 
                                         # Chi-square distribution
 
+?dchisq
+dchisq(x=6.5, df=10, ncp = 0, log = FALSE)
+pchisq(q=6.5, df=10, ncp = 0, lower.tail = TRUE, log.p = FALSE)
+qchisq(p=.25, df=10, ncp = 0, lower.tail = TRUE, log.p = FALSE)
+rchisq(n=10, df=10, ncp = 0)
+
+
 
