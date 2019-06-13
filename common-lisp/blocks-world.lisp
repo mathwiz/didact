@@ -35,3 +35,15 @@
 
 (defun match-element (a b)
   (or (equal b '?) (equal a b)))
+
+(defun match-triple (a b)
+  "More complicated than necessary to illustrate techniques."
+  (every (lambda (x) x) (mapcar (lambda (x) (match-element (first x) (second x))) (mapcar #'list a b))))
+
+(defun fetch (pat)
+  (remove-if-not (lambda (x) (match-triple x pat)) DATABASE))
+
+
+
+
+
