@@ -43,7 +43,14 @@
 (defun fetch (pat)
   (remove-if-not (lambda (x) (match-triple x pat)) DATABASE))
 
+(fetch '(b4 shape ?))
+(fetch '(? shape brick))
+(list (fetch '(b3 ? b2)) (fetch '(b2 ? b3)))
+(fetch '(b4 ? ?))
+(fetch '(? color ?))
 
+(defun color-pat (x)
+  (list x 'color '?))
 
-
-
+(defun supporters (x)
+  (mapcar #'first (fetch (list '? 'supports x))))
