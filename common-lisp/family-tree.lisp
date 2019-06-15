@@ -49,4 +49,10 @@
                          family)))
 
 (defun siblings (x)
-  nil)
+  (remove-if #'(lambda (n) (equal n x))
+             (union (children (father x))
+                    (children (mother x)))))
+
+(defun mapunion (fn xs)
+  (union (mapcar fn xs)))
+
