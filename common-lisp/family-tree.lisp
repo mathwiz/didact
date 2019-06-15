@@ -43,9 +43,10 @@
 
 (defun children (x)
   (mapcar #'first
-   (append
-    (remove-if-not #'(lambda (n) (equal (third n) x)) family)
-    (remove-if-not #'(lambda (n) (equal (second n) x)) family)
-   )))
+          (remove-if-not #'(lambda (n)
+                             (or (equal (second n) x)
+                                 (equal (third n) x)))
+                         family)))
 
-
+(defun siblings (x)
+  nil)
