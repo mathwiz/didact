@@ -54,5 +54,5 @@
                     (children (mother x)))))
 
 (defun mapunion (fn xs)
-  (union (mapcar fn xs)))
+  (reduce #'union (mapcar fn xs)))
 
