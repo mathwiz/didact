@@ -7,5 +7,9 @@
 (print (children 'arthur))
 (print (siblings 'bruce))
 (print (siblings 'zelda))
+(print (siblings 'wanda))
 (print (mapunion #'rest '((1 a b c) (2 e c j) (3 f a b c d))))
+(print (grandparents 'tamara))
+(print (cousins 'tamara))
+(print (cousins 'robert))
 

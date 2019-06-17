@@ -42,11 +42,11 @@
   (remove-if-not #'(lambda (x) x) (rest (assoc x family))))
 
 (defun children (x)
-  (mapcar #'first
-          (remove-if-not #'(lambda (n)
-                             (or (equal (second n) x)
-                                 (equal (third n) x)))
-                         family)))
+  (cond ((null x) nil)
+        (t (mapcar #'first
+                   (remove-if-not #'(lambda (n) (or (equal (second n) x)
+                                                    (equal (third n) x)))
+                                  family)))))
 
 (defun siblings (x)
   (remove-if #'(lambda (n) (equal n x))
@@ -56,3 +56,8 @@
 (defun mapunion (fn xs)
   (reduce #'union (mapcar fn xs)))
 
+(defun grandparents (x)
+  (mapunion #'parents (parents x)))
+
+(defun cousins (x)
+  (mapunion #'children (mapunion #'siblings (parents x))))
