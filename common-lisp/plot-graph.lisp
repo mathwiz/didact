@@ -4,7 +4,24 @@
         ((= n 0) (format t ""))
         (t (format t " ") (space-over (- n 1)))))
 
+
+(defun plot-one-point (plotting-string y-val)
+  (space-over y-val)
+  (format t plotting-string))
+
+
+(defun plot-points (plotting-string points)
+  (mapcar #'(lambda (x) 
+              (plot-one-point plotting-string x)
+              (format t "~%")) 
+          points))
+
+
 (defun test (n) 
   (format t "-%>>>") 
   (space-over n) 
   (format t "<<<"))
+
+
+(defun test2 (points)
+  (plot-points "< >" points))
