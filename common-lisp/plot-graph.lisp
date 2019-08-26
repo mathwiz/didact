@@ -17,6 +17,11 @@
           points))
 
 
+(defun generate (start stop)
+  (cond ((> start stop) nil)
+        (t (cons start (generate (+ start 1) stop)))))
+
+
 (defun test (n) 
   (format t "-%>>>") 
   (space-over n) 
