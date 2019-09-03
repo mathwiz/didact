@@ -22,6 +22,9 @@
         (t (cons start (generate (+ start 1) stop)))))
 
 
+(defun make-graph ()
+  )
+
 (defun test (n) 
   (format t "-%>>>") 
   (space-over n) 
