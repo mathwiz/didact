@@ -54,10 +54,14 @@
                     (children (mother x)))))
 
 (defun mapunion (fn xs)
-  (reduce #'union (mapcar fn xs)))
+  (cond ((null xs) nil)
+	(t (reduce #'union (mapcar fn xs)))))
 
 (defun grandparents (x)
   (mapunion #'parents (parents x)))
 
 (defun cousins (x)
   (mapunion #'children (mapunion #'siblings (parents x))))
+
+(defun descended-from (x)
+  nil)

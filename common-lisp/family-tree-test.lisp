@@ -12,4 +12,5 @@
 (print (grandparents 'tamara))
 (print (cousins 'tamara))
 (print (cousins 'robert))
+(print (cousins 'julie))
 
