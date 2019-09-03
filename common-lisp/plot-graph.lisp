@@ -22,8 +22,23 @@
         (t (cons start (generate (+ start 1) stop)))))
 
 
+(defun square (x)
+  (* x x))
+
+
 (defun make-graph ()
-  )
+  (format t "Function to graph? ")
+  (let ((func (read)))
+    (format t "Starting x value? ")
+    (let ((start (read)))
+      (format t "Ending x value? ")
+      (let ((end (read)))
+	(format t "Plotting string? ")
+	(let ((plot (read)))
+	  (plot-points plot (mapcar func (generate start end))))))
+    (format t "~%")))
+
+
 
 (defun test (n) 
   (format t "-%>>>") 
