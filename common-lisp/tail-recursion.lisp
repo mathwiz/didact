@@ -1,0 +1,5 @@
+(defun count-up (n)
+  (defun recurse (cnt)
+    (cond ((> cnt n) nil)
+	  (t (cons cnt (recurse (+ cnt 1))))))
+  (recurse 1))
