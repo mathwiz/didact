@@ -5,5 +5,12 @@ int main(void)
 {
     double miles, kms;
     
-    printf("Enter the distance")    
+    printf("Enter the distance in miles> ");
+    scanf("%lf", &miles);
+    
+    kms = KMS_PER_MILE * miles;
+    
+    printf("That equals %f kilometers.\n", kms);
+    
+    return 0;
 }
