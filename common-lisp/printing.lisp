@@ -8,16 +8,17 @@
 	 (print-close))
 	(t (format t "~S" objs))))
 
+
+;; Broken
 (defun hybrid-prin1 (objs)
-  (cond ((null objs) (format t ""))
+  (cond ((null objs) (format t "NIL"))
 	((listp objs)
 	 (print-open)
 	 (hybrid-prin1 (car objs))
-	 (print-dot)
-	 (hybrid-prin1 (cdr objs))
-	 (print-close))
+	 (cond ((null (cdr objs)) (format t ")"))
+	       ((listp (cdr objs)) (hybrid-prin1 (cdr objs)))
+	       (t (format t " . ~S" (cdr objs)))))
 	(t (format t "~S" objs))))
-
 
 
 (defun print-open ()
