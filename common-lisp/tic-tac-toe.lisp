@@ -120,3 +120,23 @@
 	pos
 	(pick-random-empty-position board))))
 
+(defun make-three-in-a-row (board)
+  (let ((pos (win-or-block board (* 2 *computer*))))
+    (and pos (list pos "make three in a row"))))
+
+(defun block-opponent-win (board)
+  (let ((pos (win-or-block board (* 2 *opponent*))))
+    (and pos (list pos "block opponent"))))
+
+(defun win-or-block (board target-sum)
+  (let ((triplet (find-if #'(lambda (trip)
+			      (equal (sum-triplet board trip)
+				     target-sum))
+			  *triplets*)))
+    (when triplet (find-empty-position board triplet))))
+
+(defun find-empty-position (board squares)
+  (find-if #'(lambda (pos)
+	       (zerop (nth pos board)))
+	   squares))
+
