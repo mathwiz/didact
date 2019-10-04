@@ -160,7 +160,7 @@
 				 board
 				 (+ (* 2 player-to-block)
 				    player))))
-    (when (and triplet (= (fifth board) player))
+    (when (and triplet (= (sixth board) player))
       (find-empty-position
        board
        *sides*))))
@@ -170,7 +170,7 @@
 				 board
 				 (+ (* 2 player-to-block)
 				    player))))
-    (when (and triplet (= (fifth board) player-to-block))
+    (when (and triplet (= (sixth board) player-to-block))
       (find-empty-position
        board
        *corners*))))
