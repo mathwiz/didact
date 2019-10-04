@@ -119,6 +119,7 @@
   (or (make-three-in-a-row board)
       (block-opponent-win board)
       (block-squeeze-play board)
+      (block-two-on-one board)
       (random-move-strategy board)))
 
 (defun random-move-strategy (board)
@@ -143,6 +144,10 @@
   (let ((pos (find-squeeze-play board *computer* *opponent*)))
     (and pos (list pos "block squeeze play"))))
 
+(defun block-two-on-one (board)
+  (let ((pos (find-two-on-one board *computer* *opponent*)))
+    (and pos (list pos "block two on one"))))
+
 (defun win-or-block (board target-sum)
   (let ((triplet (find-if #'(lambda (trip)
 			      (equal (sum-triplet board trip)
@@ -155,10 +160,20 @@
 				 board
 				 (+ (* 2 player-to-block)
 				    player))))
-    (when (if (and triplet (= (second triplet) 5)) triplet nil)
+    (when (and triplet (= (fifth board) player))
       (find-empty-position
        board
        *sides*))))
+
+(defun find-two-on-one (board player player-to-block)
+  (let* ((triplet (strategic-diagonal
+				 board
+				 (+ (* 2 player-to-block)
+				    player))))
+    (when (and triplet (= (fifth board) player-to-block))
+      (find-empty-position
+       board
+       *corners*))))
 
 (defun diagonal-p (trip)
   (and (or (and (= (first trip) 1) (= (third trip) 9))
