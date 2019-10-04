@@ -52,6 +52,14 @@
 	(1 4 7) (2 5 8) (3 6 9)
 	(1 5 9) (3 5 7)))
 
+(defvar *corners*)
+(setf *corners*
+      '(1 3 7 9))
+
+(defvar *sides*)
+(setf *sides*
+      '(2 4 6 8))
+
 (defun sum-triplet (board triplet)
   (+ (nth (first triplet) board)
      (nth (second triplet) board)
@@ -108,7 +116,10 @@
 	  (t (opponent-move new-board)))))
 
 (defun choose-best-move (board)
-  (random-move-strategy board))
+  (or (make-three-in-a-row board)
+      (block-opponent-win board)
+      (block-squeeze-play board)
+      (random-move-strategy board)))
 
 (defun random-move-strategy (board)
   (list (pick-random-empty-position board)
@@ -128,6 +139,10 @@
   (let ((pos (win-or-block board (* 2 *opponent*))))
     (and pos (list pos "block opponent"))))
 
+(defun block-squeeze-play (board)
+  (let ((pos (find-squeeze-play board *computer* *opponent*)))
+    (and pos (list pos "block squeeze play"))))
+
 (defun win-or-block (board target-sum)
   (let ((triplet (find-if #'(lambda (trip)
 			      (equal (sum-triplet board trip)
@@ -135,8 +150,34 @@
 			  *triplets*)))
     (when triplet (find-empty-position board triplet))))
 
+(defun find-squeeze-play (board player player-to-block)
+  (let* ((triplet (strategic-diagonal
+				 board
+				 (+ (* 2 player-to-block)
+				    player))))
+    (when (if (and triplet (= (second triplet) 5)) triplet nil)
+      (find-empty-position
+       board
+       *sides*))))
+
+(defun diagonal-p (trip)
+  (and (or (and (= (first trip) 1) (= (third trip) 9))
+	   (and (= (first trip) 3) (= (third trip) 7)))
+       (= (second trip) 5)))
+
+(defun strategic-diagonal (board target-sum)
+  (find-if #'(lambda (trip)
+	       (and (equal (sum-triplet board trip)
+			   target-sum)
+		    (diagonal-p trip)))
+	   *triplets*))
+
 (defun find-empty-position (board squares)
   (find-if #'(lambda (pos)
 	       (zerop (nth pos board)))
 	   squares))
+
+(defun block-squeeze-play (board)
+  (let ((pos (block-squeezes board 2)))
+    (and (pos (list pos "block squeeze play")))))
 
