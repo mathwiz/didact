@@ -191,8 +191,3 @@
   (find-if #'(lambda (pos)
 	       (zerop (nth pos board)))
 	   squares))
-
-(defun block-squeeze-play (board)
-  (let ((pos (block-squeezes board 2)))
-    (and (pos (list pos "block squeeze play")))))
-
