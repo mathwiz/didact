@@ -120,6 +120,7 @@
       (block-opponent-win board)
       (block-squeeze-play board)
       (block-two-on-one board)
+      (make-diagonal-play)
       (random-move-strategy board)))
 
 (defun random-move-strategy (board)
@@ -135,6 +136,10 @@
 (defun make-three-in-a-row (board)
   (let ((pos (win-or-block board (* 2 *computer*))))
     (and pos (list pos "make three in a row"))))
+
+(defun make-diagonal-play (board)
+  (let ((pos (setup-diagonal board *opponent* *computer*)))
+    (and pos (list pos "make a diagonal play"))))
 
 (defun block-opponent-win (board)
   (let ((pos (win-or-block board (* 2 *opponent*))))
@@ -155,8 +160,13 @@
 			  *triplets*)))
     (when triplet (find-empty-position board triplet))))
 
+(defun setup-diagonal (board player player-to-block)
+  (let ((squeeze (find-squeeze-play board player player-to-block))
+	(two-on-one (find-two-on-one board player player-to-block)))
+    (or squeeze two-on-one)))
+
 (defun find-squeeze-play (board player player-to-block)
-  (let* ((triplet (strategic-diagonal
+  (let ((triplet (strategic-diagonal
 				 board
 				 (+ (* 2 player-to-block)
 				    player))))
@@ -166,7 +176,7 @@
        *sides*))))
 
 (defun find-two-on-one (board player player-to-block)
-  (let* ((triplet (strategic-diagonal
+  (let ((triplet (strategic-diagonal
 				 board
 				 (+ (* 2 player-to-block)
 				    player))))
