@@ -120,7 +120,8 @@
       (block-opponent-win board)
       (block-squeeze-play board)
       (block-two-on-one board)
-      (make-diagonal-play)
+      (make-diagonal-play board)
+      (center-or-corner-strategy board)
       (random-move-strategy board)))
 
 (defun random-move-strategy (board)
@@ -132,6 +133,17 @@
     (if (zerop (nth pos board))
 	pos
 	(pick-random-empty-position board))))
+
+
+(defun center-or-corner-strategy (board)
+  (list (favor-center-or-corner board)
+	"favor center or corner"))
+
+(defun favor-center-or-corner (board)
+  (let ((corner (find-if #'(lambda (pos) (zerop (nth pos board))) *corners*)))
+    (if (zerop (nth 5 board))
+	5
+	corner)))
 
 (defun make-three-in-a-row (board)
   (let ((pos (win-or-block board (* 2 *computer*))))
