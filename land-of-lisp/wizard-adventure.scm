@@ -16,4 +16,9 @@
 
 (define (describe-path edge)
   `(there is a ,(caddr edge) going ,(cadr edge) from here.))
+  
+(define (describe-paths location edges)
+  (apply append (map describe-path (cdr (assoc location edges)))))
+
+
 
