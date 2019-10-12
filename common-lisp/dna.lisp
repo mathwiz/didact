@@ -5,3 +5,9 @@
 	((equal b 'c) 'g)
 	(t (error "Bad argument"))))
 
+(defun complement-strand (strand)
+  (mapcar #'complement-base strand))
+
+(defun make-double (strand)
+  (mapcar #'(lambda (x) (list x (complement-base x))) strand))
+
