@@ -9,3 +9,5 @@
 			       acc
 			       (cons (car tree) acc)))))))
     (rec tree nil)))
+
+;; Usage: (prune #'evenp '(1 2 (3 (4 5) 6) 7 8 (9)))

@@ -9,3 +9,6 @@
 	      (setq wins obj
 		    max score))))
 	(values wins max))))
+
+;; Usage: (most #'length '((a b) (a b c) (a) (e f g)))
+
