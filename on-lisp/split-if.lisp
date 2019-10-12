@@ -1,0 +1,6 @@
+(defun split-if (fn lst)
+  (let ((acc nil))
+    (do ((src lst (cdr src)))
+	((or (null src) (funcall fn (car src)))
+	 (values (nreverse acc) src))
+      (push (car src) acc))))

@@ -1,0 +1,6 @@
+(defun filter (fn lst)
+  (let ((acc nil))
+    (dolist (x lst)
+      (let ((val (funcall fn x)))
+	(if val (push val acc))))
+    (nreverse acc)))
