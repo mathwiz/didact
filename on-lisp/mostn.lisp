@@ -10,5 +10,7 @@
 			 result (list obj)))
 		  ((= score max)
 		   (push obj result)))))
-	(values (nreverse result)))))
+	(values (nreverse result) max))))
+
+;; Usage: (mostn #'length '((a b) (a b c) (a) (e f g)))
 
