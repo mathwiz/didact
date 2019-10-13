@@ -5,6 +5,7 @@
                  (attic (you are in the attic.
                           there is a giant welding torch in the corner.))))
 
+
 (define (describe-location location nodes)
   (cadr (assoc location nodes)))
   
@@ -14,11 +15,32 @@
                   (garden (living-room east door))
                   (attic (living-room downstairs ladder))))
 
+
 (define (describe-path edge)
   `(there is a ,(caddr edge) going ,(cadr edge) from here.))
+
   
 (define (describe-paths location edges)
   (apply append (map describe-path (cdr (assoc location edges)))))
 
 
+(define *objects* '(whiskey bucket frog chain))
 
+
+(define *object-locations* '((whiskey living-room)
+                              (bucket living-room)
+                              (chain garden)
+                              (frog garden)))
+
+
+(define (objects-at loc objs obj-locs)
+  (let ((at-loc? (lambda (obj)
+                   (eq? (cadr (assoc obj obj-locs)) loc))))
+	(filter at-loc? objs)))
+
+
+(define (describe-objects loc objs obj-loc)
+  (let ((describe-obj (lambda (obj)
+                        `(you see a ,obj on the floor.))))
+	(apply append (map describe-obj (objects-at loc objs obj-loc)))))	                             	                   
+                                                
