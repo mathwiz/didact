@@ -5,9 +5,34 @@
 	((equal b 'c) 'g)
 	(t (error "Bad argument"))))
 
-(defun complement-strand (strand)
+(defun complement-strand-applicative (strand)
   (mapcar #'complement-base strand))
 
-(defun make-double (strand)
+(defun complement-strand (strand)
+  (let ((result nil))
+    (dolist (x (reverse strand) result)
+      (push (complement-base x) result))))
+
+(defun make-double-applicative (strand)
   (mapcar #'(lambda (x) (list x (complement-base x))) strand))
+
+(defun make-double (strand)
+  (let ((result nil))
+    (dolist (x (reverse strand) result)
+      (push (list x (complement-base x)) result))))
+
+(defun count-bases (dna)
+  (let ((na 0)
+	(nt 0)
+	(ng 0)
+	(nc 0))
+    (do* ((d dna (rest d)))
+	((null d) (list (list 'a na)
+			(list 't nt)
+			(list 'g ng)
+			(list 'c nc)))
+      (cond ((eq (car d) 'a) (incf na 1))
+	    ((eq (car d) 't) (incf nt 1))
+	    ((eq (car d) 'g) (incf ng 1))
+	    ((eq (car d) 'c) (incf nc 1))))))
 
