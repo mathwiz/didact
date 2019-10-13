@@ -41,3 +41,10 @@
 	    ((eq (car d) 'g) (incf ng 1))
 	    ((eq (car d) 'c) (incf nc 1))))))
 
+(defun prefixp (a b)
+  (do ((ai a (rest ai))
+       (bi b (rest bi)))
+      ((or (null ai) (null bi))
+       (return (not ai)))
+  (unless (eq (car ai) (car bi))
+    (return nil))))
