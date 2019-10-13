@@ -4,3 +4,5 @@
 	 (cond ((funcall test y first) nil)
 	       ((funcall test x first) lst)
 	       (t (before x y (cdr lst) :test test))))))
+
+;; Usage: (before 'a 'b '(a))
