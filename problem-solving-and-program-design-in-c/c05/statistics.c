@@ -27,7 +27,7 @@ void produce_output(int n, double sum, double mean, double var, double sd)
     printf("%6d %16.3f %16.3f %16.3f %16.3f \n", n, sum, mean, var, sd);
 }
 
-int main(int argc, const char * argv[])
+int stats()
 {
     int n = 0;
     double sum = 0.0;
@@ -49,4 +49,9 @@ int main(int argc, const char * argv[])
     produce_output(n, sum, mean, variance, sqrt(variance));
     
     return 0;
+}
+
+int main(int argc, const char * argv[])
+{
+    return stats();
 }
