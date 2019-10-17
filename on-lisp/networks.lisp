@@ -72,5 +72,26 @@
 (defnode 'penny 'lincoln)
 
 
-;; Run the question example
+;; Run Versions 1 and 2
 (run-node 'people)
+
+
+;; Run Version 3
+(defvar n)
+(setq n (compile-net 'people))
+(funcall n)
+
+
+;; CL-USER> (funcall n)
+;; Is the person a man?
+;; >> yes
+;; Is he living?
+;; >> no
+;; Was he American?
+;; >> yes
+;; Is he on a coin?
+;; >> yes
+;; Is the coin a penny
+;; >> yes
+
+LINCOLN
