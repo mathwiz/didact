@@ -41,6 +41,7 @@
 	    ((eq (car d) 'g) (incf ng 1))
 	    ((eq (car d) 'c) (incf nc 1))))))
 
+
 (defun prefixp (a b)
   (do ((ai a (rest ai))
        (bi b (rest bi)))
@@ -48,3 +49,15 @@
        (return (not ai)))
   (unless (eq (car ai) (car bi))
     (return nil))))
+
+
+(defun appearsp (a b)
+  (cond ((null a) t)
+	(t
+	 (do ((bi b (rest bi)))
+	     ((null bi)
+	      (return nil))
+	   (when (prefixp a bi)
+	     (return t))))))
+
+
