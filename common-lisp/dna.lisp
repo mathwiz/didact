@@ -61,13 +61,13 @@
 	     (return t))))))
 
 
-; does not handle case where matches but does not cover
+; does not handle case where matches but does not cover exactly
 (defun coverp (a b)
   (do ((ai a (if (null (rest ai))
 		 a
 		 (rest ai)))
        (bi b (rest bi)))
-      ((null bi) (return t))
+      ((null bi) (return (eq ai a)))
   (unless (eq (car ai) (car bi))
     (return nil))))
 
