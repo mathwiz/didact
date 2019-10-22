@@ -44,3 +44,17 @@
                         `(you see a ,obj on the floor.))))
 	(apply append (map describe-obj (objects-at loc objs obj-loc)))))	                             	                   
                                                 
+
+(define *location* 'living-room)
+
+
+(define (look)
+  (append 
+    (describe-location *location* *nodes*)
+    (describe-paths *location* *edges*)
+    (describe-objects *location* *objects* *object-locations*)))
+    
+
+
+(define (walk direction)
+  (let ((next (find 
