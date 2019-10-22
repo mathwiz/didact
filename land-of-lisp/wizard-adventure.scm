@@ -57,4 +57,13 @@
 
 
 (define (walk direction)
-  (let ((next (find 
+  (let* ((valid-edges (cdr (assoc *location* *edges*)))
+         (next (filter (lambda (it) (eq? direction (cadr it))) valid-edges)))
+    (if (null? next)
+      '(you cannot go that way)
+      (begin
+        (set! *location* (caar next))
+        (look)))))
+
+
+                                
