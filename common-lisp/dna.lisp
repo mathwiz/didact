@@ -5,21 +5,26 @@
 	((equal b 'c) 'g)
 	(t (error "Bad argument"))))
 
+
 (defun complement-strand-applicative (strand)
   (mapcar #'complement-base strand))
+
 
 (defun complement-strand (strand)
   (let ((result nil))
     (dolist (x (reverse strand) result)
       (push (complement-base x) result))))
 
+
 (defun make-double-applicative (strand)
   (mapcar #'(lambda (x) (list x (complement-base x))) strand))
+
 
 (defun make-double (strand)
   (let ((result nil))
     (dolist (x (reverse strand) result)
       (push (list x (complement-base x)) result))))
+
 
 (defun count-bases (nucleic-acid)
   (let ((all-bases (cond ((null nucleic-acid) nil)
@@ -61,7 +66,6 @@
 	     (return t))))))
 
 
-; does not handle case where matches but does not cover exactly
 (defun coverp (a b)
   (do ((ai a (if (null (rest ai))
 		 a
@@ -72,3 +76,31 @@
     (return nil))))
 
 
+(defun prefix (n strand)
+  (do ((counter n (1- counter))
+       (s strand (rest s))
+       (pre nil (cons (car s) pre)))
+      ((eq counter 0) (return (reverse pre)))
+    (when (null s)
+      (return (reverse pre)))))
+
+
+(defun kernel (strand)
+  (if (null strand)
+      nil
+      (let ((len (length strand)))
+	(do* ((n 1 (1+ n))
+	      (cand (prefix n strand) (prefix n strand)))
+	     ((eq n len) (return cand))
+	  (when (coverp cand strand)
+	    (return cand))))))
+
+
+(defun draw-dna (strand)
+  (let ((backbone "-----")
+	(connect  "  |  ")
+	(hydrogen "  .  "))
+    (do ((s (car strand) (rest s))
+	 (back backbone (concatenate 'string back backbone)))
+	((null s) (return nil))
+      nil)))
