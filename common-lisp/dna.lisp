@@ -96,11 +96,28 @@
 	    (return cand))))))
 
 
+(defun base-as-string (b)
+  (concatenate 'string "  " (symbol-name b) "  "))
+
+
 (defun draw-dna (strand)
-  (let ((backbone "-----")
-	(connect  "  |  ")
-	(hydrogen "  .  "))
-    (do ((s (car strand) (rest s))
-	 (back backbone (concatenate 'string back backbone)))
-	((null s) (return nil))
-      nil)))
+  (if (null strand)
+      nil
+      (let ((backbone "-----")
+	    (connect  "  !  ")
+	    (hydrogen "  .  ")
+	    (len (length strand)))
+	(do* ((n 1 (1+ n))
+	      (s strand (rest s))
+	      (main (base-as-string (car s))
+		    (concatenate 'string main (base-as-string (car s))))
+	      (comp (base-as-string (complement-base (car s)))
+		    (concatenate 'string comp (base-as-string (complement-base (car s)))))
+	      (back backbone (concatenate 'string back backbone))
+	      (conn connect  (concatenate 'string conn connect))
+	      (hydr hydrogen (concatenate 'string hydr hydrogen)))
+	     ((eq n len) (progn
+			   (format t "~A~%~A~%~A~%~A~%~A~%~A~%~A~%~A~%"
+				   back conn main hydr hydr comp conn back)
+			   (return nil)))
+	  ))))
