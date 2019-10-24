@@ -4,12 +4,21 @@
        ((> ,var limit))
      ,@body))
 
-(defmacro for (var start stop &body body)
+
+(defmacro better-for (var start stop &body body)
   `(do ((b #'(lambda (,var) ,@body))
 	(count ,start (1+ count))
 	(limit ,stop))
        ((> count limit))
      (funcall b count)))
+
+
+(defmacro for (var start stop &body body)
+  (let ((gstop (gensym)))
+      `(do ((,var ,start (1+ ,var))
+	    (,gstop ,stop))
+	   ((> ,var ,gstop))
+	 ,@body)))
 
 
 ;; Testing
