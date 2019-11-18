@@ -35,8 +35,12 @@
 
 ;; take user input
 (defun process-node (name)
-  (progn
-    nil))
+  (let ((node (find-node name)))
+    (cond ((null node) (progn (format t "Node ~S not found" name) nil))
+          (t (let* ((q (node-question node))
+                    (a (progn (format t "~S " q) (read))))
+               (cond ((eq a 'y) (node-yes-case node))
+                     (t (node-no-case node))))))))
 
 
 ;;
@@ -61,6 +65,16 @@
           'engine-will-run-briefly
           'engine-wont-run)
 
+(add-node 'engine-will-run-briefly
+          "Does it stall when cold but not when warm?"
+          'idle-rpm-speed
+          "Take your car to your dealer.")
+
+(add-node 'idle-rpm-speed
+          "Is the idle speed at least 700 rpm?"
+          'out-of-ideas
+          "Adjust idle speed")
+
 (add-node 'engine-wont-run
           "Is there gas in the tank?"
           'gas-in-tank
@@ -70,6 +84,11 @@
           "Do you hear any sound when you turn the key?"
           'sound-when-turn-key
           'no-sound-when-turn-key)
+
+(add-node 'sound-when-turn-key
+          "Have you ever serviced the alternator?"
+          "Take your car to the dealer."
+          "Test your alternator.")
 
 (add-node 'no-sound-when-turn-key
           "Is the battery voltage low?"
@@ -82,7 +101,11 @@
           'battery-cables-good)
 
 (add-node 'battery-cables-good
-          "?"
-          "."
-          "You are screwed.")
+          "Are you out of ideas?"
+          'out-of-ideas
+          "Check your best idea.")
 
+(add-node 'out-of-ideas
+          "Are out of ideas?"
+          "Take your car to your dealer."
+          "Think some more.")
