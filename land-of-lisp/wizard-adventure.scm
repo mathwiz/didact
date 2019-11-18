@@ -66,4 +66,7 @@
         (look)))))
 
 
-                                
+(define (pickup object)
+  (cond (1 2)
+    	(2 3)
+    	(else '(you cannot get that))))
