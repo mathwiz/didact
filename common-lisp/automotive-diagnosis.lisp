@@ -39,25 +39,35 @@
     (cond ((null node) (progn (format t "Node ~S not found" name) nil))
           (t (let* ((q (node-question node))
                     (a (progn (format t "~S " q) (read))))
-               (cond ((eq a 'y) (node-yes-case node))
+               (cond ((equal a 'y) (node-yes-case node))
                      (t (node-no-case node))))))))
 
 
-;;
+;; main program loop
 (defun run ()
-  nil)
-
+  (labels ((rec (current-node)
+                (let ((response (process-node current-node)))
+                  (cond ((null response) nil)
+                        ((stringp response) (progn (format t "~S" response) nil))
+                        (t (rec response))))))
+    (rec 'start)))
+  
+  
 
 ;; add a node through prompts
 (defun user-add ()
-  nil)
+  (let ((name (progn (format t "Enter the name: ") (read)))
+        (quest (progn (format t "Enter the question (enclose in double quotes): ") (read)))
+        (yes (progn (format t "Enter the yes case (double quote if string): ") (read)))
+        (no (progn (format t "Enter the no case (double quote if string): ") (read))))
+    (add-node name quest yes no)))
 
 
 ;; testing
 (init)
 (add-node 'start
           "Does the engine turn over?"
-          'engine=turns-over
+          'engine-turns-over
           'engine-wont-turn-over)
 
 (add-node 'engine-turns-over
@@ -101,11 +111,11 @@
           'battery-cables-good)
 
 (add-node 'battery-cables-good
-          "Are you out of ideas?"
-          'out-of-ideas
-          "Check your best idea.")
+          "Do you have an idea?"
+          "Check your best idea."
+          'out-of-ideas)
 
 (add-node 'out-of-ideas
-          "Are out of ideas?"
+          "Are you out of ideas?"
           "Take your car to your dealer."
           "Think some more.")
