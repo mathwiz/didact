@@ -35,7 +35,8 @@
 
 ;; take user input
 (defun process-node (name)
-  nil)
+  (progn
+    nil))
 
 
 ;;
