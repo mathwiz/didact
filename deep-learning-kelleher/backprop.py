@@ -9,7 +9,7 @@ class Network:
         self.layers = layer_sizes
 
     def run(self):
-        pass
+        return "nothing yet"
 
 
 def relu(val):
