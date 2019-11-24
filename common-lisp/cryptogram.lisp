@@ -5,44 +5,37 @@
 
 (defvar *encipher-table*)
 (defvar *decipher-table*)
+(defvar *spacer*)
 
 (setf *encipher-table* (make-hash-table))
 (setf *decipher-table* (make-hash-table))
-
-
-(defun sym-to-char (s)
-  s)
-
-
-(defun char-to-sym (c)
-  c)
+(setf *spacer* "-----------------")
 
 
 (defun make-substitution (clear crypt)
-  (let ((x nil))
-    (progn
-      (setf (gethash crypt *decipher-table*) clear)
-      (setf (gethash clear *encipher-table*) crypt))
-  ))
+  (progn
+    (setf (gethash crypt *decipher-table*) clear)
+    (setf (gethash clear *encipher-table*) crypt)))
 
 
 (defun undo-substitution (letter)
-  (let ((x nil))
-    (progn
-      (setf (gethash letter *decipher-table*) nil)
-      (setf (gethash letter *encipher-table*) nil))
-  ))
+  (progn
+    (setf (gethash letter *decipher-table*) nil)
+    (setf (gethash letter *encipher-table*) nil)))
 
 
 (defun clear ()
   (progn
     (clrhash *decipher-table*)
-    (clrhash *encipher-table*)
-    ))
+    (clrhash *encipher-table*)))
 
 
 (defun decipher (c)
   (gethash c *decipher-table*))
+
+
+(defun enciphered (c)
+  (gethash c *encipher-table*))
 
 
 (defun replace-char (new old pos str)
@@ -58,13 +51,13 @@
                (replacement (decipher c)))
           (if replacement
               (setf result (replace-char replacement #\space i result)))
-          ))
-       result)
+      ))
+      result)
     ))
 
 
 (defun show-line (s)
-  (format t "~S~%~S" s (decipher-string s)))
+  (format t "~%~S~%~S" s (decipher-string s)))
 
 
 (defun show-text (cryptogram)
@@ -76,13 +69,39 @@
   (char-downcase (char (format nil "~A" x) 0)))
 
 
+(defun read-letter ()
+  (let ((in (read)))
+    (cond ((or (equal 'undo in) (equal 'end in)) in)
+          (t (get-first-char in)))))
+
+
+(defun sub-letter (c)
+  (let ((d (decipher c)))
+    (if d
+      (format t "'~A' has already been deciphered as '~A'!" c d)
+      (progn
+        (format t "What does '~A' decipher to? " c)
+        (try-substitution (read-letter) c)
+        ))
+    ))
+
+
+(defun try-substitution (clear crypt)
+  (let ((existing (enciphered clear)))
+    (if existing
+        (format t "But '~A' already deciphers to '~A'!" existing clear)
+      (make-substitution clear crypt))
+  ))
+
+
 (defun solve (text)
-  (let ((spacer "-----------------"))
-    (progn
-      (format t spacer)
-      (format t spacer)
-      text
-      )))
+  (progn
+    (format t *spacer*)
+    (show-text text)
+    (format t *spacer*)
+    (format t "prompt")
+    ))
+
 
 
 ;; Testing
@@ -105,14 +124,15 @@
   (let* ((c (char test-crypt i))
          (r (decipher c)))
     (progn
-      (print c)
-      (print r)
+;      (print c)
+;      (print r)
       (if r
           (print (setf test-result (replace-char r #\space i test-result))))
       )
     ))
 
-(print test-result)
-
 (print (decipher-string test-crypt))
+
+(print "deciphered")
+(show-text crypto-text)
 
