@@ -1,6 +1,6 @@
 (setf crypto-text
       '("zj ze kljjls jf slapzi ezvlij pib kl jufwxuj p hffv jupi jf"
-        "enlpo pip slafml pvv bfwkj"))
+        "enlpo pib slafml pvv bfwkj"))
 
 
 (defvar *encipher-table*)
