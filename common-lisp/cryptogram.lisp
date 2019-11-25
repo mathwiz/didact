@@ -114,8 +114,18 @@
     (format t "~%~A" *spacer*)
     (progn
       (format t "~%Substitute which letter? ")
-      (let ((c (read-letter)))
-        c))
+      (let ((in (read-letter)))
+        (cond ((characterp in)
+               (sub-letter in))
+              ((equal in 'undo)
+               (undo-letter))
+              ((equal in 'end)
+               t)
+              (t (format t "Invalid input")))
+        (if (equal in 'end)
+          t
+          (solve text))
+      ))
   ))
 
 
