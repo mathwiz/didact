@@ -9,10 +9,10 @@
 
 (setf *encipher-table* (make-hash-table))
 (setf *decipher-table* (make-hash-table))
-(setf *spacer* "-----------------")
+(setf *spacer* "------------------------")
 
 
-(defun make-substitution (clear crypt)
+(defun make-substitution (crypt clear)
   (progn
     (setf (gethash crypt *decipher-table*) clear)
     (setf (gethash clear *encipher-table*) crypt)))
@@ -21,7 +21,8 @@
 (defun undo-substitution (letter)
   (progn
     (setf (gethash letter *decipher-table*) nil)
-    (setf (gethash letter *encipher-table*) nil)))
+    (setf (gethash letter *encipher-table*) nil)
+    letter))
 
 
 (defun clear ()
@@ -53,11 +54,11 @@
               (setf result (replace-char replacement #\space i result)))
       ))
       result)
-    ))
+  ))
 
 
 (defun show-line (s)
-  (format t "~%~S~%~S" s (decipher-string s)))
+  (format t "~%~A~%~A" s (decipher-string s)))
 
 
 (defun show-text (cryptogram)
@@ -90,17 +91,32 @@
   (let ((existing (enciphered clear)))
     (if existing
         (format t "But '~A' already deciphers to '~A'!" existing clear)
-      (make-substitution clear crypt))
-  ))
+      (make-substitution crypt clear))
+    ))
+
+
+(defun undo-letter ()
+  (progn
+    (format t "Undo which letter? ")
+    (let* ((c (read-letter))
+           (d (decipher c)))
+      (if d
+          (undo-substitution c)
+        (progn
+          (format t "'~A' does not have a decipherment." c)
+          nil)))))
 
 
 (defun solve (text)
   (progn
-    (format t *spacer*)
+    (format t "~%~A" *spacer*)
     (show-text text)
-    (format t *spacer*)
-    (format t "prompt")
-    ))
+    (format t "~%~A" *spacer*)
+    (progn
+      (format t "~%Substitute which letter? ")
+      (let ((c (read-letter)))
+        c))
+  ))
 
 
 
@@ -120,6 +136,7 @@
 
 (print test-crypt)
 (print test-result)
+
 (dotimes (i (length test-crypt))
   (let* ((c (char test-crypt i))
          (r (decipher c)))
@@ -135,4 +152,9 @@
 
 (print "deciphered")
 (show-text crypto-text)
+
+;; Run
+(clear)
+(make-substitution #\p #\a)
+(make-substitution #\z #\i)
 
