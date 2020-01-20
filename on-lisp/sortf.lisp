@@ -1,0 +1,23 @@
+(defmacro sortf (op &rest places)
+  (let* ((meths (mapcar #'(lambda (p)
+                            (multiple-value-list
+                             (get-setf-method p)))
+                        places))
+         (temps (apply #'append (mapcar #'third meths))))
+    `(let* ,(mapcar #'list
+                    (mapcan #'(lambda (m)
+                                (append (first m)
+                                        (third m)))
+                            meths)
+                    (mapcan #'(lambda (m)
+                                (append (second m)
+                                        (list (fifth m))))
+                            meths))
+       ,@ (mapcon #'(lambda (rest)
+                      (mapcar
+                       #'(lambda (arg)
+                           `(unless (,op ,(car rest) ,arg)
+                              (rotatef ,(car rest) ,arg)))
+                       (cdr rest)))
+                  temps)
+          ,@ (mapcar #'fourth meths))))
