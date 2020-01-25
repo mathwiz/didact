@@ -53,3 +53,10 @@
 (aif (long-calc 8)
      (foo it))
 
+
+;; Another test
+(format t "~%Factorial of ~F = ~F"
+        6
+        (aif 6
+             (funcall (alambda (x) (if (= x 0) 1 (* x (self (1- x))))) it)))
+
