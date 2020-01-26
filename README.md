@@ -2,6 +2,12 @@
 The book backlog
 
 Code in
-* Groovy
-* Clojure
-* Common Lisp?
+* R
+* Octave
+* Common Lisp
+* Ruby
+* Python
+* Schemne
+* C
+* C++
+
