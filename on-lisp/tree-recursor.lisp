@@ -1,3 +1,5 @@
+(load "single.lisp")
+
 (defun ttrav (rec &optional (base #'identity))
   (labels ((self (tree)
 	     (if (atom tree)
