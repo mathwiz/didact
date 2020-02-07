@@ -9,3 +9,10 @@
                     `(abbrev ,@pair))
                 (group names 2))))
 
+
+;; Example
+(abbrev collect mapcar)
+
+(abbrevs dbind desctructuring-bind
+         mvbind multiple-value-bind
+         mvsetq multiple-value-setq)
