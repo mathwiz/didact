@@ -1,3 +1,5 @@
+(load "group.lisp")
+
 (defmacro abbrev (short long)
   `(defmacro ,short (&rest args)
      `(,',long ,@args)))
