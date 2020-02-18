@@ -1,3 +1,7 @@
+;; Need: _f
+;; (load "setf-macros.lisp")
+
+
 (defmacro a+ (&rest args)
   (a+expand args nil))
 
@@ -86,6 +90,15 @@
 (defanaph aif :rule :first)
 (defanaph asetf :rule :place)
 
+
+;; Examples of previous macros redefined using asetf
+
+(defmacro incf (place &optional (val 1))
+  `(asetf ,place (+ it ,val)))
+
+
+(defmacro pull (obj place &rest args)
+  `(asetf ,place (delete ,obj it ,@args)))
 
 
 (print 'anaphoric-macro-defining)
