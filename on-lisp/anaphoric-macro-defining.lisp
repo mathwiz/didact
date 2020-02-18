@@ -52,8 +52,39 @@
   (intern (subseq (symbol-name sym) 1)))
 
 
-(defanaph a+)
+;; Enhance defanaph to operate as specified by rule
+
+(defmacro defanaph (name &optional &key calls (rule :all))
+  (let* ((opname (or calls (pop-symbol name)))
+          (body (case rule
+                  (:all `(anaphex1 args '(,opname)))
+                  (:first `(anaphex2 ',opname args))
+                  (:place `(anaphex3 ',opname args)))))
+    `(defmacro ,name (&rest args)
+       ,body)))
+
+
+(defun anaphex1 (args call)
+  (if args
+      (let ((sym (gensym)))
+        `(let* ((,sum ,(car args))
+                (it ,sym))
+           ,(anaphex1 (cdr args)
+                      (append call (list sym)))))
+      call))
+
+
+(defun anaphex2 (op args)
+  `(let ((it ,(car args))) (,op it ,@ (cdr args))))
+
+
+(defun anaphex3 (op args)
+  `(_f (lambda (it) (,op it ,@ (cdr args))) ,(car args)))
+
+
 (defanaph alist) 
+(defanaph aif :rule :first)
+(defanaph asetf :rule :place)
 
 
 
