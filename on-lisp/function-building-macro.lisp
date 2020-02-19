@@ -42,3 +42,5 @@
 
 (format t "~%")
 (write (funcall composed 3.3))
+
+(print 'function-building-macro)

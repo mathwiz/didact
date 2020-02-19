@@ -1,5 +1,6 @@
 ;; Requires
 (load "mapping.lisp")
+(load "function-building-macro.lisp")
 
 
 ;; Read macro for constant functions
@@ -52,4 +53,13 @@
 (print #[2 7])
 
 
-(print 'done)
+;; Read macro for functional composition
+(defdelim #\{ #\} (&rest args)
+          `(fn (compose ,@args)))
+
+;; Example of composition
+(defun double (x) (* 2 x))
+(defun square (x) (* x x))
+(print (funcall #{ double square 1+ } 7))
+
+(print 'read-macros)
