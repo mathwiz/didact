@@ -1,9 +1,11 @@
+;; Require
+(load "iteration-macros.lisp")
+(load "strings.lisp")
+
 ;; Built-in descructuring-bind
 (destructuring-bind (x y z) '(1 2 3)
   (progn
-    (print x)
-    (print y)
-    (print z)))
+    (print (list x y z))))
 
 
 ;; Same concept but works with any kind of sequence
@@ -48,20 +50,82 @@
                    body))))
 
 
+;; examples
 (dbind (a (b c) d) '(1 #(2 3) 4)
        (progn
-         (print a)
-         (print b)
-         (print c)
-         (print d)))
+         (print (list a b c d))))
 
 
 (dbind (a (b . c) &rest d) '(1 "fribble" 2 3 4)
        (progn
-         (print a)
-         (print b)
-         (print c)
-         (print d)))
+         (print (list a b c d))))
 
 (print (destruc '(a b c) 'seq #'atom))
 
+
+
+;; Destructuring on arrays
+(defmacro with-matrix (pats ar &body body)
+  (let ((gar (gensym)))
+    `(let ((,gar ,ar))
+       (let ,(let ((row -1))
+               (mapcan
+                #'(lambda (pat)
+                    (incf row)
+                    (setq col -1)
+                    (mapcar #'(lambda (p)
+                                `(,p (aref ,gar
+                                           ,row
+                                           ,(incf col))))
+                            pat))
+                pats))
+         ,@body))))
+
+
+(defmacro with-array (pat ar &body body)
+  (let ((gar (gensym)))
+    `(let ((,gar ,ar))
+       (let ,(mapcar #'(lambda (p)
+                         `(,(car p) (aref ,gar ,@ (cdr p))))
+                     pat)
+         ,@body))))
+
+
+;; examples
+(setq ar (make-array '(3 3)))
+
+(for (r 0 2)
+     (for (c 0 2)
+          (setf (aref ar r c) (+ (* r 10) c))))
+
+(with-matrix ((a b c)
+              (d e f)
+              (g h i)) ar
+              (print (list a b c d e f g h i)))
+
+(with-array ((a 0 0) (d 1 1) (i 2 2)) ar
+            (print (list a d i)))
+
+
+;; Destructuring on structures
+(defmacro with-struct ((name . fields) struct &body body)
+  (let ((gs (gensym)))
+    `(let ((,gs ,struct))
+       (let ,(mapcar #'(lambda (f)
+                         `(,f (,(symb name f) ,gs)))
+                     fields)
+         ,@body))))
+
+
+;; examples
+(defstruct visitor name title firm)
+
+(setq theo (make-visitor :name "Theodebert"
+                         :title 'king
+                         :firm 'franks))
+
+(with-struct (visitor- name firm title) theo
+  (print (list name firm title)))
+
+
+(print 'destructuring)
