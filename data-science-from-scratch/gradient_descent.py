@@ -6,7 +6,7 @@ from vecmat import vector_subtract, scalar_multiply
 
 
 def sum_of_squares(v):
-        return sum(v_i**2 for v_i in v)
+    return sum(v_i**2 for v_i in v)
 
 
 def difference_quotient(f, x, h):
@@ -42,9 +42,9 @@ def safe(f):
 	"""
 	def safe_f(*args, **kwargs):
 		try:
-	        return f(*args, **kwargs)
+		    return f(*args, **kwargs)
 		except:
-	        return float('inf')
+		    return float('inf')
 	return safe_f
 
 
