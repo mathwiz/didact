@@ -28,8 +28,37 @@
       (values (cdr b) b))))
 
 
+(defmacro if-match (pat seq then &optional else)
+  `(aif2 (match ',pat ,seq)
+         (let ,(mapcar #'(lambda (v)
+                           `(,v (binding ',v it)))
+                       (vars-in then #'atom))
+           ,then)
+         ,else))
+
+
+(defun vars-in (expr &optional (atom? #'atom))
+  (if (funcall atom? expr)
+      (if (var? expr) (list expr))
+      (union (vars-in (car expr) atom?)
+             (vars-in (cdr expr) atom?))))
+
+
+(defun var? (x)
+  (and (symbolp x) (eq (char (symbol-name x) 0 #\?))))
+
+
 ;; examples
 (print (match '(p a b c a) '(p ?x ?y c ?x)))
+
+(let ((m (match '(p ?x b ?y a) '(p ?y b c a))))
+  (print m))
+
+(let ((m (match '(a b c) '(a a a))))
+  (print m))
+
+(let ((m (match '(a ?x b) '(_ 1 _))))
+  (print m))
 
 
 (print 'pattern-matching)
