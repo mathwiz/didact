@@ -60,3 +60,6 @@
         (aif 6
              (funcall (alambda (x) (if (= x 0) 1 (* x (self (1- x))))) it)))
 
+
+
+(print 'anaphoric)
