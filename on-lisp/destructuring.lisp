@@ -128,4 +128,38 @@
   (print (list name firm title)))
 
 
+;; Reference destructuring
+(defmacro with-places (pat seq &body body)
+  (let ((gseq (gensym)))
+    `(let ((,gseq ,seq))
+       ,(wplac-ex (destruc pat gseq #'atom) body))))
+
+
+(defun wplac-ex (binds body)
+  (if (null binds)
+      `(progn ,@body)
+      `(symbol-macrolet ,(mapcar #'(lambda (b)
+                                     (if (consp (car b))
+                                         (car b)
+                                         b))
+                                 binds)
+         ,(wplac-ex (mapcan #'(lambda (b)
+                                (if (consp (car b))
+                                    (cdr b)))
+                            binds)
+                    body))))
+
+
+;; examples
+(with-places (a b c) #(1 2 3)
+             (print (list a b c)))
+
+
+(let ((lst `(1 (2 3) 4)))
+  (with-places (a (b . c) d) lst
+               (setf a 'uno)
+               (setf c '(tre)))
+  (print lst))
+
+
 (print 'destructuring)
