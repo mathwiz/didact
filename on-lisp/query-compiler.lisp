@@ -1,5 +1,5 @@
 ;; Require
-
+(load "pattern-matching.lisp")
 
 
 ;; Database
@@ -29,8 +29,14 @@
 
 
 ;; Testing
+(clear-db)
+
+(fact paiter hogarth william english)
 (fact painter reynolds joshua english)
 (fact painter canale antonio venetian)
+(fact dates hogarth 1697 1772)
+(fact dates canale 1697 1768)
+(fact dates reynolds 1723 1792)
 
 (print (db-query 'painter))
 
