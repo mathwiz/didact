@@ -82,13 +82,12 @@
 (fact dates canale 1697 1768)
 (fact dates reynolds 1723 1792)
 
-(print (db-query 'painter))
 
 (print (lookup 'painter '(?x ?y english)))
 
 (let ((result (interpret-query '(and (painter ?x ?y ?z)
                                  (dates ?x 1697 ?w)))))
-  (print result))
+  (princ result))
 
 
 (print 'query-compiler)
