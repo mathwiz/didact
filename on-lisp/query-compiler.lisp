@@ -71,6 +71,110 @@
           (db-query pred)))
 
 
+;; Query compiler
+(defmacro if-match (pat seq then &optional else)
+  `(let ,(mapcar #'(lambda (v) `(,v ',(gensym)))
+                 (vars-in pat #'simple?))
+     (pat-match ,pat ,seq ,then ,else)))
+
+
+(defmacro pat-match (pat seq then else)
+  (if (simple? pat)
+      (match1 `((,pat ,seq)) then else)
+      (with-gensyms (gseq gelse)
+        `(labels ((,gelse () ,else))
+           ,(gen-match (cons (list gseq seq)
+                             (destruc pat gseq #'simple?))
+                       then
+                       `(,gelse))))))
+
+
+(defun simple? (x) (or (atom x) (eq (car x) 'quote)))
+
+
+(defun gen-match (refs then else)
+  (if (null refs)
+      then
+      (let ((then (gen-match (cdr refs) then else)))
+        (if (simple? (caar refs))
+            (match1 refs then else)
+            (gen-match (car refs) then else)))))
+
+
+(defun match1 (refs then else)
+  (dbind ((pat expr) . rest) refs
+         (cond ((gensym? pat)
+                `(let ((,pat ,expr))
+                   (if (and (typep ,pat 'sequence)
+                            ,(length-test pat rest))
+                       ,then
+                       ,else)))
+               ((eq pat '_) then)
+               ((var? pat)
+                (let ((ge (gensym)))
+                  `(let ((,ge ,expr))
+                     (if (or (gensym? ,pat) (equal ,pat ,ge))
+                         (let ((,pat ,ge)) ,then)
+                         ,else))))
+               (t `(if (equal ,pat ,expr) ,then ,else)))))
+
+
+(defun gensym? (s)
+  (and (symbolp s) (not (symbol-package s))))
+
+
+(defun length-test (pat rest)
+  (let ((fin (caadar (last rest))))
+    (if (or (consp fin) (eq fin 'elt))
+        `(= (length ,pat) ,(length rest))
+        `(> (length ,pat) ,(- (length rest) 2)))))
+
+
+(defmacro with-answer (query &body body)
+  `(with-gensyms ,(vars-in query #'simple?)
+     ,(compile-query query `(progn ,@body))))
+
+
+(defun compile-query (q body)
+  (case (car q)
+    (and (compile-and (cdr q) body))
+    (or (compile-or (cdr q) body))
+    (not (compile-not (cadr q) body))
+    (lisp `(if ,(cadr q) ,body))
+    (t (compile-simple q body))))
+
+
+(defun compile-simple (q body)
+  (let ((fact (gensym)))
+    `(dolist (,fact (db-query ',(car q)))
+       (pat-match ,(cdr q) ,fact ,body nil))))
+
+
+(defun compile-and (clauses body)
+  (if (null clauses)
+      body
+      (compile-query (car clauses)
+                     (compile-and (cdr clauses) body))))
+
+
+(defun compile-or (clauses body)
+  (if (null clauses)
+      nil
+      (let ((gbod (gensym))
+            (vars (vars-in body #'simple?)))
+        `(labels ((,gbod ,vars ,body))
+           ,@(mapcar #'(lambda (cl)
+                           (compile-query cl `(,gbod ,@vars)))
+                     clauses)))))
+
+
+(defun compile-not (q body)
+  (let ((tag (gensym)))
+    `(if (block ,tag
+           ,(compile-query q `(return-from ,tag nil))
+           t)
+         ,body)))
+
 
 ;; Testing
 (clear-db)
@@ -88,6 +192,12 @@
 (let ((result (interpret-query '(and (painter ?x ?y ?z)
                                  (dates ?x 1697 ?w)))))
   (princ result))
+
+
+(setq my-favorite-year 1723)
+
+(with-answer (dates ?x my-favorite-year ?d)
+  (format t "~A was born in my favorite year,~%" ?x))
 
 
 (print 'query-compiler)
