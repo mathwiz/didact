@@ -199,5 +199,23 @@
 (with-answer (dates ?x my-favorite-year ?d)
   (format t "~A was born in my favorite year,~%" ?x))
 
+(with-answer (and (dates ?x ?b ?d)
+                  (lisp (> (- ?d ?b) 70)))
+  (format t "~A lived over 70 years.~%" ?x))
+
+(with-answer (painter 'hogarth ?x ?y)
+  (princ (list ?x ?y)))
+
+(with-answer (and (painter ?x _ 'english)
+                  (dates ?x ?b _)
+                  (not (and (painter ?x2 _ 'venetian)
+                            (dates ?x2 ?b _))))
+  (princ ?x))
+
+(with-answer (and (painter ?x _ _)
+                  (dates ?x _ ?d)
+                  (list (< 1770 ?d 1800)))
+  (princ (list ?x ?d)))
+
 
 (print 'query-compiler)
