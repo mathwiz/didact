@@ -73,3 +73,5 @@
 (format t "~%t2~%")
 (print (dft2 t2))
 
+
+(print 'continuation-passing)
