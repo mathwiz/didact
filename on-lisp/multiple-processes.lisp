@@ -179,5 +179,33 @@
 ;; try this
 ;; (ballet)
 
+
+;; Effect of changing priorities
+(=defun capture (city)
+        (take city)
+        (setpri 1)
+        (do-yield (fortify city)))
+
+
+(=defun plunder (city)
+        (loot city)
+        (ransom city))
+
+
+(defun take (c) (format t "Liberating ~A.~%" c))
+(defun fortify (c) (format t "Rebuilding ~A.~%" c))
+(defun loot (c) (format t "Nationalizing ~A.~%" c))
+(defun ransom (c) (format t "Refinancing ~A.~%" c))
+
+
+(program barbarians ()
+         (fork (capture 'rome) 100)
+         (fork (plunder 'rome) 98))
+
+
+;; try this
+;; (barbarians)
+
+
 (print 'multiple-processes)
 
