@@ -46,4 +46,4 @@
 (print (dft2 t2))
 
 
-(print 'continuation-passing)
+(print 'continuation-passing-tests)

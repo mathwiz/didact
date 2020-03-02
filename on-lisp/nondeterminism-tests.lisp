@@ -19,3 +19,5 @@
 
 ;; try it
 (print (parlor-trick 7))
+
+(print 'nondeterminism-tests)
