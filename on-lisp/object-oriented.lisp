@@ -56,6 +56,45 @@
         (error "No ~A method for ~A." name obj))))
 
 
+(defstruct meth around before primary after)
+
+
+(defmacro meth- (field obj)
+  (let ((gobj (gensym)))
+    `(let ((,gobj ,obj))
+       (and (meth-p ,gobj)
+            (,(symb 'meth- field) ,gobj)))))
+
+
+(defun run-methods (obj name args)
+  (let ((pri (rget obj name :primary)))
+    (if pri
+        (let ((ar (rget obj name :around)))
+          (if ar
+              (apply ar obj args)
+              (run-core-methods obj name args pri)))
+        (error "No primary ~A method for ~A." name obj))))
+
+
+(defun run-core-methods (obj name args &optional pri)
+  (maultiple-value-prog1
+   (progn (run-befores obj name args)
+          (apply (or pri (rget obj name :primary))
+                 obj args))
+   (run-afters obj name args)))
+
+
+(defun rget (obj prop &optional meth (skip 0))
+  (some2 #'(lambda (a)
+             (multiple-value-bind (val win) (gethash prop a)
+               (if win
+                   (case meth 
+                     (:around (meth- around val))
+                     (:primary (meth- primary val))
+                     (t (values val win))))))
+         (nthcdr skip (ancestors obj))))
+
+
 (defmacro defmeth ((name &optional (type :primary))
                            obj parms &body body)
   (let ((gobj (gensym)))
