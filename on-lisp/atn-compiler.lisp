@@ -55,5 +55,14 @@
                  ,regs))
 
 
+(defmacro with-parses (node sent &body body)
+  (with-gensyms (pos regs)
+    `(progn
+       (setq *sent* ,sent)
+       (setq *paths* nil)
+       (=bind (parse ,pos ,regs) (,node 0 '(nil))
+              (if (= ,pos (length *sent*))
+                  (progn ,@body (fail))
+                  (fail))))))
 
 
