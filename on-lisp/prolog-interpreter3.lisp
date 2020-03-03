@@ -10,7 +10,7 @@
   (let ((vars (vars-in query #'simple?)) (gb (gensym)))
     `(with-gensyms ,vars
        (setq *paths* nil)
-       (=bind (,gb) ,(gen-query (rep_ query))
+       (=bind (,gb) ,(gen-query (rep_ query) nil '*paths*)
               (let ,(mapcar #'(lambda (v)
                                 `(,v (fullbind ,v ,gb)))
                             vars)
@@ -38,35 +38,39 @@
 
 
 ;; Interpretation of queries
-(defun gen-query (expr &optional binds)
+(defun gen-query (expr binds paths)
   (case (car expr)
-    (and (gen-and (cdr expr) binds))
-    (or (gen-or (cdr expr) binds))
-    (not (gen-not (cadr expr) binds))
+    (and (gen-and (cdr expr) binds paths))
+    (or (gen-or (cdr expr) binds paths))
+    (not (gen-not (cadr expr) binds paths))
+    (lisp (gen-lisp (cadr expr) binds))
+    (is (gen-is (cadr expr) (third expr) binds))
+    (cut `(progn (setq *paths* ,paths)
+                 (=values ,binds)))
     (t `(prove (list ',(car expr)
                      ,@ (mapcar #'form (cdr expr)))
-               ,binds))))
+               ,binds *paths*))))
 
 
-(defun gen-and (clauses binds)
+(defun gen-and (clauses binds paths)
   (if (null clauses)
       `(=values ,binds)
       (let ((gb (gensym))) 
-        `(=bind (,gb) ,(gen-query (car clauses) binds)
-                ,(gen-and (cdr clauses) binds)))))
+        `(=bind (,gb) ,(gen-query (car clauses) binds paths)
+                ,(gen-and (cdr clauses) gb paths)))))
 
 
-(defun gen-or (clauses binds)
+(defun gen-or (clauses binds paths)
   `(choose 
-    ,@(mapcar #'(lambda (c) (gen-query c binds))
+    ,@(mapcar #'(lambda (c) (gen-query c binds paths))
               clauses)))
 
 
-(defun gen-not (expr binds)
+(defun gen-not (expr binds paths)
   (let ((gpaths (gensym)))
     `(let ((,gpaths *paths*))
        (setq *paths* nil)
-       (choose (=bind (b) ,(gen-query expr binds)
+       (choose (=bind (b) ,(gen-query expr binds paths)
                       (setq *paths* ,gpaths)
                       (fail))
                   (progn
@@ -74,8 +78,25 @@
                     (=values ,binds))))))
 
 
-(=defun prove (query binds)
-        (choose-bind r *rules* (=funcall r query binds)))
+(defmacro with-binds (binds expr)
+  `(let ,(mapcar #'(lambda (v) `(,v (fullbind ,v ,binds)))
+                 (vars-in expr))))
+
+
+(defun gen-lisp (expr binds)
+  `(if (with-binds ,binds ,expr)
+       (=values ,binds)
+       (fail)))
+
+
+(defun gen-is (expr1 expr2 binds)
+  `(aif2 (match ,expr1 (with-binds ,binds ,expr2) ,binds)
+         (=values it)
+         (fail)))
+
+
+(=defun prove (query binds paths)
+        (choose-bind r *rules* (=funcall r query binds paths)))
 
 
 (defun form (pat)
@@ -96,8 +117,8 @@
 
 
 (defun rule-fn (ant con)
-  (with-gensyms (val win fact binds)
-    `(=lambda (,fact ,binds)
+  (with-gensyms (val win fact binds paths)
+    `(=lambda (,fact ,binds ,paths)
               (with-gensyms ,(vars-in (list ant con) #'simple?)
                 (multiple-value-bind (,val ,win)
                     (match ,fact
