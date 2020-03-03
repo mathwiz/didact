@@ -67,3 +67,39 @@
              ,(build-meth name type gobj parms body)))))
 
 
+(defun build-meth (name type gobj parms body)
+  (let ((gargs (gensym)))
+    `#'(lambda (&rest ,gargs)
+         (labels
+             ((call-next ()
+                ,(if (or (eq type :primary)
+                         (eq type :around))
+                     `(cnm ,gobj ',name (cdr ,gargs) ,type)
+                     `(error "Illegal call-next.")))
+              (next-p ()
+                ,(case type
+                   (:around
+                    `(or (rget ,gobj ',name :around 1)
+                         (rget ,gobj ',name :primary)))
+                   (:primary
+                    `(rget ,gobj ',name :primary 1))
+                   (t nil))))
+           (apply #'(lambda ,parms ,@body) ,gargs)))))
+
+
+(defun cnm (obj name args type)
+  (case type
+    (:around (let ((ar (rget obj name :around 1)))
+               (if ar
+                   (apply ar obj args)
+                   (run-core-methods obj name args))))
+    (:primary (let ((pri (rget obj name :primary 1)))
+                (if pri
+                    (apply pri obj args)
+                    (error "No next method."))))))
+
+
+(defmacro undefmeth ((name &optional (type :primary)) obj)
+  `(setf (,(symb 'meth- type) (gethash ',name ,obj))
+         nil))
+
