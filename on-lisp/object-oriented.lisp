@@ -158,3 +158,96 @@
   `(setf (,(symb 'meth- type) (gethash ',name ,obj))
          nil))
 
+
+(defmacro children (obj)
+  `(gethash 'children ,obj))
+
+
+(defun parents (obj)
+  (gethash 'parents obj))
+
+
+(defun set-parents (obj pars)
+  (dolist (p (parents obj))
+    (setf (children p)
+          (delete obj (children p))))
+  (setf (gethash 'parents obj) pars)
+  (dolist (p pars)
+    (pushnew obj (children p)))
+  (maphier #'(lambda (obj)
+               (setf (gethash 'ancestors obj)
+                     (get-ancestors obj)))
+           obj)
+  pars)
+
+
+(defsetf parents set-parents)
+
+
+(defun maphier (fn obj)
+  (funcall fn obj)
+  (dolist (c (children obj))
+    (maphier fn c)))
+
+
+(defun obj (&rest parents)
+  (let ((obj (make-hash-table)))
+    (setf (parents obj) parents)
+    obj))
+
+
+(defmacro defcomb (name op)
+  `(progn
+     (defprop ,name t)
+     (setf (get ',name 'mcombine)
+           ,(case op
+              (:standard nil)
+              (:progn '#'(lambda (&rest args)
+                           (car (last args))))
+              (t op)))))
+
+
+(defun run-core-methods (obj name args &optional pri)
+  (let ((comb (get name 'mcombine)))
+    (if comb
+        (if (symbolp comb)
+            (funcall (case comb
+                       (:and #'comb-and)
+                       (:or #'comb-or))
+                     obj name args (ancestors obj))
+            (comb-normal comb obj name args))
+        (multiple-value-prog1
+            (progn (run-befores obj name args)
+                   (apply (or pri (rget obj name :primary))
+                          obj args))
+          (run-afters obj name args)))))
+
+
+(defun comb-normal (comb obj name args)
+  (apply comb
+         (mapcan #'(lambda (a)
+                     (let* ((pm (meth- primary
+                                       (gethash name a)))
+                            (val (if pm
+                                     (apply pm obj args))))
+                       (if val (list val))))
+                 (ancestors obj))))
+
+
+(defun comb-and (obj name args ancs &optional (last t))
+  (if (null ancs)
+      last
+      (let ((pm (meth- primary (gethash name (car ancs)))))
+        (if pm
+            (let ((new (apply pm obj args)))
+              (and new
+                   (comb-and obj name args (cdr ancs) new)))
+            (comb-and obj name args (cdr ancs) last)))))
+
+
+(defun comb-or (obj name args ancs)
+  (and ancs
+       (let ((pm (meth- primary (gethash name (car ancs)))))
+         (or (and pm (apply pm obj args))
+             (comb-or obj name args (cdr ancs))))))
+

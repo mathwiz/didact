@@ -29,3 +29,26 @@
 ;; try it
 (format t "~%Backing up...~%")
 (backup (obj filesystem))
+
+
+(setq citrus (obj))
+(setq orange (obj citrus))
+(setq my-orange (obj orange))
+
+(defmeth (props) citrus (c) '(round acidic))
+(defmeth (props) orange (o) '(orange sweet))
+(defmeth (props) my-orange (m) '(dented))
+
+(defcomb props #'(lambda (&rest args) (reduce #'union args)))
+
+
+;; try it
+(format t "~%Properties")
+
+(print (props my-orange))
+
+(defcomb props :standard)
+
+(print (props my-orange))
+
+
