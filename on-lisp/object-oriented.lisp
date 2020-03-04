@@ -77,7 +77,7 @@
 
 
 (defun run-core-methods (obj name args &optional pri)
-  (maultiple-value-prog1
+  (multiple-value-prog1
    (progn (run-befores obj name args)
           (apply (or pri (rget obj name :primary))
                  obj args))
@@ -93,6 +93,22 @@
                      (:primary (meth- primary val))
                      (t (values val win))))))
          (nthcdr skip (ancestors obj))))
+
+
+(defun run-befores (obj prop args)
+  (dolist (a (ancestors obj))
+    (let ((bm (meth- before (gethash prop a))))
+      (if bm (apply bm obj args)))))
+
+
+(defun run-afters (obj prop args)
+  (labels ((rec (lst)
+             (when lst
+               (rec (cdr lst))
+               (let ((am (meth- after
+                                (gethash prop (car lst)))))
+                 (if am (apply am (car lst) args))))))
+    (rec (ancestors obj))))
 
 
 (defmacro defmeth ((name &optional (type :primary))
