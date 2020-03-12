@@ -81,3 +81,13 @@
   (cons 'items- (objects-at 'body *objects* *object-locations*)))
 
 
+(defun game-repl ()
+  (let ((cmd (game-read)))
+    (unless (eq (car cmd) 'quit)
+      (game-print (game-eval cmd))
+      (game-repl))))
+
+
+
+
+
