@@ -21,7 +21,19 @@ female(pat).
 female(ann).
 male(jim).
 
-mother(X, Y) :- parent(X, Y), female(X).
+mother(X, Y) :- 
+    parent(X, Y), 
+    female(X).
+
+grandparent(X, Z) :-
+    parent(X, Y),
+    parent(Y, Z).
+
+sister(X, Y) :-
+    parent(Z, X),
+    parent(Z, Y),
+    female(X),
+    different(X, Y).
 
 predecessor(X, Z) :- 
     parent(X, Z).
