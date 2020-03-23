@@ -23,3 +23,7 @@ male(jim).
 
 mother(X, Y) :- parent(X, Y), female(X).
 
+predecessor(X, Z) :- 
+    parent(X, Y), 
+    predecessor(Y, Z).
+
