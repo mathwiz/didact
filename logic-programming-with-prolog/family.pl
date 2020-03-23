@@ -4,7 +4,7 @@ parent(pam, bob).
 parent(tom, bob).
 parent(tom, liz).
 parent(bob, ann).
-parent(pat, bob).
+parent(bob, pat).
 parent(pat, jim).
 
 % parent(X, liz).
@@ -22,6 +22,9 @@ female(ann).
 male(jim).
 
 mother(X, Y) :- parent(X, Y), female(X).
+
+predecessor(X, Z) :- 
+    parent(X, Z).
 
 predecessor(X, Z) :- 
     parent(X, Y), 
