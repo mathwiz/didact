@@ -12,14 +12,15 @@ parent(pat, jim).
 
 offspring(Y, X) :- parent(X, Y).
 
-% gprolog does not like these. why?
-female(pam).
+% keep like predicates together
+male(jim).
 male(tom).
 male(bob).
 female(liz).
 female(pat).
 female(ann).
-male(jim).
+female(pam).
+
 
 mother(X, Y) :- 
     parent(X, Y), 
@@ -28,6 +29,8 @@ mother(X, Y) :-
 grandparent(X, Z) :-
     parent(X, Y),
     parent(Y, Z).
+
+different(X, Y) :- \==(X, Y).
 
 sister(X, Y) :-
     parent(Z, X),
