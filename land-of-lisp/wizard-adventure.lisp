@@ -81,11 +81,17 @@
   (cons 'items- (objects-at 'body *objects* *object-locations*)))
 
 
+(defun prompt ()
+  (princ "> "))
+
+
 (defun game-repl ()
-  (let ((cmd (game-read)))
-    (unless (eq (car cmd) 'quit)
-      (game-print (game-eval cmd))
-      (game-repl))))
+  (progn
+    (prompt)
+    (let ((cmd (game-read)))
+     (unless (eq (car cmd) 'quit)
+       (game-print (game-eval cmd))
+       (game-repl)))))
 
 
 (defun game-read ()
