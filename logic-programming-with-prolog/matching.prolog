@@ -6,4 +6,6 @@ horizontal( seg( point(X, Y), point(X1, Y))).
 % vertical( seg( point(1,1), point(1, 2))).
 % vertical( seg( point(1,1), point(2, Y))).
 % horizontal( seg( point(1,1), point(2, Y))).
+% vertical(seg(point(2,3), P)).
+% vertical(S), horizontal(S).
 
