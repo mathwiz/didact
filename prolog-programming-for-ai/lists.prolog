@@ -13,13 +13,14 @@ conc( [X | L1], L2, [X, L3] ) :-
 add( X, L, [X | L] ).
 
 
-% delete( a, [a,b,a,a], L ).
-% delete( a, L, [1,2,3] ).
+% delete( [a,b,a,a], a, L ).
+% delete( [1,2,3], 1, L ).
 
 
 % sublist( [c,d,e], [a,b,c,d,e,f] ).
-
+% sublist( L, [a,b,c] ).
 
 % permutation( [a,b,c], P ).
-
+% permutation( [1,1,0,1], P).
+% permutation( [1,2,3,4], P).
 
