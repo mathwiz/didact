@@ -95,6 +95,22 @@
               m)))))
 
 
+(defun init-monsters ()
+  (setf *monsters*
+        (map 'vector
+             (lambda (x)
+               (funcall (nth (random (length *monster-builders*))
+                             *monster-builders*)))
+             (make-array *monster-num*))))
+
+
+(defun monster-dead (m)
+  (<= (monster-health m) 0))
+
+
+(defun monsters-dead ()
+  (every #'monster-dead *monsters*))
+
 
 
 
