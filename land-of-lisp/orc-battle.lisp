@@ -12,9 +12,9 @@
   (init-player)
   (game-loop)
   (when (player-dead)
-    (princ "You have been killed. Game Over."))
+    (princ "* You have been killed. Game Over."))
   (when (monsters-dead)
-    (princ "Congratulations! You have vanquished all of your foes.")))
+    (princ "** Congratulations! You have vanquished all of your foes.")))
 
 
 (defun game-loop ()
@@ -44,7 +44,7 @@
 
 (defun show-player ()
   (fresh-line)
-  (princ "You are a valiant knight with a health of ")
+  (princ "* You are a valiant knight with a health of ")
   (princ *player-health*)
   (princ ", an agility of ")
   (princ *player-agility*)
