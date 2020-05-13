@@ -65,4 +65,31 @@
       (remhash pos *plants*))))
 
 
+(defparameter *reproduction-energy* 200)
+
+
+(defun reproduce (animal)
+  (let ((e (animal-energy animal)))
+    (when (>= e *reproduction-energy*)
+      (setf (animal-energy animal) (ash e -1))
+      (let ((animal-nu (copy-structure animal))
+            (genes (copy-list (animal-genes animal)))
+            (mutation (random 8)))
+        (setf (nth mutation genes) (max 1 (+ (nth mutation genes) (random 3) -1)))
+        (setf (animal-genes animal-nu) genes)
+        (push animal-nu *animals*)))))
+
+
+(defun update-world ()
+  (setf *animals* (remove-if (lambda (animal)
+                               (<= (animal-energy animal) 0))
+                             *animals*))
+  (mapc (lambda (x)
+          (turn x)
+          (move x)
+          (eat x)
+          (reproduce x))
+        *animals*)
+  (add-plants))
+
 
