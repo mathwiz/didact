@@ -48,4 +48,21 @@
 
 
 (defun turn (animal)
-  nil)
+  (let ((x (random (apply #'+ (animal-genes animal)))))
+    (labels ((angle (genes x)
+               (let ((xnu (- x (car genes))))
+                 (if (< xnu 0)
+                     0
+                     (1+ (angle (cdr genes) xnu))))))
+      (setf (animal-dir animal)
+            (mod (+ (animal-dir animal) (angle (animal-genes animal) x)) 8)))))
+
+
+(defun eat (animal)
+  (let ((pos (cons (animal-x animal) (animal-y animal))))
+    (when (gethash pos *plants*)
+      (incf (animal-energy animal) *plant-energy*)
+      (remhash pos *plants*))))
+
+
+
