@@ -1,4 +1,4 @@
-(defparameter *width* 100)
+(defparameter *width* 80)
 (defparameter *height* 30)
 (defparameter *jungle* '(45 10 10 10))
 (defparameter *plant-energy* 80)
@@ -31,7 +31,7 @@
   (let ((dir (animal-dir animal))
         (x (animal-x animal))
         (y (animal-y animal)))
-    (setf (animal-x aniaml) (mod (+ x
+    (setf (animal-x animal) (mod (+ x
                                     (cond ((and (>= dir 2) (< dir 5)) 1)
                                           ((or (= dir 1) (= dir 5)) 0)
                                           (t -1))
@@ -91,5 +91,41 @@
           (reproduce x))
         *animals*)
   (add-plants))
+
+
+(defun draw-world ()
+  (loop for y
+       below *height*
+       do (progn (fresh-line)
+                 (princ "|")
+                 (loop for x
+                      below *width*
+                      do (princ (cond ((some (lambda (animal)
+                                               (and (= (animal-x animal) x)
+                                                    (= (animal-y animal) y)))
+                                             *animals*)
+                                       #\M)
+                                      ((gethash (cons x y) *plants*) 
+                                       #\*)
+                                      (t #\space))))
+                 (princ "|")))
+  (format t "~%----~%"))
+
+
+(defun evolution ()
+  (draw-world)
+  (fresh-line)
+  (let ((str (read-line)))
+    (cond ((equal str "quit") ())
+          (t (let ((x (parse-integer str :junk-allowed t)))
+               (if x
+                   (loop for i
+                        below x
+                        do (update-world)
+                        if (zerop (mod i 10000))
+                        do (princ #\.))
+                   (update-world))
+               (evolution))))))
+
 
 
