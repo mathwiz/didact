@@ -1,0 +1,25 @@
+graph{
+10[label="(10 ?)"];
+27[label="(27 SIRENS! *)"];
+20[label="(20 ?)"];
+24[label="(24 ?)"];
+3[label="(3 ?)"];
+7[label="(7)"];
+9[label="(9 ?)"];
+11[label="(11 ?)"];
+22[label="(22 ?)"];
+25[label="(25 LIGHTS!)"];
+18[label="(18 BLOOD! LIGHTS! SIRENS!)"];
+29[label="(29 ?)"];
+27--10[label=""];
+18--27[label="(COPS)"];
+18--20[label=""];
+18--24[label=""];
+18--3[label=""];
+18--29[label=""];
+25--9[label=""];
+25--11[label=""];
+25--22[label=""];
+7--25[label=""];
+7--18[label=""];
+7--29[label=""];}
