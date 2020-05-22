@@ -21,3 +21,15 @@
         result
         (format t "key ~A not found" key))))
 
+
+(defun enter-data ()
+  (format t "~%Enter key, or (q)uit: ")
+  (let ((key (read)))
+    (cond ((equal key 'q) 'bye)
+          (t (progn 
+               (format t "~%Enter value: ")
+               (let ((val (read)))
+                 (add-data key val))
+               (enter-data))))))
+
+
