@@ -1,5 +1,5 @@
 (defun save-data (file data)
-  (with-open-file (stream file :direction :output)
+  (with-open-file (stream file :direction :output :if-exists :supersede)
     (print data stream)))
 
 
@@ -9,6 +9,10 @@
 
 
 (defparameter *my-hashtable* (make-hash-table :test #'equal))
+
+
+(defun load-hash (file)
+  (setf *my-hashtable* (read-data file)))
 
 
 (defun add-data (key val)
