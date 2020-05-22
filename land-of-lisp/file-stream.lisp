@@ -15,6 +15,10 @@
   (setf *my-hashtable* (read-data file)))
 
 
+(defun save-hash (file)
+  (save-data file *my-hashtable*))
+
+
 (defun add-data (key val)
   (setf (gethash key *my-hashtable*) val))
 
