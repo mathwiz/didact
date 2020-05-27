@@ -74,6 +74,19 @@ addroot( t( L, Y, R ), X, t( t( L, Y, R1 ), X, R2 ) ) :-
     addroot( R, X, t( R1, X, R2 ) ).
 
 
+show( T ) :-
+    show2( T, 0 ).
+
+show2( nil, _ ).
+
+show2( t( L, X, R ), Indent ) :-
+    Ind2 is Indent + 2,
+    show2( R, Ind2 ),
+    tab( Indent ), write( X ), nl,
+    show2( L, Ind2 ).
+
+    
+
 % Examples
 
 % in( 3, t( t( nil, 1, nil ), 2, t( t( nil, 3, nil ), 4, nil ) ) ).
