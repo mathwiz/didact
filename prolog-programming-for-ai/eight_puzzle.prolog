@@ -83,6 +83,12 @@ score( 2/2, _, 1 ) :- !.                      % Tile in center scores 1
 
 score( 1/3, 2/3, 0 ) :- !.                    % Proper successor scores 0
 score( 2/3, 3/3, 0 ) :- !.
+score( 3/3, 3/2, 0 ) :- !.
+score( 3/2, 3/1, 0 ) :- !.
+score( 3/1, 2/1, 0 ) :- !.
+score( 2/1, 1/1, 0 ) :- !.
+score( 1/1, 1/2, 0 ) :- !.
+score( 1/2, 1/3, 0 ) :- !.
 
 score( _, _, 2 ).                             % Tiles out of sequence
 
@@ -92,12 +98,31 @@ goal( [ 2/2, 1/3, 2/3, 3/3, 3/2, 3/1, 2/1, 1/1, 1/2 ] ).
 
 % Starting positions for some puzzles
 
+start1( [ 2/2, 1/3, 3/2, 2/3, 3/3, 3/1, 2/1, 1/1, 1/2 ] ).      % Requires 4 steps
+
+start2( [ 2/1, 1/2, 1/3, 3/3, 3/2, 3/1, 2/2, 1/1, 2/3 ] ).      % Requires 5 steps
+
+start3( [ 2/2, 2/3, 1/3, 3/1, 1/2, 2/1, 3/3, 1/1, 3/2 ] ).      % Requires 18 steps
 
 
 % Display a solution path as a list of board positions
 
+showsol( [] ).
+
+showsol( [ P | L ] ) :-
+    showsol( L ),
+    nl, write( '---' ),
+    showpos( P ).
 
 
 % Display a board position
 
+showpos( [ S0, S1, S2, S3, S4, S5, S6, S7, S8 ] ) :-
+    member( Y, [ 3, 2, 1 ] ),
+    nl, member( X, [ 1, 2, 3 ] ),
+    member( Tile-X/Y, [ ' '-S0, 1-S1, 2-S2, 3-S3, 4-S4, 5-S5, 6-S6, 7-S7, 8-S8 ] ),
+    write( Tile ),
+    fail.
+
 showpos( _ ).
+
