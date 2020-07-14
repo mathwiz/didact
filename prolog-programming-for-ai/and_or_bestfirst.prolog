@@ -80,3 +80,45 @@ expandlist( Trees, Bound, NewTrees, Solved ) :-
 
 % 'continue' decides how to continue after expanding a tree list
 
+continue( yes, Node, C, SubTrees, _, solvedtree( Node, F, SubTrees ), yes ) :-
+    backup( SubTrees, H ), F is C + H, !.
+
+continue( never, _, _, _, _, _, never ) :- !.
+
+continue( no, Node, C, SubTrees, Bound, NewTree, Solved ) :-
+    backup( SubTrees, H), F is C + H, !,
+    expand( tree( Node, F, C, SubTrees ), Bound, NewTree, Solved ).
+
+
+% 'combine' combines results of expanding a tree and a tree list
+
+combine( or : _, Tree, yes, Tree, yes ) :- !.               % OR list solved
+
+combine( or : Trees, Tree, no, or : NewTrees, no ) :-
+    insert( Tree, Trees, NewTrees ), !.                     % OR list still unsolved
+
+combine( or : [], _, never, _, never ) :- !.                % No more candidates
+
+combine( or : Trees, _, never, or : Trees, no ) :- !.       % There are more candidates
+
+combine( and : Trees, Tree, yes, and : [ Tree | Trees ], yes ) :-
+    allsolved( Trees ), !.                                  % AND list solved
+
+combine( and : _, _, never, _, never ) :- !.                % AND list unsolvable
+
+combine( and : Trees, Tree, YesNo, and : NewTrees, no ) :-
+    insert( Tree, Trees, NewTrees ), !.                     % AND list still unsolved
+
+
+% 'expandnode' makes a tree of a node and its successors
+
+expandnode( Node, C, tree( Node, F, C, Op : SubTrees ) ) :-
+    Node ---> Op : Successors,
+    evaluate( Successors, SubTrees ),
+    backup( Op : SubTrees, H ), F is C + H.
+
+
+evaluate( [], [] ).
+
+
+
