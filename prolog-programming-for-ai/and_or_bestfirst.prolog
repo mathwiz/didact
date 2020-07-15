@@ -120,5 +120,81 @@ expandnode( Node, C, tree( Node, F, C, Op : SubTrees ) ) :-
 
 evaluate( [], [] ).
 
+evaluate( [ Node/C | NodesCosts ], Trees ) :-
+    h( Node, H ), F is C + H,
+    evaluate( NodesCosts, Trees1 ),
+    insert( leaf( Node, F, C ), Trees1, Trees ).
+
+
+% 'allsolved' checks whether all trees in a tree list are solved
+
+allsolved( [] ).
+
+allsolved( [ Tree | Trees ] ) :-
+    solved( Tree ),
+    allsolved( Trees ).
+
+
+solved( solvedtree( _, _, _ ) ).
+
+solved( solvedleaf( _, _ ) ).
+
+
+f( Tree, F ) :-                                             % Extract F-value of a tree
+    arg( 2, Tree, F ), !.                                   % F is the 2nd argument in Tree
+
+
+% insert( Tree, Trees, NewTrees ) inserts Tree into
+% tree list Trees producing NewTrees
+
+insert( T, [], [ T ] ) :- !.
+
+insert( T, [ T1 | Ts ], [ T, T1 | Ts ] ) :-
+    solved( T1 ), !.
+
+insert( T, [ T1 | Ts ], [ T1 | Ts1 ] ) :-
+    solved( T ),
+    insert( T, Ts, Ts1 ), !.
+
+insert( T, [ T1 | Ts ], [ T, T1 | Ts ] ) :-
+    f( T, F ), f( T1, F1 ), F =< F1, !.
+
+insert( T, [ T1 | Ts ], [ T1 | Ts1 ] ) :-
+    insert( T, Ts, Ts1 ).
+
+
+% 'backup' finds the backed-up F-value of AND/OR tree list
+
+backup( or : [ Tree | _ ], F ) :-                           % First tree in OR list is best
+    f( Tree, F ), !.
+
+backup( and : [], 0 ) :- !.
+
+backup( and : [ Tree1 | Trees ], F ) :-
+    f( Tree1, F1 ),
+    backup( and : Trees, F2 ),
+    F is F1 + F2, !.
+
+backup( Tree, F ) :-
+    f( Tree, F ).
+
+
+% Relation selecttree( Trees, BestTree, OtherTrees, Bound, Bound1 )
+% OtherTrees is an AND/OR list Trees without its best member BestTree
+% Bound is expansion bound for Trees
+% Bound1 is expansion bound for BestTree
+
+selecttree( Op : [ Tree ], Tree, Op : [], Bound, Bound ) :- !.    % The only candidate
+
+selecttree( Op : [ Tree | Trees ], Tree, Op : Trees, Bound, Bound1 ) :-
+    backup( Op : Trees, F ),
+    ( Op = or, !, min( Bound, F, Bound1 );
+      Op - and, Bound1 is Bound - F).
+
+
+min( A, B, A ) :- A < B, !.
+
+min( A, B, B ).
+
 
 
