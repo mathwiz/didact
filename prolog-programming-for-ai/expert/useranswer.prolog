@@ -7,8 +7,16 @@ Trace is a chain of ancestor goals ans rules used for 'why' explanation.
 
 */
 
-:- op( 600, xfx, by ).                            % Duplicate if 'explore' loaded
-
+% Duplicate if 'explore' loaded
+:- op( 900, xfx, : ).
+:- op( 800, xfx, was ).
+:- op( 870, fx, if ).
+:- op( 880, xfx, then ).
+:- op( 550, xfy, or ).
+:- op( 540, xfy, and ).
+:- op( 300, fx, 'derived by' ).
+:- op( 600, xfx, from ).
+:- op( 600, xfx, by ).
 
 useranswer( Goal, Trace, Answer ) :-
     askable( Goal, _ ),                           % May be asked of the user
@@ -150,3 +158,52 @@ nextindex( Next ) :-
     assert( lastindex( Next ) ).
 
 
+% Displaying the conclusion of a consultation and 'how' explanation
+
+present( Answer ) :- 
+    nl, showconclusion( Answer ),
+    nl, write( 'Would hou like to see how? ' ),
+    getreply( Reply ),
+    ( Reply = yes, !, show( Answer );             % Show solution tree
+      true ).
+
+
+showconclusion( Answer1 and Answer2 ) :- !,
+    showconclusion( Answer1 ), write( ' and ' ),
+    showconclusion( Answer2 ).
+
+showconclusion( Conclusion was Found ) :-
+    write( Conclusion ).
+
+
+% 'show' displays a complete solution tree
+
+show( Solution ) :-
+    nl, show( Solution, 0 ), !.                   % Indent by 0
+
+show( Answer1 and Answer2, H ) :- !,              % Indent by H
+    show( Answer1, H ),
+    tab( H ), write( and ), nl, 
+    show( Answer2, H ).
+
+show( Answer was Found, H ) :-                    % Indent by H
+    tab( H ), writeans( Answer ),                 % Show conclusion
+    nl, tab( H ),
+    write( ' was ' ),
+    show1( Found, H ).                            % Show evidence
+
+
+show1( Derived from Answer, H ) :- !,
+    write( Derived ), write( ' from ' ),          % Show rule name
+    nl, H1 is H + 4,
+    show( Answer, H1 ).                           % Show antecedent
+
+show1( Found, _ ) :-                              % Found = 'told' or 'found as fact'
+    write( Found ), nl.
+
+
+writeans( Goal is true ) :- !,
+    write( Goal ).                                % Omit 'is true' on output
+
+writeans( Answer ) :-
+    write( Answer ).
