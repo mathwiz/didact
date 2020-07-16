@@ -52,3 +52,30 @@ explore( Goal, Trace, Goal is Answer was told ) :-
 exploreyes( Goal, Trace, Answer ) :-
     explore( Goal, Trace, Answer ),
     positive( Answer ).
+
+
+continue( Answer1, Goal1 and Goal2, Trace, Answer ) :-
+    positive( Answer1 ),
+    explore( Goal2, Trace, Answer2 ),
+    ( positive( Answer2 ), Answer = Answer1 and Answer2;
+      negative( Answer2 ), Answer = Answer2 ).
+
+continue( Answer1, Goal1 and Goal2, _, Answer1 ) :-
+    negative( Answer1 ).
+
+
+truth( Question is TruthValue was Found, TruthValue ) :- !.
+
+truth( Answer1 and Answer2, TruthValue ) :-
+    truth( Answer1, true ),
+    truth( Answer2, true ), !,
+    TruthValue = true;
+    TruthValue = false.
+
+
+positive( Answer ) :-
+    truth( Answer, true ).
+
+
+negative( Answer ) :-
+    truth( Answer, false ).
