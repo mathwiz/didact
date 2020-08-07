@@ -1,7 +1,7 @@
 FileStream fileIn: 'Cards.gst'.
 
 | cardDeck cards aCard |
-
+"
 cardDeck := OrderedCollection new: 52.
 
 #(#heart #club #spade #diamond) do: 
@@ -14,3 +14,17 @@ cards := SampleSpaceWithoutReplacement data: cardDeck.
 
 aCard := (cards next).
 aCard asString  displayNl.
+"
+
+CardDeck initialize.
+cardDeck := CardDeck new.
+cardDeck printNl.
+cardDeck shuffle.
+
+cardDeck next asString displayNl.
+cardDeck next asString displayNl.
+cardDeck next asString displayNl.
+cardDeck next asString displayNl.
+cardDeck next asString displayNl.
+
+
