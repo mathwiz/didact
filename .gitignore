@@ -1,0 +1,26 @@
+# Backups #
+*.bak
+*~
+
+# Compiled source #
+*.exe
+*.err
+*.out
+*.o
+*.class
+*.lib
+*.fas
+*.cmi
+*.cmo
+*.im
+
+# Paths #
+__pycache__
+python/.idea/
+scala/.idea/
+# Language files #
+.RData
+.R[Hh]istory
+.Rapp.history
+octave-workspace
+.DS_Store
