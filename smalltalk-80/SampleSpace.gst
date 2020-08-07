@@ -39,3 +39,21 @@ setData: aSequenceableCollection [
 
 ] "SampleSpaceWithReplacement"
 
+
+SampleSpaceWithReplacement subclass: SampleSpaceWithoutReplacement [
+
+SampleSpaceWithoutReplacement class >> data: aCollection [
+    ^self new setData: aCollection
+]
+
+next [
+    ^data remove: super next
+]
+
+setData: aCollection [
+    data := aCollection asOrderedCollection.
+    rand := Random new.
+]
+
+] "SampleSpaceWithoutReplacement"
+
