@@ -74,5 +74,39 @@ new [
     ^super new cards: Initial copy
 ]
 
-] "class methods"
+] "CardDeck class methods"
 
+
+Object subclass: CardHand [
+| cards |
+
+CardHand class >> new [
+    ^super new setCards
+]
+
+take: aCard [
+    cards add: aCard.
+]
+
+returnAllCardsTo: cardDeck [
+    cards do: [ :eachCard | cardDeck return: eachCard ].
+    self setCards.
+]
+
+points [
+    "The sum of the ranks"
+
+    ^cards inject: 0 into: [ :value :nextCard | value + nextCard rank ]
+]
+
+asString [
+    ^cards inject: '' 
+           into: [ :cardString :card | cardString isEmpty ifTrue: [ card asString ] 
+                                                          ifFalse: [ cardString, ', ', card asString ] ]
+]
+
+setCards [
+    cards := OrderedCollection new.
+]
+
+] "CardHand"
