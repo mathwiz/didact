@@ -47,12 +47,8 @@ walkWithin: aRectangle startingAt: aPoint [
     numberTiles := (aRectangle width + 1) * (aRectangle height + 1).
     tilesVisited add: currentTile.
     [ tilesVisited asSet size < numberTiles ] whileTrue:
-        [ currentTile := currentTile neighborAt: self randomStep.
+        [ currentTile := currentTile neighborAt: self class randomStep.
           tilesVisited add: currentTile ].
-]
-
-randomStep [
-    ^self class randomStep
 ]
 
 numberOfSteps [
