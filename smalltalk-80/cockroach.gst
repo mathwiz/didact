@@ -4,11 +4,8 @@ FileStream fileIn: 'DrunkenCockroach.gst'.
 
 DrunkenCockroach initialize.
 roach := DrunkenCockroach new.
-roach randomStep displayNl.
-roach randomStep displayNl.
-roach randomStep displayNl.
 
-'Run 10 experiments with a 5 x 5 room' displayNl.
+'* Run 10 experiments with a 5 x 5 room' displayNl.
 
 results := OrderedCollection new: 10.
 
@@ -20,7 +17,8 @@ results := OrderedCollection new: 10.
 
 avg := (results inject: 0 into: [ :sum :each | sum + each ]) / 10.0e. 
 
-('It takes on average ', avg asString, ' steps') displayNl.
+results displayNl.
+('* It takes on average ', avg asString, ' steps') displayNl.
 
 
 
