@@ -49,4 +49,10 @@ words size displayNl.
 words addFirst: (WordNode for: 'ape').
 words size displayNl.
 
+words remove: (WordNode for: 'horse').
+words size displayNl.
+
+words remove: (WordNode for: 'frog').
+words size displayNl.
+
 
