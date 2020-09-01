@@ -2,7 +2,7 @@
 (define hardware "")
 (define software "")
 (define operating-system "")
-(define compiler "")
+(define compiler "a program that converts from one language (usually high-level) to another (usually machine)")
 (define database-management-system "")
 (define artificial-intelligence "")
 (define soft-computing "")
