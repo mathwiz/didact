@@ -71,8 +71,17 @@
       (socket-server-close socket))))
 
 
+(defun hello-request-handler (path header params)
+  (if (equal path "greeting")
+      (let ((name (assoc 'name params)))
+        (if (not name)
+            (princ "<html><body><form> What is your name? <input name='name' /> </form></body></html>")
+            (format t "<html><body><h1>Nice to meet you, ~a!</h1></body></html>" (cdr name))))
+      (princ "Sorry... I don't know that page!")))
 
 
+; Run with
+; (serve #'hello-request-handler) 
 
 
 
