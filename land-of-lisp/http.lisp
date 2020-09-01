@@ -72,16 +72,21 @@
 
 
 (defun hello-request-handler (path header params)
-  (if (equal path "greeting")
-      (let ((name (assoc 'name params)))
-        (if (not name)
-            (princ "<html><body><form> What is your name? <input name='name' /> </form></body></html>")
-            (format t "<html><body><h1>Nice to meet you, ~a!</h1></body></html>" (cdr name))))
-      (princ "Sorry... I don't know that page!")))
+  (progn
+    (do-header)
+    (if (equal path "greeting")
+       (let ((name (assoc 'name params)))
+         (if (not name)
+             (princ "<html><body><form> What is your name? <input name='name' /> </form></body></html>")
+             (format t "<html><body><h1>Nice to meet you, ~a!</h1></body></html>" (cdr name))))
+       (princ "Sorry... I don't know that page!"))))
+
+(defun do-header ()
+  (format t "HTTP/1.0 200 OK~2%"))
 
 
-; Run with
-; (serve #'hello-request-handler) 
+; Run
+(serve #'hello-request-handler) 
 
 
 
