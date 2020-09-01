@@ -86,7 +86,7 @@
 
 
 ; Run
+(princ "Starting server... (ctrl-c to quit) ")
 (serve #'hello-request-handler) 
-
 
 
