@@ -66,8 +66,49 @@
                                               cur-player
                                               (+ spare-dice (dice dst))
                                               nil)))))
-                        (loop for n below *board-hexnum*
-                             collect n)))))))
+                        (neighbors src))))
+            (loop for n below *board-hexnum*
+                 collect n))))
 
+
+(defun neighbors (pos)
+  (let ((up (- pos *board-size*))
+        (down (+ pos *board-size*)))
+    (loop for p in (append (list up down)
+                           (unless (zerop (mod pos *board-size*))
+                             (list (1- up) (1- pos)))
+                           (unless (zerop (mod (1+ pos) *board-size*))
+                             (list (1+ pos) (1+ down))))
+         when (and (>= p 0) (< p *board-hexnum*))
+         collect p)))
+
+
+(defun board-attack (board player src dst dice)
+  (board-array (loop for pos
+                    for hex across board
+                    collect (cond ((eq pos src) (list player 1))
+                                  ((eq pos dst) (list player (1- dice)))
+                                  (t hex)))))
+
+
+(defun add-new-dice (board player spare-dice)
+  (labels ((f (lst n)
+             (cond ((null lst) nil)
+                   ((zerop n) lst)
+                   (t (let ((cur-player (caar lst))
+                            (cur-dice (cadar lst)))
+                        (if (and (eq cur-player player) (< cur-dice *max-dice*))
+                            (cons (list cur-player (1+ cur-dice))
+                                  (f (cdr lst) (1- n)))
+                            (cons (car lst) (f (cdr lst) n))))))))
+    (board-array (f (coerce board 'list) spare-dice))))
+
+
+
+
+
+(print (board-attack #((0 3) (0 3) (1 3) (1 1)) 0 1 3 3))
+(print (add-new-dice #((0 1) (1 3) (0 2) (1 1)) 0 2))
+(print (game-tree #((0 1) (1 1) (0 2) (1 1)) 0 0 t))
 
 (print 'done)
