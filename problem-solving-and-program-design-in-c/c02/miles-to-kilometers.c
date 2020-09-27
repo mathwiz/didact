@@ -10,7 +10,8 @@ int main(void)
     
     kms = KMS_PER_MILE * miles;
     
-    printf("That equals %f kilometers.\n", kms);
+    printf("That equals %.2f kilometers.\n", kms); /* note the use of
+                                                      decimal format */
     
     return 0;
 }
