@@ -154,11 +154,8 @@
         (format t "The winner is ~a" (player-letter (car w))))))
 
 
+(defun rate-position (tree player)
+  1)
 
-
-
-(print (board-attack #((0 3) (0 3) (1 3) (1 1)) 0 1 3 3))
-(print (add-new-dice #((0 1) (1 3) (0 2) (1 1)) 0 2))
-(print (game-tree #((0 1) (1 1) (0 2) (1 1)) 0 0 t))
 
 (print 'done)
