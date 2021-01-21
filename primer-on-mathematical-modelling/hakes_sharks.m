@@ -1,9 +1,9 @@
-% Example: hakes_sharks(1000)
+% Example: hakes_sharks(100)
 % Input: Nh = number of time steps
 %
 function hakes_sharks(Nh)
 % endpoints of time
-t0=0; tf=10;
+t0=0; tf=80;
 % initial condition
 p0=5000; s0=40;
 % parameters of model

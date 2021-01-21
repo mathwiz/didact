@@ -29,5 +29,5 @@ vn(1)=s0;
 % use Euler method
 for n=1:Nh
   un(n+1)=un(n)+h*f1(tn(n),un(n),vn(n));
-  vn(n+1)=un(n)+h*f2(tn(n),un(n),vn(n));
+  vn(n+1)=vn(n)+h*f2(tn(n),un(n),vn(n));
 end
