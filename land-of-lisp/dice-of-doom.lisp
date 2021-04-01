@@ -1,6 +1,6 @@
 (defparameter *num-players* 2)
 (defparameter *max-dice* 3)
-(defparameter *board-size* 2)
+(defparameter *board-size* 3)
 (defparameter *board-hexnum* (* *board-size* *board-size*))
 
 
@@ -37,6 +37,13 @@
                           spare-dice
                           first-move
                           (attacking-moves board player spare-dice))))
+
+; Optimization
+(let ((old-game-tree (symbol-function 'game-tree))
+      (previous (make-hash-table :test #'equalp)))
+  (defun game-tree (&rest rest)
+    (or (gethash rest previous)
+        (setf (gethash rest previous) (apply old-game-tree rest)))))
 
 
 (defun add-passing-move (board player spare-dice first-move moves)
@@ -83,6 +90,14 @@
          collect p)))
 
 
+; Optimization
+(let ((old-neighbors (symbol-function 'neighbors))
+      (previous (make-hash-table)))
+  (defun neighbors (pos)
+    (or (gethash pos previous)
+        (setf (gethash pos previous) (funcall old-neighbors pos)))))
+
+
 (defun board-attack (board player src dst dice)
   (board-array (loop for pos
                     for hex across board
@@ -91,7 +106,7 @@
                                   (t hex)))))
 
 
-(defun add-new-dice (board player spare-dice)
+(defun old-add-new-dice (board player spare-dice)
   (labels ((f (lst n)
              (cond ((null lst) nil)
                    ((zerop n) lst)
@@ -102,6 +117,22 @@
                                   (f (cdr lst) (1- n)))
                             (cons (car lst) (f (cdr lst) n))))))))
     (board-array (f (coerce board 'list) spare-dice))))
+
+
+; Optimization
+(defun add-new-dice (board player spare-dice)
+  (labels ((f (lst n acc)
+             (cond ((null lst) (reverse acc))
+                   ((zerop n) (append (reverse acc) lst))
+                   (t (let ((cur-player (caar lst))
+                            (cur-dice (cadar lst)))
+                        (if (and (eq cur-player player) (< cur-dice *max-dice*))
+                            (f (cdr lst)
+                               (1- n)
+                               (cons (list cur-player (1+ cur-dice)) acc))
+                            (f (cdr lst) n (cons (car lst) acc))))))))
+    (board-array (f (coerce board 'list) spare-dice nil))))
+
 
 
 (defun play-vs-human (tree)
@@ -167,6 +198,18 @@
               0)))))
 
 
+; Optimization
+(let ((old-rate-position (symbol-function 'rate-position))
+      (previous (make-hash-table)))
+  (defun rate-position (tree player)
+    (let ((tab (gethash player previous)))
+      (unless tab
+        (setf tab (setf (gethash player previous) (make-hash-table))))
+      (or (gethash tree tab)
+          (setf (gethash tree tab)
+                (funcall old-rate-position tree player))))))
+
+
 (defun get-ratings (tree player)
   (mapcar (lambda (move)
             (rate-position (cadr move) player))
@@ -186,7 +229,8 @@
 
 
 
-(print 'done)
+; Run it!
+(defun play ()
+  (play-vs-computer (game-tree (gen-board) 0 0 t)))
 
-; Try this
-; (play-vs-computer (game-tree (gen-board) 0 0 t))
+
