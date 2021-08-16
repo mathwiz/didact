@@ -21,7 +21,7 @@ main(void)
   printf("Enter an integer scale factor> ");
   scanf("%d", &factor);
   
-  printf("Result of call to scale(%.2f, %d) is %.0f\n", num, factor, scale(num, factor));
+  printf("Result of call to scale(%f, %d) is %f\n", num, factor, scale(num, factor));
 
   return 0;
 }
