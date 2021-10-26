@@ -40,3 +40,8 @@
 ;(tag mytag (color 'blue size 'big) (tag first_inner_tag ()) (tag second_innter_tag ()))
 
 ;(tag html () (tag body () (princ "Hello World!")))
+
+
+(defmacro html (&body body)
+  `(tag html ()
+        ,@body))
