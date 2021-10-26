@@ -45,3 +45,37 @@
 (defmacro html (&body body)
   `(tag html ()
         ,@body))
+
+(defmacro body (&body body)
+  `(tag body ()
+        ,@body))
+
+
+(defmacro svg (&body body)
+  `(tag svg (xmlns "http://www.w3.org/2000/svg"
+                   "xmlns:xlink" "http://www.w3.org/1999/xlink")
+        ,@body))
+
+
+(defun brightness (col amt)
+  (mapcar (lambda (x)
+            (min 255 (max 0 (+ x amt))))
+          col))
+
+;; Example
+;(brightness '(255 0 0) -100)
+
+(defun svg-style (color)
+  (format nil
+          "~{fill:rgb(~a,~a,~a);stroke:rgb(~a,~a,~a)~}"
+          (append color
+                  (brightness color -100))))
+
+(defun circle (center radius color)
+  (tag circle (cx (car center)
+                  cy (cdr center)
+                  r radius
+                  style (svg-style color))))
+
+;; Example
+;(svg (circle '(50 . 50) 50 '(255 0 0)) (circle '(100 . 100) 50 '(0 0 255)))
