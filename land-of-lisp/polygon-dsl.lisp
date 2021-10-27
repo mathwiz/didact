@@ -26,7 +26,7 @@
                                    :if-exists :supersede)
   (svg (loop repeat 10
             do (polygon (append '((0 . 200))
-                                (loop for x
+                                (loop for x below 400
                                      for y in (random-walk 100 400)
                                      collect (cons x y))
                                 '((400 . 200)))
