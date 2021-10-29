@@ -1,7 +1,7 @@
 (load "dice_of_doom_v1.lisp")
 (load "lazy.lisp")
 
-(defparameter *board-size* 4)
+(defparameter *board-size* 5)
 (defparameter *board-hexnum* (* *board-size* *board-size*))
 
 (defun add-passing-move (board player spare-dice first-move moves)
