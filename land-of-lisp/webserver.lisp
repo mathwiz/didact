@@ -62,14 +62,23 @@
                         (params (append (cdr url) 
                                         (get-content-params stream header)))
                         (*standard-output* stream))
+                   (do-header)
                    (funcall request-handler path header params))))
        (socket-server-close socket))))
 
 (defun hello-request-handler (path header params)
-  (if (equal path "greeting")
+  (if (equal path "greeting.html")
       (let ((name (assoc 'name params)))
         (if (not name)
             (princ "<form>What is your name?<input name='name' /></form>")
             (format t "Nice to meet you, ~a!" (cdr name))))
       (princ "Sorry... I don't know that page.")))
 
+
+(defun do-header ()
+  (format t "HTTP/1.0 200 OK~2%"))
+
+
+;Examples
+;(serve #'hello-request-handler) 
+;(serve #'dod-request-handler) 
