@@ -1,6 +1,8 @@
 ;; 2.1.1
 
-(display (list (square 7) (sin 0) (max 1 2)))
+;(display (square 7)) ; nope
+(display (sin 0)) ; yep
+(display (max 1 2)) ; yep
 
 ;; 2.1.2
 
