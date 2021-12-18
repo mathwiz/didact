@@ -3,18 +3,22 @@
 #define DEMAND_CHG  35.00
 #define PER_1000_CHG  1.10
 #define LATE_CHG  2.00
+#define OVERUSE_CHG_RATE 2.00
+#define CONSERVE_RATE 95
 
 void instruct_water(void);
-double comp_use_charge(int previous, int current);
+double comp_use_charge(int previous, int current, int last_year);
 double comp_late_charge(double unpaid);
 void display_bill(double late_charge, double bill, double unpaid);
+void display_overuse_msg(int used, int use_last_year);
 
 int main(int argc, const char * argv[])
 {
-  int previous;   /* input */
-  int current;    /* linput */
-  double unpaid;  /* input */
-  double bill;    /* output */
+  int previous;      /* input */
+  int current;       /* input */
+  int use_last_year; /* input */
+  double unpaid;     /* input */
+  double bill;       /* output */
   int used;
   double use_charge;
   double late_charge;
@@ -29,8 +33,10 @@ int main(int argc, const char * argv[])
   scanf("%d", &previous);
   printf("Enter current meter reading> ");
   scanf("%d", &current);
+  printf("Enter last year usage> ");
+  scanf("%d", &use_last_year);
 
-  use_charge = comp_use_charge(previous, current);
+  use_charge = comp_use_charge(previous, current, use_last_year);
 
   late_charge = comp_late_charge(unpaid);
 
@@ -41,11 +47,27 @@ int main(int argc, const char * argv[])
   return 0;
 }
 
-double comp_use_charge(int previous, int current)
+double comp_use_charge(int previous, int current, int use_last_year)
 {
   int used = current - previous;
-  double use_charge = used * PER_1000_CHG;
+  double use_charge;
+  if (used <= CONSERVE_RATE / 100.0 * use_last_year)
+    use_charge = used * PER_1000_CHG;
+  else
+  {
+    display_overuse_msg(used, use_last_year);
+    use_charge = used * OVERUSE_CHG_RATE * PER_1000_CHG;
+  }
   return use_charge;
+}
+
+void display_overuse_msg(int used, int use_last_year)
+{
+  printf("\n");
+  printf("Use charge is at %.2f times ", OVERUSE_CHG_RATE);
+  printf("normal rate since use of \n");
+  printf("%d units exceeds %d percent ", used, CONSERVE_RATE);
+  printf("of last year's %d-unit use.\n ", use_last_year);
 }
 
 double comp_late_charge(double unpaid)
@@ -74,8 +96,9 @@ void instruct_water(void)
   printf("gallons use charge.\n\n");
   printf("A $%.2f surcharge is added to ", LATE_CHG);
   printf("accounts with an unpaid balance.\n");
-  printf("\nEnter unpaid balance, previous, ");
-  printf("and current meter readings\n");
+  printf("\nEnter unpaid balance, previous ");
+  printf("and current meter readings, \n");
+  printf("and use last year\n");
   printf("on separate lines after the prompts.\n");
   printf("Press <ret> or <enter> after ");
   printf("typing each number.\n\n");
