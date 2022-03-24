@@ -29,20 +29,24 @@ class Screen:
   def clear(self):
     self.scr.fill((255,255,255))
     self.s = pygame.Surface(self.scr.get_size(), pygame.SRCALPHA, 32)
+    pygame.display.update()
 
   def set_pixel(self, x, y, rgb=(0, 0, 0)):
     self.colormap[(x, y)] = rgb
     pygame.draw.circle(self.scr, rgb, (x, y), 1)
+    pygame.display.update()
 
   def get_pixel(self, x, y):
     return self.colormap.get((x,y), (255, 255, 255))
 
   def draw_string(self, x, y, text, rgb=(0, 0, 0), text_size='medium'):
-    screen = self.scr
-    s = self.s
-    pygame.draw.circle(screen, "green", (50, 100), 10)
-    pygame.draw.circle(screen, "black", (50, 100), 10, 1)
-    pygame.display.flip()
+    fontSize = 24 #todo use text_size
+    pygame.font.init()
+    myfont = pygame.font.SysFont('Helvetica', fontSize)
+    textsurface = myfont.render(text, False, rgb)
+
+    self.scr.blit(textsurface, (x, y))
+    pygame.display.update()
 
 
 
@@ -63,7 +67,9 @@ def draw_string(x, y, text, rgb=(0, 0, 0), text_size='medium'):
 
 
 _screen = Screen()
-draw_string(20, 40, "hello world")
+draw_string(200, 100, "Hello World!", (100, 89, 200))
 set_pixel(10, 20, (255,0,0))
+set_pixel(110, 90, (0,255,0))
+set_pixel(210, 180, (0,0,255))
 print(get_pixel(10, 20))
 show_screen()
