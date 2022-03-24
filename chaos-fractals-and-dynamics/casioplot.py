@@ -11,7 +11,7 @@ class Screen:
     self.clear()
 
   def is_on(self, x, y):
-    return (x > 0 and x < self.width) and (y > 0 and y < self.height)
+    return (x > 0 and x <= self.width) and (y > 0 and y <= self.height)
 
   def show(self):
     try:
@@ -44,7 +44,6 @@ class Screen:
     pygame.font.init()
     myfont = pygame.font.SysFont('Helvetica', fontSize)
     textsurface = myfont.render(text, False, rgb)
-
     self.scr.blit(textsurface, (x, y))
     pygame.display.update()
 
