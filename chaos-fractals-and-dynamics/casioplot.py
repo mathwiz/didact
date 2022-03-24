@@ -66,9 +66,9 @@ def draw_string(x, y, text, rgb=(0, 0, 0), text_size='medium'):
 
 
 _screen = Screen()
-draw_string(200, 100, "Hello World!", (100, 89, 200))
-set_pixel(10, 20, (255,0,0))
-set_pixel(110, 90, (0,255,0))
-set_pixel(210, 180, (0,0,255))
-print(get_pixel(10, 20))
-show_screen()
+# draw_string(200, 100, "Hello World!", (100, 89, 200))
+# set_pixel(10, 20, (255,0,0))
+# set_pixel(110, 90, (0,255,0))
+# set_pixel(210, 180, (0,0,255))
+# print(get_pixel(10, 20))
+# show_screen()
