@@ -22,4 +22,5 @@ for i in range(1,37):
   for i in range(1, 5):
     forward(60)
     right(90)
-    right(10)
+
+  right(10)
