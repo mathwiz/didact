@@ -4,6 +4,7 @@ import pygame.gfxdraw
 class Screen:
   def __init__(self):
     pygame.init()
+    self.colormap = {}
     self.width = 384
     self.height = 192
     self.scr = pygame.display.set_mode((self.width, self.height))
@@ -30,7 +31,11 @@ class Screen:
     self.s = pygame.Surface(self.scr.get_size(), pygame.SRCALPHA, 32)
 
   def set_pixel(self, x, y, rgb=(0, 0, 0)):
+    self.colormap[(x, y)] = rgb
     pygame.draw.circle(self.scr, rgb, (x, y), 1)
+
+  def get_pixel(self, x, y):
+    return self.colormap.get((x,y), (255, 255, 255))
 
   def draw_string(self, x, y, text, rgb=(0, 0, 0), text_size='medium'):
     screen = self.scr
@@ -53,11 +58,12 @@ def get_pixel(x, y):
 def set_pixel(x, y, rgb=(0, 0, 0)):
   _screen.set_pixel(x, y, rgb)
 
-def draw_string(x, y, rgb=(0, 0, 0), text_size='medium'):
-  _screen.draw_string(x, y, "test", rgb, text_size)
+def draw_string(x, y, text, rgb=(0, 0, 0), text_size='medium'):
+  _screen.draw_string(x, y, text, rgb, text_size)
 
 
 _screen = Screen()
-draw_string(20,40)
+draw_string(20, 40, "hello world")
 set_pixel(10, 20, (255,0,0))
+print(get_pixel(10, 20))
 show_screen()
