@@ -23,13 +23,13 @@ def doLogo(cmd, args):
   elif cmd=='fd':
     fd(ns[0])
   elif cmd=='bk':
-    bk(n[0])
+    bk(ns[0])
   elif cmd=='lt':
-    lt(n[0])
+    lt(ns[0])
   elif cmd=='rt':
-    rt(n[0])
+    rt(ns[0])
   elif cmd=='goto':
-    goto(n[0], n[1])
+    goto(ns[0], ns[1])
   else:
     print("Unknown cmd:[%s]" % (cmd))
 
