@@ -1,11 +1,14 @@
 from logo import *
 
 exec("""
-fd  3
+fd  30
  rt  30
-fd 4
- lt 30
-bd 4
- lt 30
+fd 40
+ lt 60
+bk 40
+ lt 90
 pu
+goto 30 20
+pd
+fd 100
 """)
