@@ -40,7 +40,12 @@ class Screen:
     return self.colormap.get((x,y), (255, 255, 255))
 
   def draw_string(self, x, y, text, rgb=(0, 0, 0), text_size='medium'):
-    fontSize = 24 #todo use text_size
+    if text_size == 'large':
+      fontSize = 14
+    elif text_size == 'small':
+      fontSize = 10
+    else:
+      fontSize = 12
     pygame.font.init()
     myfont = pygame.font.SysFont('Helvetica', fontSize)
     textsurface = myfont.render(text, False, rgb)
