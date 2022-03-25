@@ -11,7 +11,7 @@ def process(line):
   doLogo(cmd, args)
 
 def doLogo(cmd, args):
-  ns = [ float(arg) for arg in args if arg ]
+  ns = [ float(x) for x in args if x ]
   if cmd=='home':
     home()
   elif cmd=='clear':
