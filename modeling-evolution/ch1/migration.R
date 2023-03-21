@@ -14,8 +14,7 @@ pop = function(Max.Lambda, Npop, N.Patches, P.Mig, P.Surv) {
     Lambda <- runif(N.Patches, min=0, max=Max.Lambda)
     Emigrants <- Npop * P.Mig
     Immigrants <- sum(Emigrants) * P.Surv/N.Patches
-    Npop <- Npop - Emigrants + Immigrants
-    Npop <- Npop * Lambda
+    Npop <- (Npop - Emigrants + Immigrants) * Lambda
     # set extinct populations to exactly zero
     Npop[Npop < 1] <- 0
     return(Npop)
@@ -41,7 +40,7 @@ print("migration finished.")
 # Output
 output = function() {
     par(mfcol=c(1,2))
-    plot(seq(1, Gen), Npop.Sizes[1:Gen], xlab="Generation", ylab="Mean Pop Size", type="l")
+    plot(seq(1, Gen), log10(Npop.Sizes[1:Gen]), xlab="Generation", ylab="Mean Pop Size", type="l")
     plot(seq(1, Gen), N.Extinct[1:Gen], xlab="Generation", ylab="Number of Pops Extinct", type="l", ylim=c(0, N.Patches))
 }
 
