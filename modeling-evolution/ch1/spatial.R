@@ -39,6 +39,6 @@ print("spatial finished.")
 output = function() {
     par(mfcol=c(1,2))
     plot(seq(1, i), Npop.Sizes[1:i], xlab="Generation", ylab="Mean Pop Size", type="l")
-    plot(seq(1, i), N.Extinct[1:i], xlab="Generation", ylab="Mean Pop Size", type="l", ylim=c(0, N.Patches))
+    plot(seq(1, i), N.Extinct[1:i], xlab="Generation", ylab="Number of Pops Extinct", type="l", ylim=c(0, N.Patches))
 }
 
