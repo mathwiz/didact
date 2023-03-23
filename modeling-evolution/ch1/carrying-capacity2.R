@@ -1,15 +1,7 @@
 rm(list=ls())
 
 set.seed(100)
-
-Max.Gen = 1000
 Carrying.Capacity = 1000
-N.Init = 20
-Max.Lambda = 2.2
-N.Patches = 10
-# data for multiple runs
-P.Mig = seq(from=0.1, to=0.9, length=10)
-P.Surv = seq(from=0.8, to=0.9, length=10)
 
 pop = function(Max.Lambda, Npop, N.Patches, P.Mig, P.Surv) {
     # randomize growth rate
@@ -29,23 +21,30 @@ main = function(data) {
     P.Mig = data[1]
     P.Surv = data[2]
 
-# initialize populations
-Npop = matrix(N.Init, N.Patches, 1)
-Npop.Sizes = matrix(0, Max.Gen)
-# first generation
-Npop.Sizes[1] = mean(Npop)
-N.Extinct = matrix(0, N.Patches, 1)
+    Max.Gen = 1000
+    N.Init = 20
+    Max.Lambda = 2.2
+    N.Patches = 10
 
-Gen <- 1
-while (Gen < Max.Gen && Npop.Sizes[Gen] > 0) {
-    Gen <- Gen + 1
-    Npop <- pop(Max.Lambda, Npop, N.Patches, P.Mig, P.Surv)
-    Npop.Sizes[Gen] <- mean(Npop)
-    N.Extinct[Gen] <- length(Npop[Npop==0])
-}    
+    # initialize populations
+    Npop = matrix(N.Init, N.Patches, 1)
+    Npop.Sizes = matrix(0, Max.Gen)
+    # first generation
+    Npop.Sizes[1] = mean(Npop)
+    N.Extinct = matrix(0, N.Patches, 1)
+
+    Gen <- 1
+    while (Gen < Max.Gen && Npop.Sizes[Gen] > 0) {
+        Gen <- Gen + 1
+        Npop <- pop(Max.Lambda, Npop, N.Patches, P.Mig, P.Surv)
+        Npop.Sizes[Gen] <- mean(Npop)
+        N.Extinct[Gen] <- length(Npop[Npop==0])
+    }    
 
 } #main
 
+P.Mig = seq(from=0.1, to=0.9, length=10)
+P.Surv = seq(from=0.8, to=0.9, length=10)
 Data = expand.grid(P.Mig, P.Surv)
 Z = apply(Data, 1, main)
 Z.Matrix = matrix(Z, length(P.Mig), length(P.Surv))
