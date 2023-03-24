@@ -19,7 +19,7 @@ grad = function(w) {
 Max.Root = uniroot(grad, interval=c(-2,4))$root
 Max.Numeric = nlm(function(x) { -1*fitness(x) }, p=-2)$estimate
 
-print('simple-trade-off done.')
+print('age-structure done.')
 
 output = function() {
     plot(X, W, type='l', xlab='Body size', ylab='Fitness, W', las=1, lwd=3)
