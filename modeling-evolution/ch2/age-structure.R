@@ -6,13 +6,13 @@ fitness = function(x) {
 
 #### Main program ####
 
-FitnessExpr = expression(-2*x^2 + 4*x)
+FitnessExpr = expression(-2*x^2 + 4*x) # adding age structure leaves expression the same
 X = seq(0, 2, length=1000)
 W = sapply(X, fitness)
 
 Dx = deriv(FitnessExpr, 'x')
 grad = function(w) {
-    x <- w # what does this do?
+    x <- w # variable must be 'x' to use eval
     return (attr(eval(Dx), 'gradient'))
 }
 

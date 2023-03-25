@@ -10,9 +10,10 @@ FitnessExpr = expression(-2*x^2 + 4*x)
 X = seq(0, 2, length=1000)
 W = sapply(X, fitness)
 
-Dx = deriv(FitnessExpr, 'x')
-grad = function(w) {
-    x <- w # what does this do?
+
+grad = function(w) {  # could just call arg 'x' here to avoid next line
+    x <- w            # argument must be named 'x' since that is var in FitnessExpr
+    Dx = deriv(FitnessExpr, 'x')
     return (attr(eval(Dx), 'gradient'))
 }
 
