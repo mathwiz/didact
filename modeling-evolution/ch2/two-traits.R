@@ -29,6 +29,27 @@ W.Temp = apply(D, 1, fitness, A.xy, A.0, B.xy, C.xy, B.yx, C.yx)
 # convert into matrix
 W = matrix(W.Temp, N, N, byrow=T)
 
+# find maximum using calculus
+derivative = function(x) {
+    t1 <- abs(0.4*x[2] + 0.8 - 2.0*0.4*x[1])
+    t2 <- abs(0.4*x[1] + 0.8 - 2.0*0.4*x[2])
+    return(t1 + t2)
+}
+Max.Symb = nlm(derivative, p=c(1,1))$estimate
+
+# find maximum numerically
+fitness2 = function(x) {
+    t1 <- A.xy * x[1] * x[2]
+    t3 <- B.xy * x[1]
+    t4 <- C.xy * x[1]^2
+    t5 <- B.yx * x[2]
+    t6 <- C.yx * x[2]^2
+    w <- t1 - A.0 + t3 - t4 + t5 - t6
+    return(-w)
+}
+
+Traits = nlm(fitness2, p=c(0.5,0.5))$estimate
+Max.Num = -fitness2(Traits)
 
 print('two-traits done.')
 
@@ -37,4 +58,8 @@ output = function() {
     plot(X, S.xy, type='l', xlab='Vigilance or Foraging Rate', ylab='Effect on Survival', las=1, lwd=3)
     contour(Vigilance, Foraging, W, xlab='Vigilance', ylab='Foraging', las=1, lwd=3, labcex=1)
     persp(Vigilance, Foraging, W, xlab='Vigilance', ylab='Foraging', zlab='Fitness', theta=50, phi=25, lwd=2)
+    print('Maximum using calculus')
+    print(Max.Symb)
+    print('Maximum numerically')
+    print(c(Traits, Max.Num))
 }    
