@@ -98,9 +98,7 @@ fitness3 = function(x) {
 
     return(-w)
 }    
-
-# find maximum numerically
-Max.Num = nlm(fitness3, p=1)$estimate
+Max.Symb2 = nlm(fitness3, p=1)$estimate
 
 
 print('three-traits done.')
@@ -111,6 +109,6 @@ output = function() {
     persp(X, X, W, xlab='Propagule size 1st clutch', ylab='Popagule size 2nd clutch', zlab='Fitness', theta=25, phi=25, lwd=1)
     print('Maximum using calculus')
     print(Max.Symb)
-    print('Maximum numerically')
-    print(Max.Num)
+    print('Maximum using calculus (alternate method)')
+    print(Max.Symb2)
 }    
