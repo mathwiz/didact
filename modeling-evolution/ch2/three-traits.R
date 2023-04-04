@@ -65,9 +65,43 @@ fitness2 = function(x) {
 }    
 Max.Symb = nlm(fitness2, p=1)$estimate
 
-## # find maximum numerically
-## Max.Num = optimize(f=fitness, interval=c(1,8), maximum=T)$maximum
-## Size.Second.Num = (R/N) - Max.Num
+# second method
+gradient = function(w, y) {
+    # x1 is 1st propagule, x2 is second
+    dx1x2 <- deriv(~ (N*S1*F.Max*(1-exp(-A*x1)) + N*S2*F.Max*(1-exp(-A*x2)) + N*S3*F.Max*(1-exp(-A*(R/N-(x1+x2))))), c("x1", "x2"))
+    x1 <- w
+    x2 <- y
+    z <- eval(dx1x2)
+    g <- attr(z, "gradient")
+    return(abs(g[1] - g[2]))
+}
+
+fitness3 = function(x) {
+    x2 <- x
+    x1 <- nlm(gradient, p=1, x2)$estimate
+    x3 <- (R - N*(x1 + x2)) / N
+
+    if(x3 < 0) {
+        w <- 0
+    } else if(N*x1 > R) {
+        w <- 0
+    } else {
+        w1 <- N*S1*F.Max*(1-exp(-A*x1))
+        if(N*x2 > R) {
+            w <- w1
+        } else {
+            w2 <- N*S2*F.Max*(1-exp(-A*x2))
+            w3 <- N*S3*F.Max*(1-exp(-A*x3))
+            w <- w1 + w2 + w3
+        }    
+    }
+
+    return(-w)
+}    
+
+# find maximum numerically
+Max.Num = nlm(fitness3, p=1)$estimate
+
 
 print('three-traits done.')
 
@@ -77,6 +111,6 @@ output = function() {
     persp(X, X, W, xlab='Propagule size 1st clutch', ylab='Popagule size 2nd clutch', zlab='Fitness', theta=25, phi=25, lwd=1)
     print('Maximum using calculus')
     print(Max.Symb)
-    ## print('Maximum numerically')
-    ## print(c(Max.Num, Size.Second.Num))
+    print('Maximum numerically')
+    print(Max.Num)
 }    
