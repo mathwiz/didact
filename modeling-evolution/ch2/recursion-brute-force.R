@@ -55,17 +55,21 @@ Alpha.Best = Alpha[Best[1]]
 G.Best = G.Num[Best[1]]
 W.Best = W.Num[Best[1]]
 
-## # brute force approach
-## Brute.Size = 100
-## Brute.X = seq(from=1.0, to=5.0, length=Brute.Size)
-## Brute.Y = seq(from=1.0, to=5.0, length=Brute.Size)
-## Brute.D = expand.grid(Brute.X, Brute.Y)
-## Brute.W = apply(Brute.D, 1, function(x) { -fitness(x) })
-## # find position in row with highest fitness
-## Best = order(Brute.W, na.last=T, decreasing=T)
-## Brute.X1 = Brute.D[Best[1],1]
-## Brute.X2 = Brute.D[Best[1],2]
-## Brute.X3 = (R - N*(Brute.X1 + Brute.X2)) / N
+# brute force approach
+best.g = function(alpha) {
+    g1 <- nlm(fitness2, p=0.1, alpha)$estimate
+    w1 <- fitness2(g1, alpha)
+    g2 <- nlm(fitness2, p=0.1, alpha+1)$estimate
+    w2 <- fitness2(g2, alpha+1)
+    wdiff <- w1 - w2
+    return(c(wdiff, w1, g1))
+}
+Alpha.Brute = 5
+Diff = best.g(Alpha.Brute)
+while(Diff[1] > 0) { # if Diff[1] > 0 then W is still increasing
+    Alpha.Brute = Alpha.Brute + 1
+    Diff = best.g(Alpha.Brute) #Diff[3] = G, Diff[2] = -W
+}
 
 
 print('recursion-brute-force done.')
@@ -73,10 +77,8 @@ print('recursion-brute-force done.')
 output = function() {
     par(mfrow=c(1,1))
     contour(G, Alpha, -W.Mat, xlab='G', ylab='Alpha')
-    ## persp(X, X, W, xlab='Propagule size 1st clutch', ylab='Popagule size 2nd clutch', zlab='Fitness', theta=25, phi=25, lwd=1)
     print('Maximum numerically')
     print(c(Alpha.Best, G.Best, W.Best))
-    ## print(c(X1, X2, X3))
-    ## print('Brute force approach')
-    ## print(c(Brute.X1, Brute.X2, Brute.X3, Brute.W[Best[1]]))
+    print('Brute force approach')
+    print(c(Alpha.Brute, Diff[3], -Diff[2]))
 }    
