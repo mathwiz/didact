@@ -43,12 +43,17 @@ D = expand.grid(G, Alpha)
 W = apply(D, 1, fitness)
 W.Mat = matrix(W, N.G, N.Alpha)
 
-
-## # finding maximum numerically
-## Max.Num <- nlm(fitness, p=c(0.1, 0.1))$estimate
-## X1 = Max.Num[1]
-## X2 = Max.Num[2]
-## X3 = (R - N*(X1 + X2)) / N
+# finding maximum numerically
+G.Num = matrix(0, N.Alpha)
+W.Num = matrix(0, N.Alpha)
+for(i in 1:N.Alpha) {
+    G.Num[i] = nlm(fitness2, p=0.2, Alpha[i])$estimate
+    W.Num[i] = -1 * fitness2(G.Num[i], Alpha[i])
+}
+Best = order(W.Num, na.last=T, decreasing=T)
+Alpha.Best = Alpha[Best[1]]
+G.Best = G.Num[Best[1]]
+W.Best = W.Num[Best[1]]
 
 ## # brute force approach
 ## Brute.Size = 100
@@ -69,12 +74,8 @@ output = function() {
     par(mfrow=c(1,1))
     contour(G, Alpha, -W.Mat, xlab='G', ylab='Alpha')
     ## persp(X, X, W, xlab='Propagule size 1st clutch', ylab='Popagule size 2nd clutch', zlab='Fitness', theta=25, phi=25, lwd=1)
-    ## print('Maximum using calculus')
-    ## print(Max.Symb)
-    ## print('Maximum using calculus (alternate method)')
-    ## print(Max.Symb2)
-    ## print('Maximum numerically')
-    ## print(Max.Num)
+    print('Maximum numerically')
+    print(c(Alpha.Best, G.Best, W.Best))
     ## print(c(X1, X2, X3))
     ## print('Brute force approach')
     ## print(c(Brute.X1, Brute.X2, Brute.X3, Brute.W[Best[1]]))
