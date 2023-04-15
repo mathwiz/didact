@@ -15,10 +15,8 @@ print('Calculated')
 print(Result)
 
 
-# pairwise invasibility analysis
-
 # using Leslie matrix
-rm(list=ls())
+## rm(list=ls())
 
 leslie = function(x, maxage) {
     age <- seq(from=1, to=maxage)
@@ -52,20 +50,21 @@ pop.dynamics = function(x) {
     invader.mat <- leslie(x.invader, maxage)
     f.resident <- resident.mat[1,]
     f.invader <- invader.mat[1,]
-
+    maxgen <- 30
     n.resident <- matrix(0, maxage, 1) # pop size
     n.resident[1] <- 1
-    for(i in 2:30) {
+    for(i in 2:maxgen) {
         n <- sum(n.resident)
         resident.mat[1,] <- dd(alpha, beta, f.resident, n)
         n.resident <- resident.mat %*% n.resident
     }
     # introduce invader
-    pop.invader <- matrix(0, 100, 1)
+    maxgen <- 100
+    pop.invader <- matrix(0, maxgen, 1)
     n.invader <- matrix(0, maxage, 1)
     n.invader[1] <- 1
     pop.invader[1,1] <- n.invader[1]
-    for(i in 2:100) {
+    for(i in 2:maxgen) {
         n <- sum(n.resident) + sum(n.invader)
         resident.mat[1,] <- dd(alpha, beta, f.resident, n)
         n.resident <- resident.mat %*% n.resident
@@ -74,7 +73,6 @@ pop.dynamics = function(x) {
         pop.invader[i] <- sum(n.invader)
     }
 
-    maxgen <- 100
     generation <- seq(from=1, to=maxgen)
     n.start <- 20
     # linear regression
@@ -95,5 +93,40 @@ Z <- apply(D, 1, pop.dynamics)
 Z.Mat <- matrix(Z, N1, N1)
 
 # contour plot
+par(mfrow=c(2,2))
 contour(X.Resident, X.Invader, Z.Mat, xlab="Resident", ylab="Invader")
 points(1.68703, 1.68703, cex=3)
+
+
+# Elasticity analysis
+pop.dynamics2 = function(x, coeff) {
+    pop.dynamics(c(x, coeff))
+}
+
+Increments = 20
+Coeff = 0.995
+X = matrix(seq(from=0.5, to=3.0, length=Increments))
+Elasticity = apply(X, 1, pop.dynamics2, Coeff)
+
+plot(X, Elasticity, type='l')
+lines(c(0.5, 3.0), c(0, 0))
+
+# calculate optimum
+Optimum = optimize(pop.dynamics2, interval=c(0.5, 3.0), Coeff)
+## Optimum = uniroot(pop.dynamics2, interval=c(1.5, 3.0), Coeff)
+Best.X = Optimum$minimum
+## Best.X = Optimum$root
+print('Optimum body size')
+print(signif(Best.X, 6))
+
+## Best.X = 1.68703 # don't know why uniroot is not giving correct value
+Coeffs = X / Best.X
+Invasion.Exp = matrix(0, Increments, 1) # allocate matrix
+
+for(i in 1:Increments) {
+    Invasion.Exp[i] = pop.dynamics2(Best.X, Coeff[i])
+}
+
+plot(X, Invasion.Exp, type='l')
+points(Best.X, 0, cex=2)
+
