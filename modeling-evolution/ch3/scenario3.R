@@ -1,6 +1,6 @@
 # using Fisherian optimization
 rm(list=ls())
-par(mfrow=c(3,4))
+par(mfrow=c(3,3))
 
 dd = function(n, alpha, beta) {
     alpha*exp(-beta*n)
@@ -38,6 +38,7 @@ Maxgen2 = 300
 Tot.Gen = Maxgen1 + Maxgen2
 Generation = seq(from=1, to=Tot.Gen)
 N.Start = 10 + Maxgen1
+
 pop.dynamics = function(alpha) {
     alpha.resident <- alpha[1]
     alpha.invader <- alpha[2]
@@ -79,34 +80,54 @@ points(2.725109, 2.72, cex=3)
 
 
 # Elasticity analysis
+dd2 = function(alpha, n1, n2) {
+    beta <- alpha * Factor
+    n1 * alpha*exp(-beta*n2)
+}
+
 pop.dynamics2 = function(x, coeff) {
-    pop.dynamics(c(x, coeff))
+    alpha.resident <- x
+    alpha.invader <- alpha.resident * coeff
+    alpha <- c(alpha.resident, alpha.invader)
+    pop.dynamics(alpha)
 }
 
-Increments = 20
+Min.A = 1; Max.A = 10
 Coeff = 0.995
-X = matrix(seq(from=0.5, to=3.0, length=Increments))
-Elasticity = apply(X, 1, pop.dynamics2, Coeff)
-
-plot(X, Elasticity, type='l')
-lines(c(0.5, 3.0), c(0, 0))
-
 # calculate optimum
-Optimum = optimize(pop.dynamics2, interval=c(0.5, 3.0), Coeff)
-## Optimum = uniroot(pop.dynamics2, interval=c(1.5, 3.0), Coeff)
-Best.X = Optimum$minimum
-## Best.X = Optimum$root
-print('Optimum body size')
-print(signif(Best.X, 6))
+Optimum = optimize(pop.dynamics2, interval=c(Min.A, Max.A), Coeff)
+Best.Alpha = Optimum$root
+print('Optimum alpha')
+print(Best.Alpha)
 
-## Best.X = 1.68703 # don't know why uniroot is not giving correct value
-Coeffs = X / Best.X
-Invasion.Exp = matrix(0, Increments, 1) # allocate matrix
+# plot elasticity vs alpha
+N.Int = 30
+Alpha = matrix(seq(from=Min.A, to=Max.A, length=N.Int), N.Int, 1)
+Elasticity = apply(Alpha, 1, pop.dynamics2, Coeff)
+plot(Alpha, Elasticity, type='l')
+lines(c(Min.A, Max.A), c(0, 0))
 
-for(i in 1:Increments) {
-    Invasion.Exp[i] = pop.dynamics2(Best.X, Coeff[i])
+Coeffs = Alpha / Best.Alpha
+Invasion.Exp = matrix(0, N.Int, 1) # allocate matrix
+# calculate invasion coefficient
+for(i in 1:N.Int) {
+    Invasion.Exp[i] = pop.dynamics2(Best.Alpha, Coeffs[i])
 }
 
-plot(X, Invasion.Exp, type='l')
-points(Best.X, 0, cex=2)
-
+plot(Alpha, Invasion.Exp, type='l')
+points(Best.Alpha, 0, cex=2)
+# plot N(t+1) on N(t) for optimum alpha
+Max.N = 1000
+N.t = seq(from=1, to=Max.N)
+N.tplus1 = matrix(0, Max.N)
+for(i in 1:Max.N) {
+    N.tplus1[i] = dd2(Best.Alpha, N.t[i], N.t[i])
+}
+plot(N.t, N.tplus1, type='l', xlab='N(t)', ylab='N(t+1)')
+# plot N(t) on t
+Max.N = 100
+N = matrix(1, Max.N)
+for(i in 2:Max.N) {
+    N[i] = dd2(Best.Alpha, N[i-1], N[i-1])
+}
+plot(seq(from=1, to=Max.N), N, type='l', xlab='Generation', ylab='N(t)')

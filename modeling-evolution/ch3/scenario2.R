@@ -124,7 +124,7 @@ Coeffs = X / Best.X
 Invasion.Exp = matrix(0, Increments, 1) # allocate matrix
 
 for(i in 1:Increments) {
-    Invasion.Exp[i] = pop.dynamics2(Best.X, Coeff[i])
+    Invasion.Exp[i] = pop.dynamics2(Best.X, Coeffs[i])
 }
 
 plot(X, Invasion.Exp, type='l')
