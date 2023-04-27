@@ -80,55 +80,42 @@ optimum.point = 0.5651338
 points(optimum.point, optimum.point, cex=3)
 
 
-## # Elasticity analysis
-## dd2 = function(alpha, n1, n2) {
-##     beta <- alpha * Factor
-##     n1 * alpha*exp(-beta*n2)
-## }
+# Elasticity analysis
+dd2 = function(alpha, beta, f.di, ei, n) {
+    # no change from dd
+    dd(alpha, beta, f.di, ei, n)
+}
 
-## pop.dynamics2 = function(x, coeff) {
-##     alpha.resident <- x
-##     alpha.invader <- alpha.resident * coeff
-##     alpha <- c(alpha.resident, alpha.invader)
-##     pop.dynamics(alpha)
-## }
+pop.dynamics2 = function(x, coeff) {
+    alpha.resident <- x
+    alpha.invader <- alpha.resident * coeff
+    alpha <- c(alpha.resident, alpha.invader)
+    pop.dynamics(alpha)
+}
 
-## Min.A = 1; Max.A = 10
-## Coeff = 0.995
-## # calculate optimum
-## Optimum = optimize(pop.dynamics2, interval=c(Min.A, Max.A), Coeff)
-## Best.Alpha = Optimum$root
-## print('Optimum alpha')
-## print(Best.Alpha)
+Min.A = 0.01; Max.A = 0.9
+Coeff = 0.995
+# calculate optimum
+Optimum = uniroot(pop.dynamics2, interval=c(Min.A, Max.A), Coeff)
+Best.Alpha = Optimum$root
+print('Optimum reproductive effort')
+print(Best.Alpha)
 
-## # plot elasticity vs alpha
-## N.Int = 30
-## Alpha = matrix(seq(from=Min.A, to=Max.A, length=N.Int), N.Int, 1)
-## Elasticity = apply(Alpha, 1, pop.dynamics2, Coeff)
-## plot(Alpha, Elasticity, type='l')
-## lines(c(Min.A, Max.A), c(0, 0))
+# plot elasticity vs alpha
+N.Int = 30
+Low = 0.2
+High = Max.A
+Alpha = matrix(seq(from=Low, to=High, length=N.Int), N.Int, 1)
+Elasticity = apply(Alpha, 1, pop.dynamics2, Coeff)
+plot(Alpha, Elasticity, type='l')
+lines(c(Low, High), c(0, 0))
 
-## Coeffs = Alpha / Best.Alpha
-## Invasion.Exp = matrix(0, N.Int, 1) # allocate matrix
-## # calculate invasion coefficient
-## for(i in 1:N.Int) {
-##     Invasion.Exp[i] = pop.dynamics2(Best.Alpha, Coeffs[i])
-## }
+Coeffs = Alpha / Best.Alpha
+Invasion.Exp = matrix(0, N.Int, 1) # allocate matrix
+# calculate invasion coefficient
+for(i in 1:N.Int) {
+    Invasion.Exp[i] = pop.dynamics2(Best.Alpha, Coeffs[i])
+}
 
-## plot(Alpha, Invasion.Exp, type='l')
-## points(Best.Alpha, 0, cex=2)
-## # plot N(t+1) on N(t) for optimum alpha
-## Max.N = 1000
-## N.t = seq(from=1, to=Max.N)
-## N.tplus1 = matrix(0, Max.N)
-## for(i in 1:Max.N) {
-##     N.tplus1[i] = dd2(Best.Alpha, N.t[i], N.t[i])
-## }
-## plot(N.t, N.tplus1, type='l', xlab='N(t)', ylab='N(t+1)')
-## # plot N(t) on t
-## Max.N = 100
-## N = matrix(1, Max.N)
-## for(i in 2:Max.N) {
-##     N[i] = dd2(Best.Alpha, N[i-1], N[i-1])
-## }
-## plot(seq(from=1, to=Max.N), N, type='l', xlab='Generation', ylab='N(t)')
+plot(Alpha, Invasion.Exp, type='l')
+points(Best.Alpha, 0, cex=2)
