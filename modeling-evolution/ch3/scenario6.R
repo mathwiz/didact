@@ -5,7 +5,7 @@
 
 
 rm(list=ls())
-par(mfrow=c(2,2))
+par(mfrow=c(3,3))
 
 Ps = c(0.1, 0.5, 0.7, 0.9)
 Maxgen = 100
@@ -58,7 +58,7 @@ pop.dynamics = function(alpha) {
 }
 
 
-## #### MAIN PROGRAM ####
+##### MAIN PROGRAM ####
 Best.Alpha = 24.21837
 
 N.Int = 30
@@ -71,3 +71,66 @@ Z = apply(D, 1, pop.dynamics)
 Z.Mat = matrix(Z, N.Int, N.Int)
 contour(A.Resident, A.Invader, Z.Mat, xlab='Resident', ylab='Invader')
 points(Best.Alpha, Best.Alpha, cex=2)
+
+
+# Elasticity analysis
+dd2 = function(alpha, n1, n2) {
+    # no change from dd
+    dd(alpha, n1, n2)
+}
+
+pop.dynamics2 = function(x, coeff) {
+    alpha.resident <- x
+    alpha.invader <- alpha.resident * coeff
+    alpha <- c(alpha.resident, alpha.invader)
+    pop.dynamics(alpha)
+}
+
+Min.A = 10; Max.A = 40
+Coeff = 0.995
+# calculate optimum
+Optimum = uniroot(pop.dynamics2, interval=c(Min.A, Max.A), Coeff)
+Best.Alpha = Optimum$root
+print('Optimum reproductive effort')
+print(Best.Alpha)
+
+# plot elasticity vs alpha
+N.Int = 30
+Low = Min.A
+High = Max.A
+Alpha = matrix(seq(from=Low, to=High, length=N.Int), N.Int, 1)
+Elasticity = apply(Alpha, 1, pop.dynamics2, Coeff)
+plot(Alpha, Elasticity, type='l')
+lines(c(Low, High), c(0, 0))
+
+Coeffs = Alpha / Best.Alpha
+Invasion.Exp = matrix(0, N.Int, 1) # allocate matrix
+# calculate invasion coefficient
+for(i in 1:N.Int) {
+    Invasion.Exp[i] = pop.dynamics2(Best.Alpha, Coeffs[i])
+}
+
+plot(Alpha, Invasion.Exp, type='l')
+points(Best.Alpha, 0, cex=2)
+
+# plot N(t+1) vs N(t)
+N0 = 1
+N = 1000
+N.t = seq(from=N0, to=N)
+N.tplus1 = matrix(0, N)
+for(i in N0:N) {
+    N.tplus1[i] = dd2(Best.Alpha, N.t[i], N.t[i])
+}
+plot(N.t, N.tplus1, type='l')
+
+# plot N(t) vs t
+N0 = 1
+N = 100
+
+N.t = matrix(0, N)
+N.t[1] = 1
+for(i in (N0+1):N) {
+    N.t[i] = dd2(Best.Alpha, N.t[i-1], N.t[i-1])
+}
+plot(seq(from=N0, to=N), N.t, type='l', xlab='Generation', ylab='Population')
+
