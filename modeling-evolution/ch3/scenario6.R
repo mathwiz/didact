@@ -5,7 +5,7 @@
 
 
 rm(list=ls())
-par(mfrow=c(3,3))
+par(mfrow=c(5,3))
 
 Ps = c(0.1, 0.5, 0.7, 0.9)
 Maxgen = 100
@@ -173,3 +173,49 @@ pop.dynamics3 = function(x, coeff) {
 
 Invader.Alpha = 10
 pop.dynamics3(Best.Alpha, Invader.Alpha/Best.Alpha)
+
+
+# Multiple invasibility analysis
+dd4 = function(x, n.tot) {
+    alpha <- x[1]
+    n <- x[2]
+    dd(alpha, n, n.tot)
+}
+
+set.seed(10)
+Maxgen = 10^4
+Stats = matrix(0, Maxgen, 3)
+Max.Alpha = 50
+N.Inc = 50
+Store = matrix(0, Maxgen, N.Inc)
+Data = matrix(0, N.Inc, 2)
+Data[24,2] = 1
+Alpha = matrix(seq(from=1, to=Max.Alpha, length=N.Inc), N.Inc, 1)
+Data[,1] = Alpha
+for(i in 1:Maxgen) {
+    N.Total = sum(Data[,2])
+    Data[,2] = apply(Data, 1, dd4, N.Total)
+    Store[i,] = Data[,2]
+    S = sum(Data[,2])
+    Stats[i,1] = S
+    Stats[i,2] = sum(Data[,1] * Data[,2]) / S # mean
+    SX1 = sum(Data[,1]^2 * Data[,2])
+    SX2 = (sum(Data[,1] * Data[,2]))^2 / S
+    Stats[i,3] = sqrt((SX1 - SX2) / (S - 1))
+    # introduce random mutant
+    Mutant = ceiling(runif(1, min=0, max=50))
+    Data[Mutant, 2] = Data[Mutant, 2] + 1
+}
+
+# select rows to be plotted
+for(row in (Maxgen-2):Maxgen) {
+    plot(Alpha, Store[row,], type='l', xlab='Alpha', ylab='N')
+}    
+
+Generation = seq(from=1, to=Maxgen)
+N0 = Maxgen - 100
+plot(Generation[N0:Maxgen], Stats[N0:Maxgen,1], xlab='Generation', ylab='Population', type='l')
+plot(Generation[N0:Maxgen], Stats[N0:Maxgen,2], xlab='Generation', ylab='Mean', type='l')
+plot(Generation[N0:Maxgen], Stats[N0:Maxgen,3], xlab='Generation', ylab='SD', type='l')
+print(c('Mean alpha in last gen = ', Stats[Maxgen, 2]))
+print(c('SD of alpha in last gen = ', Stats[Maxgen, 3]))
