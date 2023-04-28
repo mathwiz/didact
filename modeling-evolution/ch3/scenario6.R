@@ -134,3 +134,42 @@ for(i in (N0+1):N) {
 }
 plot(seq(from=N0, to=N), N.t, type='l', xlab='Generation', ylab='Population')
 
+
+# Invasibility 3
+dd3 = function(alpha, n1, n2) {
+    #same as previous
+    dd(alpha, n1, n2)
+}
+
+pop.dynamics3 = function(x, coeff) {
+    a.resident <- x
+    a.invader <- x * coeff
+    maxgen1 <- 50
+    maxgen2 <- 300
+    tot.gen <- maxgen1 + maxgen2
+
+    n.resident <- n.invader <- matrix(0, tot.gen)
+    n.resident[1] <- 1
+    n.invader[maxgen1] <-1
+
+    # resident generations
+    for(i in 2:maxgen1) {
+        n <- n.resident[i-1]
+        n.resident[i] <- dd3(a.resident, n, n) # density effect
+    }
+
+    # introduce invader
+    for(i in (maxgen1+1):tot.gen) {
+        n <- n.resident[i-1] + n.invader[i-1]
+        n.resident[i] <- dd3(a.resident, n.resident[i-1], n)
+        n.invader[i] <- dd3(a.invader, n.invader[i-1], n)
+    }
+
+    generation <- seq(from=1, to=tot.gen)
+
+    plot(generation, n.resident, xlab='Generation', ylab='Resident N', type='l')
+    plot(generation, n.invader, xlab='Generation', ylab='Invader N', type='l')
+}    
+
+Invader.Alpha = 10
+pop.dynamics3(Best.Alpha, Invader.Alpha/Best.Alpha)
