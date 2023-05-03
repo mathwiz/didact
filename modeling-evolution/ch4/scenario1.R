@@ -1,5 +1,7 @@
 rm(list=ls())
 
+# Stabilizing selection using an Population Variance Components model
+
 # General assumptions
 # 1. Both traits are quantitative with non-zero probabilities
 # 2. Selection is stabilizing.

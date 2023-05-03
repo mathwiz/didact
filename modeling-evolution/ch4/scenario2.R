@@ -1,5 +1,7 @@
 rm(list=ls())
 
+# Stabilizing selection using an Individual Variance Components model
+
 # General assumptions
 # 1. Organism is semelparous
 # 2. Fecundity, F, increases with body size, x
@@ -29,8 +31,8 @@ Vp = (.1)^2      # phenotypic variance
 Va = H2 * Vp     # since H2 = Va / Vp
 Ve = Vp - Va     # environmental variance
 Mu = 1.5         # initial trait mean value
-SDa = sqrt(Va)   # by def of DS
-SDe = sqrt(Ve)   # by def of DS
+SDa = sqrt(Va)   # by def of sd
+SDe = sqrt(Ve)   # by def of sd
 
 for(i in 1:Maxgen) {
     GX = rnorm(N, mean=Mu, sd=SDa)
