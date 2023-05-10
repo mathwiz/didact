@@ -46,7 +46,7 @@ B = Payoff.Mat[1,2]
 C = Payoff.Mat[2,1]
 D = Payoff.Mat[2,2]
 # expected proportion of Hawk
-P.Hawk = (B-D) / (B+C-A-D)
+P.Hawks = (B-D) / (B+C-A-D)
 # proportion of H allele
 Output[,1] = seq(from=0.01, to=0.95, length=Max.Prop)
 
@@ -67,13 +67,45 @@ for(i in 1:Max.Prop) {
 }
 
 
-par(mfrow=c(1,1))
+par(mfrow=c(2,1))
+
 Y.Min = min(Output[,2], Output[,4])
 Y.Max = max(Output[,2], Output[,4])
 plot(Output[,1], Output[,2], type='l', lty=2, ylim=c(Y.Min, Y.Max), xlab='Initial Prop (P or Prop.H)', ylab='Change (in P or Prop.H)')
 lines(Output[,3], Output[,4], type='l')  # change in Prop.H
 lines(Output[,1], rep(0, Max.Prop)) # theoretical ESS horizontal line
-points(P.Hawk, 0, pch='X', cex=2)
+points(P.Hawks, 0, pch='X', cex=2)
 # splines for smoothing
 lines(smooth.spline(Output[,1], Output[,2]))
 lines(smooth.spline(Output[,3], Output[,4]))
+
+print('Finding ESS using a numerical approach')
+N.Pop = 100
+Maxgen = 100
+Output = matrix(0, Maxgen, 2)
+Prop.H = 0.5
+Morph = matrix(2, N.Pop, 1)
+
+for(i in 1:Maxgen) {
+    Output[i, 1] = i
+    # find number of genontypes
+    HH = round(Prop.H^2 * N.Pop)
+    HD = round(2*Prop.H * (1-Prop.H) * N.Pop)
+    Morph[1:N.Pop] = 2 # initialize to Dove
+    N.Hawk = HH + HD
+    Morph[1:N.Hawk] = 1 # make correct number of Hawks
+    # calculate new proportion of H allele by applying fitness
+    Output[i, 2] = N.Hawk / N.Pop
+    Prop.H = fitness(Morph, Payoff.Mat, HH, HD, N.Pop)
+}
+
+Y.Min = min(Output[,2])
+Y.Max = max(Output[,2])
+plot(Output[,1], Output[,2], type='l', ylim=c(Y.Min, Y.Max), xlab='Generation', ylab='Proportion of Hawks')
+lines(Output[,1], rep(P.Hawks, Maxgen))  # theoretical expectation
+
+Equilibrium = Output[20:Maxgen, 2]
+print('Mean Hawks, SD Hawks, Expected Hawks')
+print(c(mean(Equilibrium), sd(Equilibrium), P.Hawks))
+print(t.test(Equilibrium, mu=P.Hawks))
+

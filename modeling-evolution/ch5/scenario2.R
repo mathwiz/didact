@@ -38,7 +38,7 @@ A = Payoff.Mat[1,1]
 B = Payoff.Mat[1,2]
 C = Payoff.Mat[2,1]
 D = Payoff.Mat[2,2]
-P.Hawk = (B-D) / (B+C-A-D)
+P.Hawks = (B-D) / (B+C-A-D)
 
 for(i in 1:Maxgen) {
     Output[i, 1] = i
@@ -57,5 +57,5 @@ lines(Output[,1], rep(P.Hawk, Maxgen), lty=2) # theoretical number of Hawks
 
 print('t-test vs theoretical expectation (after generation 20) [mean, sd, theoretical]')
 Equilibrium.P.Hawk = Output[20:Maxgen, 2]
-print(c(mean(Equilibrium.P.Hawk), sd(Equilibrium.P.Hawk), P.Hawk))
-print(t.test(Equilibrium.P.Hawk, mu=P.Hawk))
+print(c(mean(Equilibrium.P.Hawk), sd(Equilibrium.P.Hawk), P.Hawks))
+print(t.test(Equilibrium.P.Hawk, mu=P.Hawks))
