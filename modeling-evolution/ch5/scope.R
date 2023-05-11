@@ -2,7 +2,7 @@ fun1 = function(x, a, b) { a*x + b }
 
 fun2 = function(x) { a*x + b }
 
-print('take 1')
+print('all arguments passed')
 for(i in 1:2) {
     for(a in 1:3) {
         r = fun1(i, a, 2*a)
@@ -10,7 +10,7 @@ for(i in 1:2) {
     }
 }    
 
-print('take 2')
+print('dynamic scope')
 for(i in 1:2) {
     for(a in 1:3) {
         b = 2*a

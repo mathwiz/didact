@@ -6,7 +6,7 @@ def fun3(x) {
 
 def funs = []
 
-println("take 1")
+println("all args")
 for (i in 1..2) {
   for (a in 1..3) {
     def r = fun1(i, a, 2*a)
@@ -14,16 +14,16 @@ for (i in 1..2) {
   }
 }
 
-println("take 2")
+println("dynamic does not run. just show a")
 for (i in 1..2) {
   for (a in 1..3) {
     // does not work for fun2 or fun3
-    def r = a * i + 2*a //fun3(i)
+    def r = a  //fun3(i)
     println(r)
   }
 }
 
-println("take 3")
+println("static binding when lambda created?")
 for (i in 1..2) {
     for (a in 1..3) {
         def b = 2*a
@@ -33,7 +33,7 @@ for (i in 1..2) {
     }
 }
 
-println("take 4")
+println("stored lambda works so static scope is true")
 for (i in 1..3) {
     def a = i
     def b = 2*a

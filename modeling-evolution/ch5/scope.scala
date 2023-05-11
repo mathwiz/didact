@@ -5,14 +5,14 @@ val fun1 = (x:Int, a:Int, b:Int) => a*x + b
 // no go for this definition
 //val badfun3 = (x:Int) => a*x + b
 
-println("take 1")
+println("a and b supplied as args")
 for(i <- 1 to 2) {
   for(a <- 1 to 3) {
     println( fun1(i, a, 2*a) )
   }
 }
 
-println("take 2")
+println("locally created lambda. could be static or dynamic")
 for(i <- 1 to 2) {
   for(a <- 1 to 3) {
     val b = 2*a
@@ -22,7 +22,7 @@ for(i <- 1 to 2) {
 }
 
 val funs: ArrayBuffer[Int => Int] = ArrayBuffer()
-println("take 3")
+println("stored lambda works so static")
 for(a <- 1 to 3) {
   val b = 2*a
   funs += ( (x:Int) => a*x + b )
