@@ -41,8 +41,8 @@ for (i in 1..3) {
 }
 
 for (i in 1..2) {
-    for (j in 0..2) {
-        println(funs[j](i))
+    for (f in funs) {
+        println(f(i))
     }
 }
 
