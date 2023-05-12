@@ -7,8 +7,7 @@ for(i in 1:2) {
     for(j in 1:3) {
         a = j
         b = 2*a
-        r = fun1(i, a, b)
-        print(r)
+        print( fun1(i, a, b) )
     }
 }    
 
@@ -17,20 +16,29 @@ for(i in 1:2) {
     for(j in 1:3) {
         a = j
         b = 2*a
-        r = fun2(i)
-        print(r)
+        print( fun2(i) )
+    }
+}    
+
+print('calling function defined locally')
+for(i in 1:2) {
+    for(j in 1:3) {
+        c = j
+        d = 2*c
+        fun = function(x) { c*x + d }
+        print( fun(i) )
     }
 }    
 
 print('call functions created with a and b in context; functions are stored for later call')
 funs = list()
 for(i in 1:3) {
-    a = i
-    b = 2*a
-    funs[[i]] = function(x) { a*x + b }
+    e = i
+    f = 2*e
+    funs[[i]] = function(x) { e*x + f }
 }
 
-print(c('during call the values of a and b are: ', a, b))
+print(c('during call the values of e and f are: ', e, f))
 for(i in 1:2) {
     for(j in 1:3) {
         r = funs[[j]](i)
