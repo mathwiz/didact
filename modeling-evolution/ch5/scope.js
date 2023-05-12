@@ -4,13 +4,12 @@ let fun1 = (x, a, b) => a*x + b
 
 let fun2 = (x) => a*x + b
 
-print('take 1')
+print('all arguments supplied')
 for(let i=1; i<=2; i++) {
     for(let j=1; j<=3; j++) {
-        a = j
-        b = 2*a
-        r = fun1(i, a, b)
-        print(r)
+        z = j
+        y = 2*z
+        print( fun1(i, z, y) )
     }
 }    
 
@@ -19,28 +18,26 @@ for(let i=1; i<=2; i++) {
     for(let j=1; j<=3; j++) {
         a = j
         b = 2*a
-        r = fun2(i)
-        print(r)
+        print( fun2(i) )
     }
 }    
-
 
 print('dynamic on anonymous function')
 for(let i=1; i<=2; i++) {
     for(let j=1; j<=3; j++) {
-        a = j
-        b = 2*a
-        r = ( (x) => a*x + b )(i)
-        print(r)
+        c = j
+        d = 2*c
+        fun = (x) => c*x + d
+        print( fun(i) )
     }
 }    
 
 print('stored functions still use dynamically scoped values of a and b')
-let funs = []
+let funs = [ ]
 for(let j=1; j<=3; j++) {
-    a = j
-    b = 2*a
-    funs.push( (x) => a*x + b )
+    e = j
+    f = 2*e
+    funs.push( (x) => e*x + f ) // not 2*x + 4
 }
 
 for(let i=1; i<=2; i++) {

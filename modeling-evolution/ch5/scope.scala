@@ -5,6 +5,10 @@ val fun1 = (x:Int, a:Int, b:Int) => a*x + b
 // no go for this definition
 //val badfun3 = (x:Int) => a*x + b
 
+// having a value for a and b should have no effect since local a and b hide them
+val a = -100
+val b = -200
+
 println("a and b supplied as args")
 for(i <- 1 to 2) {
   for(a <- 1 to 3) {
@@ -14,7 +18,8 @@ for(i <- 1 to 2) {
 
 println("locally created lambda. could be static or dynamic")
 for(i <- 1 to 2) {
-  for(a <- 1 to 3) {
+  for(j <- 1 to 3) {
+    val a = j
     val b = 2*a
     val fun2 = (x:Int) => a*x + b
     println( fun2(i) )
@@ -23,7 +28,8 @@ for(i <- 1 to 2) {
 
 val funs: ArrayBuffer[Int => Int] = ArrayBuffer()
 println("stored lambda works so static")
-for(a <- 1 to 3) {
+for(j <- 1 to 3) {
+  val a = j
   val b = 2*a
   funs += ( (x:Int) => a*x + b )
 }
@@ -34,3 +40,5 @@ for(i <- 1 to 2) {
     println( f(i) )
   }
 }
+
+

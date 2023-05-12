@@ -7,20 +7,22 @@ def fun3(x):
 
 print('all arguments passed')
 for i in range(1,3):
-  for a in range(1,4):
-    r = fun1(i, a, 2*a)
-    print(r)
+  for j in range(1,4):
+    a = j
+    b = 2 * a
+    print( fun1(i, a, b) )
 
-print('lambda')
+print('call earlier defined function that have a, b unbound')
 for i in range(1,3):
-  for a in range(1,4):
+  for j in range(1,4):
+    a = j
     b = 2*a
-    r = fun2(i)
-    print(r)
+    print( fun2(i) )
 
-print('def function')
+print('call earlier defined function declared with def ')
 for i in range(1,3):
-  for a in range(1,4):
+  for j in range(1,4):
+    a = j
     b = 2*a
     r = fun3(i)
     print(r)
