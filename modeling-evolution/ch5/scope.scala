@@ -11,17 +11,19 @@ val b = -200
 
 println("a and b supplied as args")
 for(i <- 1 to 2) {
-  for(a <- 1 to 3) {
-    println( fun1(i, a, 2*a) )
+  for(j <- 1 to 3) {
+    val a = j
+    val b = 2*a
+    println( fun1(i, a, b) )
   }
 }
 
 println("locally created lambda. could be static or dynamic")
 for(i <- 1 to 2) {
   for(j <- 1 to 3) {
-    val a = j
-    val b = 2*a
-    val fun2 = (x:Int) => a*x + b
+    val c = j
+    val d = 2*c
+    val fun2 = (x:Int) => c*x + d
     println( fun2(i) )
   }
 }
@@ -29,12 +31,12 @@ for(i <- 1 to 2) {
 val funs: ArrayBuffer[Int => Int] = ArrayBuffer()
 println("stored lambda works so static")
 for(j <- 1 to 3) {
-  val a = j
-  val b = 2*a
-  funs += ( (x:Int) => a*x + b )
+  val e = j
+  val f = 2*e
+  funs += ( (x:Int) => e*x + f )
 }
-// a, b now out of scope
-//println(b)
+// e, f now out of scope
+//println(e)
 for(i <- 1 to 2) {
   for(f <- funs) {
     println( f(i) )
