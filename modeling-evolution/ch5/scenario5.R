@@ -79,15 +79,10 @@ isocline = function(x, add, lty) {
     # lty is the line type
     result <- contourLines(Proportion, Proportion, x, levels=0)
     b <- data.frame(unlist(result))
-    print(result)
-    print(b)
     n.zeros <- length(b[b==0])
     for(i in 1:n.zeros) {
-        print(i)
-        prop.r <- result[[i]]$x
-        print(prop.r)
-        prop.s <- result[[i]]$y
-        print(prop.s)
+        prop.r <- result[[1]]$x   # why does i cause index out of bounds?
+        prop.s <- result[[1]]$y   # ditto
         prop.p <- 1 - prop.r - prop.s
         rr <- prop.r^2
         rs <- 2*prop.r * prop.s
