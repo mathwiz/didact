@@ -136,7 +136,7 @@ for(i in 1:N.Combos) {
         N.Paper = N.Genotypes[6]
         Morph[1:N.Rock] = Rock
         N1 = N.Rock + 1
-        N2 = N1 + N.Scissors
+        N2 = N1 + N.Scissors - 1
         Morph[N1:N2] = Scissors
         # apply fitness to get proportions
         Propns = fitness(Morph, Payoff.Mat, N.Genotypes)
@@ -153,7 +153,7 @@ Delta.Scissors = matrix(Data.Scissors, N.Props, N.Props, byrow=F)
 Delta.Paper = matrix(Data.Paper, N.Props, N.Props, byrow=F)
 
 # Output
-par(mfrow=c(2,2))
+par(mfrow=c(3,3))
 Offset1 = 0.25
 Offset2 = Offset1 * 2
 Startgen = 400
@@ -169,17 +169,63 @@ isocline(Delta.Scissors, 1, 2)
 isocline(Delta.Paper, 1, 3)
 points(1/3, 1/3, cex=2)
 
-## plot(Output[,1], Output[,2], type='l', xlab='Generation', ylab='Prop (+ offset)', ylim=c(0, 1))
-## lines(Output[,1], Output[,3] + Offset1)
-## lines(Output[,1], Output[,4] + Offset2)
-## # add lines for expected values
-## lines(Output[,1], rep(1/3, Maxgen))
-## lines(Output[,1], rep(1/3 + Offset1, Maxgen))
-## lines(Output[,1], rep(1/3 + Offset2, Maxgen))
-## # phase plots of pairwise morphs
-## plot(Output[Startgen:Maxgen,2], Output[Startgen:Maxgen,3], type='l', xlab='Rock', ylab='Scissors')
-## plot(Output[Startgen:Maxgen,2], Output[Startgen:Maxgen,4], type='l', xlab='Rock', ylab='Paper')
-## plot(Output[Startgen:Maxgen,3], Output[Startgen:Maxgen,4], type='l', xlab='Scissors', ylab='Paper')
-## print(c('Mean Proportions (R, S, P) from Generation', Startgen, 'to', Maxgen))
-## print(c(mean(Output[Startgen:Maxgen, 2]), mean(Output[Startgen:Maxgen, 3]), mean(Output[Startgen:Maxgen, 4])))
 
+# Finding ESS using a numerical approach
+# Reset parameters
+N.Pop = 2000
+Maxgen = 2000
+Output = matrix(0, Maxgen, 7)
+Prop.R = 0.33
+Prop.S = 0.3
+Prop.P = 1 - Prop.R - Prop.S
+Morph = matrix(0, N.Pop, 1)
+# iterate over all possible combinations
+for(i in 1:N.Combos) {
+    D1 = genotype(Prop.R, Prop.S, Prop.P, N.Pop)
+    N.Genotypes = D1[1:6]
+    Prop.Morphs = D1[7:9]
+    Morph[1:N.Pop] = Paper # initialize all
+    N.Rock = sum(N.Genotypes[1:3])
+    N.Scissors = sum(N.Genotypes[4:5])
+    N.Paper = N.Genotypes[6]
+    Morph[1:N.Rock] = Rock
+    N1 = N.Rock + 1
+    N2 = N1 + N.Scissors - 1
+    Morph[N1:N2] = Scissors
+    N = sum(N.Genotypes)
+    Output[i, 1] = i
+    Output[i, 2] = N.Rock / N
+    Output[i, 3] = N.Scissors / N
+    Output[i, 4] = N.Paper / N
+    Output[i, 5] = Prop.R
+    Output[i, 6] = Prop.S
+    Output[i, 7] = Prop.P
+    
+    # apply fitness to get proportions
+    Propns = fitness(Morph, Payoff.Mat, N.Genotypes)
+    Prop.R = Propns[1]
+    Prop.S = Propns[2]
+    Prop.P = Propns[3]
+}
+
+
+Offset1 = 0.5
+Offset2 = Offset1 * 2
+Startgen = 1
+plot(Output[,1], Output[,2], type='l', xlab='Generation', ylab='Prop (+ offset)', ylim=c(0, 1.8))
+lines(Output[,1], Output[,3] + Offset1, lty=2)
+lines(Output[,1], Output[,4] + Offset2, lty=3)
+# add lines for expected values
+lines(Output[,1], rep(1/3, Maxgen))
+lines(Output[,1], rep(1/3 + Offset1, Maxgen))
+lines(Output[,1], rep(1/3 + Offset2, Maxgen))
+
+# phase plots of pairwise morphs
+plot(Output[Startgen:Maxgen,2], Output[Startgen:Maxgen,3], type='l', xlab='Rock', ylab='Scissors')
+plot(Output[Startgen:Maxgen,2], Output[Startgen:Maxgen,4], type='l', xlab='Rock', ylab='Paper')
+plot(Output[Startgen:Maxgen,3], Output[Startgen:Maxgen,4], type='l', xlab='Scissors', ylab='Paper')
+Startgen = 400
+print(c('Mean Proportions (R, S, P) from Generation', Startgen, 'to', Maxgen))
+print(c(mean(Output[Startgen:Maxgen, 2]), mean(Output[Startgen:Maxgen, 3]), mean(Output[Startgen:Maxgen, 4])))
+print(c('Mean Allele Frequencies (R, S, P) from Generation', Startgen, 'to', Maxgen))
+print(c(mean(Output[Startgen:Maxgen, 5]), mean(Output[Startgen:Maxgen, 6]), mean(Output[Startgen:Maxgen, 7])))
