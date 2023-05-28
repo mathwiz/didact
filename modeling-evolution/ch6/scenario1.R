@@ -89,7 +89,7 @@ Benefit <- c(0, 3, 5)
 Npatch <- 3
 Horizon <- 20
 # pre-allocate RHS of equation
-RHS <- matrix(0, Npatch, 1)
+RHS <- matrix(0, Npatch, 1)   # when is this ever used?
 
 # set up matrix for fitnesses
 # col 1 is F(x, t), col 2 is F(x, t+1)
@@ -128,3 +128,38 @@ FxtT[Horizon,] <- X
 print(Best.Patch[,Xmin:Xmax])
 print(signif(FxtT[,Xmin:Xmax], 3))
 
+
+print("Using the decision matrix: individual prediction")
+set.seed(10)
+Horizon <- 15
+Output <- matrix(0, Horizon, 10)
+Time <- seq(1, Horizon)
+
+par(mfrow=c(5,2))
+
+for(Replicate in 1:10) {
+    X <- 4
+    for(i in 1:Horizon) {
+        if(X > Xcritical) {
+            Patch <- Best.Patch[i,X]
+            # Check if animal survives predation
+            if(runif(1) < Pmortality[Patch]) print("Dead from predator")
+            # Find new weight
+            # set multiplier to zero, corresponding to no food
+            Index <- 0
+            if(runif(1) < Pbenefit[Patch]) Index <- 1  # food discovered
+            X <- X - Cost + Benefit[Patch]*Index
+            # If X greater than Xmax then X must be set to Xmax
+            X <- min(X, Xmax)
+            # If X less than X then animal dies
+            if(X < Xmin) print("Dead from starvation")
+            Output[i, Replicate] <- Patch
+        }
+    }
+    # end of time loop
+    print(paste("Plotting Replicate", Replicate))
+    plot(Time, Output[,Replicate], type='l', ylab="Patch selected")
+ }   
+
+
+print("Using the decision matrix: expected state')
