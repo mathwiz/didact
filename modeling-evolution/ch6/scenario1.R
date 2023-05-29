@@ -6,7 +6,7 @@
 # 3. Patches vary in quality and hence the benefits obtained by the animal vary with patch type.
 # 4. There is a metabolic cost to foraging.
 # 5. Independent of the metabolic cost there is a possibility of dying from some external cause such as a predator or inclement weather conditions. The probability may vary among patches.
-# 6. 2 Options
+# 6. 2 Options for Fitness
 #    a. Fitness is measured as the probability of being alive at the end of some time interval (e.g. in a small territorial vertebrate this may be the summer period, the end of the season being the time at which hibernation is entered).
 #    b. Fitness is a function of the state variable at the end of some time interval (e.g. in a small terrestrial vertebrate this may be the summer period, the end of the season being the time at which hibernation is entered, or ti could be the reproductive episode).
 #
@@ -21,10 +21,11 @@
 # 5. Fitness is equal to the maximum probability of surviving until time T, the end of the season (or some other designated point).
 #
 #                                Model
+#
 # Patch Type      Benefit       Pbenefit       Pmortality       Cost
 #      1            0             0.0            0.000           1
 #      2            3             0.4            0.004           1
-#      1            5             0.6            0.020           1
+#      3            5             0.6            0.020           1
 #
 
 rm(list=ls())
