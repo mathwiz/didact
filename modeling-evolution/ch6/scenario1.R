@@ -138,6 +138,7 @@ Time <- seq(1, Horizon)
 par(mfrow=c(5,2))
 
 for(Replicate in 1:10) {
+    print(paste("Performing Replicate", Replicate))
     X <- 4
     for(i in 1:Horizon) {
         if(X > Xcritical) {
@@ -157,9 +158,44 @@ for(Replicate in 1:10) {
         }
     }
     # end of time loop
-    print(paste("Plotting Replicate", Replicate))
     plot(Time, Output[,Replicate], type='l', ylab="Patch selected")
  }   
 
 
-print("Using the decision matrix: expected state')
+print('Using the decision matrix: expected state')
+Xmax <- 10
+Xcritical <- 3
+Xmin <- Xcritical + 1
+Cost <- 1
+Time <- 2
+Npatch <- 3
+Pmortality <- c(0, 0.004, 0.02)
+Pbenefit <- c(1, 0.4, 0.6)
+Benefit <- c(0, 3, 5)
+Trans.density <- matrix(0, Xmax, Xmax)
+
+## Step one cycle over all values of z from Xmin to Xmax
+for(z in Xmin:Xmax) {
+    print(paste("Performing State", z))
+    # Select the best patch from the Decision matrix at row Time
+    K <- Best.Patch[Time,z] # Decision matrix is called Best.Patch
+    # Calculate w(x, t|z)
+    # Found food and survies predator
+    X <- min(z - Cost + Benefit[K], Xmax)
+    # Assign probability
+    Trans.density[z,X] <- (1 - Pmortality[K]) * Pbenefit[K]
+    # Food not found
+    X <- z - Cost
+    # State exceeds the critical value
+    if(X > Xcritical) {
+        # Animal survives
+        Trans.density[z,X] <- (1 - Pmortality[K]) * (1 - Pbenefit[K])
+        # Animal does not survive
+        Trans.density[z,Xcritical] <- Pmortality[K]
+    } else { # State is less than critical
+        Trans.density[z,Xcritical] <- Pmortality[K] + (1 - Pmortality[K]) * (1 - Pbenefit[K])
+    }    
+ }
+
+print(Trans.density)
+
