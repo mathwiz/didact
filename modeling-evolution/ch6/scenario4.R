@@ -5,7 +5,7 @@
 # 2. Patches or hosts vary in quality.
 # 3. The survival and growth of larvae depend on the number in the clutch and host quality.
 # 4. Variation in host quality can be detected by the ovipositing female.
-# 5. Survival of the femail may or may not change over time. For computational simplicity, we assume that the sequence of events is that egg-laying precedes the determination of survival over the time period.
+# 5. Survival of the female may or may not change over time. For computational simplicity, we assume that the sequence of events is that egg-laying precedes the determination of survival over the time period.
 # 6. Only one host at most is encountered per time interval.
 # 7. Hosts already with eggs are not encountered.
 # 8. Fitness is a function of the number of offsping.

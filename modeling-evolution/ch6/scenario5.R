@@ -1,38 +1,66 @@
-# Host choice in parasitoids: fitness decreases with time
+# Optimizing egg and clutch size: dealing with two state variables
 
 # General assumptions
-# 1. The animal commences the time period with some fixed quantity of eggs, as occurs, for example, in some Lepidoptera. In general, animals can be classified into capital breeders that use only, or primarily, resources gathered prior to maturity and income breeders that garner resources for reproduction after maturity. The present model applies to capital breeders, though it can easily be adapted for income breeders.
+# 1. The animal commences the time period with some fixed quantity of resources that can be divided into clutches and eggs of different sizes. Thus although we have two state variables, egg size and clutch size, these can be combined operationally into a single variable, reproductive biomass, X.
 # 2. Patches or hosts vary in quality.
-# 3. The survival and growth of larvae depend on the number in the clutch and host quality.
+# 3. The survival and growth of larvae depend on the number in the clutch, egg size, and host quality.
 # 4. Variation in host quality can be detected by the ovipositing female.
-# 5. Survival of the femail may or may not change over time. For computational simplicity, we assume that the sequence of events is that egg-laying precedes the determination of survival over the time period.
+# 5. Survival of the female may or may not change over time. For computational simplicity, we assume that the sequence of events is that egg-laying precedes the determination of survival over the time period.
 # 6. Only one host at most is encountered per time interval.
 # 7. Hosts already with eggs are not encountered.
 # 8. Fitness is a function of the number of offsping.
 #
 # Mathematical assumptions
 # 1. There are four types of host.
-# 2. The single host fitness can be modeled by a cubic function: Benefit(i,n) = a(i) + b(i)n + c(i)n^2 + d(i)n^3.
-# 3.The probability of encountering a host is constant but different for each host, designated as Pbenefit(i), where i is the host type. Thus the probability of not encountering a host, P0, is: P0 = 1 - sum(1, 4, Pbenefit(i))
-# 4. We shall assume a constant mortality per unit time, Pmortality = 0.01. At the end of the season no further eggs can be laid, meaning that the female is, from the point of view of natural selection, dead. For computational simplicity we shall use Psurvival = 1 - Pmortality
+# 2. The amount of reproductive biomass available at time t is B, which is equal to the product of egg size and clutch size, x(t) = X.E * X.C.
+# 3. The single host fitness can be modeled by the function: Benefit(i,E,C) = Wmax - sqrt( a.E(i)*(X.E - b.E(i))^2 + a.C(i)*(X.C - b.C(i))^2 )
+# 4. A host is encountered during each time step: the probability of encountering host type 1 is P(1) = 0.5 and host type 2 P(2) = 0.5.
+# 4. We shall assume a constant mortality per unit time, Pmortality = 0.1. At the end of the season no further eggs can be laid, meaning that the female is, from the point of view of natural selection, dead. For computational simplicity we shall use Psurvival = 1 - Pmortality
 #
-#                                Model
+#                                Model Parameters
 #
-# Host found     Survives           X
-# Yes              Yes           x - Benfit(i, n)
-# Yes              No            x - Benfit(i, n)
-# No               Yes              X
-# No               No               X
+# Host             Wmax             a.E               a.C             b.E            b.C
+# 1                10               100               1               2              5
+# 2                20               100               1               1              10
 #
 #
+
+rm(list=ls())
+print("Outcome chart and expected lifetime fitness function")
+
+FITNESS <- function(X, Wmax, Xegg, Xclutch, ax, ay) {
+    W <- Wmax - sqrt(ax*(X[1] - Xegg)^2 + ay*(X[2] - Xclutch)^2)
+    return(W)
+}    
+
+Wmax <- c(10, 20)
+Xegg <- c(2,1)
+Xclutch <- c(5,10)
+ax <- 100
+ay <- 1
+n <- 20
+x <- seq(from=0, to=3, length=n)  # egg size
+y <- seq(from=0, to=30, length=n)  # clutch size
+d <- expand.grid(x, y)
+
+par(mfrow=c(2,2))
+
+for(i in 1:2) {
+    # create a vector of fitness values for all combinations
+    Wtemp <- apply(d, 1, FITNESS, Wmax[i], Xegg[i], Xclutch[i], ax, ay)
+    # convert to matrix
+    W <- matrix(Wtemp, n, n, byrow=F)
+    # plots
+    contour(x, y, W, xlab='Egg size', ylab='Clutch size', las=1, lwd=3, labcex=1)
+    persp(x, y, W, xlab='Egg size', ylab='Clutch size', zlab='Fitness', lwd=3, theta=50, phi=25)
+}
+
 
 rm(list=ls())
 
 print("Calculating the decision matrix")
 rm(list=ls())
 
-## set path to save files if desired
-## setwd(".")
 
 OVER.PATCHES <- function(X, F.vectors, Xcritical, Xmax, Xinc, Npatch, Benefit, Pbenefit, Psurvival) {
     # create matrix for storing best clutch size for each host type
