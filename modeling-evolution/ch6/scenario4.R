@@ -192,8 +192,16 @@ persp(x, y, Best.Patch[1:(Horizon-1),2:Max.Index], xlab='Time', ylab='x', zlab='
 image(x, y, Best.Patch[1:(Horizon-1),2:Max.Index], col=terrain.colors(50), xlab='Time', ylab='x', las=1)
 
 # Output data
-DATA <- cbind(x, Best.Patch[1:(Horizon-1),4])
+DATA <- cbind(x, Best.Patch[1:(Horizon-1),41])
 DATA <- t(DATA)
 write(DATA, file="Oviposition.dat", nc=2)
+
+# write data files for each host
+for(i in 1:4) {
+    filename <- paste("DM", i, ".dat", sep="")
+    print(paste("Writing file:", filename))
+    DATA <- t(Best.Patch[1:(Horizon-1),2:41])
+    write(DATA, file=filename, nc=40)
+}          
 
 
