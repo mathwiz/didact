@@ -61,48 +61,81 @@ rm(list=ls())
 print("Calculating the decision matrix")
 rm(list=ls())
 
+FITNESS <- function(Egg, Clutch, X, F.vectors, Xcritical, Xmax, Xinc, Psurvival, Wmax, A, XEgg, Xclutch, Ith.Patch) {
+    W <- 0
+    Biomass <- Clutch * Egg
+    # calculate only if less than X
+    if(Biomass < X) {
+        Max.Index <- 1 + (Xmax - Xcritical) / Xinc
+        Index <- 1 + (Biomass - Xcritical) / Xinc
+        # Get fitness at lower and upper
+        Index.lower <- floor(Index)
+        Index.upper <- Index.lower + 1
+        Index.upper <- min(Index.upper, Max.Index)
+        Qx <- Biomass - floor(Biomass)
+        Fxt.lower <- F.vectors[Index.lower,2]
+        Fxt.upper <- F.vectors[Index.upper,2]
+        Fxt.interpolated <- Qx*Fxt.upper + (1-Qx)*Fxt.lower
+        W <- Wmax[Ith.Patch] - sqrt(A[1]*(Egg - Xegg[Ith.Patch])^2 + A[2]*(Clutch - Xclutch[Ith.Patch])^2)
+    }    
+    return(W)
+}
 
-OVER.PATCHES <- function(X, F.vectors, Xcritical, Xmax, Xinc, Npatch, Benefit, Pbenefit, Psurvival) {
-    # create matrix for storing best clutch size for each host type
-    Best.Clutch <- matrix(0, Npatch)
+
+OVER.PATCHES <- function(X, F.vectors, Xcritical, Xmax, Xinc, Npatch, Psurvival, Wmax, A, Xegg, Xclutch, P1) {
+    # X is the total biomass available
     Index <- 1 + (X - Xcritical) / Xinc
-    # vector of clutch sizes to Index-1
-    Clutch <- seq(from=1, to=Index-1)
-    # Start fitness accumulation with component for case of not finding a host
-    W <- Psurvival * (1 - sum(Pbenefit)) * F.vectors[Index,2]
-    for(i in 1:Npatch) {
-        # calculate "partial" fitness, W.partial for each clutch size
-        W.partial <- Benefit[2:Index,i] + Psurvival*F.vectors[Index-Clutch,2]
-        # find largest W.partial and hence best clutch size
-        Best <- order(W.partial, na.last=T, decreasing=T)
-        Best.Clutch[i] <- Best[1]  # store best clutch for host i
-        W <- W + Pbenefit[i] * W.partial[Best[1]]
-        # test for several equal optimal choices
-        # only examine W.partial that contain more than one entry
-        if(length(W.partial) > 1 & W.partial[Best[1]]==W.partial[Best[2]]) {
-            print("Several possible equal choices")
-        }    
-    }
-
+    # Allocate storage of best combinations for each patch
+    # Columns contain: Fitness, Clutch, Egg
+    Choice.Flag <- matrix(0, 2)
+    Best.in.Patch <- matrix(0, 2, 3)
+    # Iterate over patches
+    for(Ith.Patch in 1:Npatch) {
+        # Make a matrix, W.host of 3 cols: Fitness, Clutch size, Egg size
+        W.host <- matrix(0, 11, 3)
+        # Iterate over clutch size
+        for(Clutch in 1:11) {
+            W.host[Clutch,2] <- Clutch
+            Best.egg.size <- optimize(f=FITNESS, interval=c(0.01,3), Clutch, X, F.vectors, Xcritical, Xmax, Xinc, Psurvival, Wmax, A, Xegg, Xclutch, Ith.Patch, maximum=T)
+            W.host[Clutch,1] <- Best.egg.size$objective  # fitness
+            W.host[Clutch,3] <- Best.egg.size$maximum  # egg size
+        }
+        # Get best combination for this host
+        R <- W.host[,1]
+        Best <- order(R, na.last=T, decreasing=T)
+        Best.in.Patch[Ith.Patch,] <- W.host[Best[1],]
+        # Test for several equal optimal choices
+        Choice1 <- W.host[Best[1],1]
+        Choice2 <- W.host[Best[2],1]
+        if(Choice1 == Choice2) Choice.Flag[Ith.Patch] <- 2
+    } # next host
+    
+    # Overall fitness
+    W <- P1*Best.in.Patch[1,1] + (1-P1)*Best.in.Patch[2,1]
     F.vectors[Index,1] <- W  # get best W = F(x, t)
     # Concatenate F(x, t) and the optimal clutch values for host type 2
-    Temp <- c(F.vectors[Index,1], Best.Clutch[2])
-    # Add Temp to bottom of F.vectors and rename to Temp
-    Temp <- rbind(F.vectors, Temp)
+    Temp1 <- c(F.vectors[Index,1], 1)
+    Temp2 <- c(Best.in.Patch[1,2], Best.in.Patch[1,3])
+    Temp3 <- c(Best.in.Patch[2,2], Best.in.Patch[2,3])
+    # Add Temp vectors to bottom of F.vectors
+    Temp <- rbind(F.vectors, Temp1, Temp2, Temp3)
     
     return(Temp)
 }
 
-OVER.STATES <- function(F.vectors, Xcritical, Xmax, Xinc, Npatch, Benefit, Pbenefit, Psurvival, Max.Index) {
-    Store <- matrix(0, Max.Index, 2)
+OVER.STATES <- function(F.vectors, Xcritical, Xmax, Xinc, Npatch, Psurvival, Max.Index, Wmax, A, Xegg, Xclutch, P1) {
+    Store <- matrix(0, Max.Index, 7)
     for(Index in 2:Max.Index) {
         X <- (Index-1)*Xinc + Xcritical
         # For given X call OVER.PATCHES to determine F(x, t) and best patch
-        Temp <- OVER.PATCHES(X, F.vectors, Xcritical, Xmax, Xinc, Npatch, Benefit, Pbenefit, Psurvival)
-        # Extract components. Last row is F(x, t) and best clutch size for host 2
-        n <- nrow(Temp) - 1
+        Temp <- OVER.PATCHES(X, F.vectors, Xcritical, Xmax, Xinc, Npatch, Psurvival, Wmax, A, Xegg, Xclutch, P1)
+        # Extract components
+        # Last row is F(x, t) and best clutch size and egg size for host 2
+        # Last row is flag that multiple equal choices exist
+        n <- nrow(Temp) - 4
         F.vectors <- Temp[1:n,]
-        Store[Index,] <- Temp[n+1,]  # save F(x, t, T) and best patch
+        # Add the seven output values (omit dummy) to storage
+        Store[Index,] <- c(Temp[n+1,1], Temp[n+2,1:2], Temp[n+3,1:2], Temp[n+4,1:2])
     }
     # Add Store values to end of F.vectors for pass back to main program
     Temp <- cbind(F.vectors, Store)  # combined by columns
@@ -111,54 +144,39 @@ OVER.STATES <- function(F.vectors, Xcritical, Xmax, Xinc, Npatch, Benefit, Pbene
 }    
 
 #### MAIN PROGRAM #####
-Xmax <- 40
+Xmax <- 10
 Xcritical <- 0
 Xinc <- 1
 Max.Index <- 1 + (Xmax - Xcritical) / Xinc
-Psurvival <- 0.99
-Npatch <- 4
-# Create host coefficient matrix from which to get Benefits
-Host.coeff <- matrix(0, 4, 4)
-Host.coeff[1,] <- c(-0.2302, 2.7021, -0.2044, 0.0039)
-Host.coeff[2,] <- c(-0.1444, 2.2997, -0.1170, 0.0013)
-Host.coeff[3,] <- c(-0.1048, 2.2097, -0.0878, 0.0004222)
-Host.coeff[4,] <- c(-0.0524, 2.0394, -0.0339, 0.0003111)
-# Calculate benefit as a function of clutch size
-# Rows = clutch size, Cols = host type
-Clutch <- seq(from=0, to=Xmax)
-Benefit <- matrix(0, Xmax+1, 4)
-# Iterate over host types
-for(I.Host in 1:4) {
-    acc <- 0
-    acc <- acc + Host.coeff[I.Host,1]
-    acc <- acc + Host.coeff[I.Host,2]*Clutch
-    acc <- acc + Host.coeff[I.Host,3]*Clutch^2
-    acc <- acc + Host.coeff[I.Host,4]*Clutch^3
-    Benefit[,I.Host] <- acc
-}
+Wmax <- c(10, 20)
+Xegg <- c(2,1)
+Xclutch <- c(5,10)
+A <- c(100, 1)
+P1 <- 0.5  # probability of host 1
+Psurvival <- 0.90
+Npatch <- 2
+Horizon <- 10
 
-Benefit[1,] <- 0  # reset first row to 0
-SHM <- c(9, 12, 14, 23)  # Single host maximum
-# Make all values > SHM equal 0. Note we use 2 because of zero class
-for(i in 1:4) { Benefit[(SHM[i]+2):Max.Index,i] <- 0 }
-# Probability of encountering host type
-Pbenefit <- c(0.05, 0.05, 0.10, 0.80)
-Horizon <-21
-
-# set up matrix for fitnesses
-# col 1 is F(x, t), col 2 is F(x, t+1)
+# Set up matrix for fitnesses. Initialize to 0
+# col 1 is temporary F(x, t+1), col 2 is F(x, t+1)
 F.vectors <- matrix(0, Max.Index, 2)
 
-# create matrices for output
-FxtT <- matrix(0, Horizon, Max.Index)  # F(x, t, T)
-Best.Patch <- matrix(0, Horizon, Max.Index)
+# create matrices for output, one for each host
+FxtT <- matrix(0, Horizon, Max.Index)  # F(x, t)
+Best.Clutch1 <- matrix(0, Horizon, Max.Index)
+Best.Clutch2 <- matrix(0, Horizon, Max.Index)
+Best.Egg1 <- matrix(0, Horizon, Max.Index)
+Best.Egg2 <- matrix(0, Horizon, Max.Index)
+Choice.H1 <- matrix(0, Horizon, Max.Index)
+Choice.H2 <- matrix(0, Horizon, Max.Index)
+
 
 # start iterations
 Time <- Horizon
 while(Time > 1) {
     Time <- Time - 1
     # Call OVER.STATES to get best values for this time step
-    Temp <- OVER.STATES(F.vectors, Xcritical, Xmax, Xinc, Npatch, Benefit, Pbenefit, Psurvival, Max.Index)
+    Temp <- OVER.STATES(F.vectors, Xcritical, Xmax, Xinc, Npatch, Psurvival, Max.Index, Wmax, A, Xegg, Xclutch, P1)
     # Extract F.vectors
     TempF <- Temp[,1:2]
     # Update F1
@@ -166,39 +184,31 @@ while(Time > 1) {
         F.vectors[J,2] <- TempF[J,1]
     }
     # Store results
-    Best.Patch[Time,] <- Temp[,4]
     FxtT[Time,] <- Temp[,3]
+    Best.Clutch1[Time,] <- Temp[,4]
+    Best.Egg1[Time,] <- Temp[,5]
+    Best.Clutch2[Time,] <- Temp[,6]
+    Best.Egg2[Time,] <- Temp[,7]
+    Choice.H1[Time,] <- Temp[,8]
+    Choice.H2[Time,] <- Temp[,9]
 }    
 
 # Output information. For display add states (=wts) to last row of matrices
 Index <- seq(from=1, to=Max.Index)
-Best.Patch[Horizon,] <- (Index - 1) * Xinc + Xcritical
 FxtT[Horizon,] <- (Index - 1) * Xinc + Xcritical
 
-print("Decision matrix, Fxt of Decision, and Matrix of Choices")
-print(Best.Patch[,1:Max.Index])
+Best.Clutch1[Horizon,] <- (Index - 1) * Xinc + Xcritical
+Best.Clutch2[Horizon,] <- (Index - 1) * Xinc + Xcritical
+Best.Egg1[Horizon,] <- (Index - 1) * Xinc + Xcritical
+Best.Egg2[Horizon,] <- (Index - 1) * Xinc + Xcritical
+Choice.H1[Horizon,] <- (Index - 1) * Xinc + Xcritical
+Choice.H2[Horizon,] <- (Index - 1) * Xinc + Xcritical
+
+print(Best.Clutch1[,1:Max.Index])
+print(Best.Clutch2[,1:Max.Index])
+print(signif(Best.Egg1[,1:Max.Index], 3))
+print(signif(Best.Egg2[,1:Max.Index], 3))
+print(Choice.H1[,1:Max.Index])
+print(Choice.H2[,1:Max.Index])
 print(signif(FxtT[,1:Max.Index], 3))
-
-# Plots
-y <- Best.Patch[Horizon,2:Max.Index]
-x <- seq(from=1, to=Horizon-1)
-
-par(mfrow=c(1,2))
-
-persp(x, y, Best.Patch[1:(Horizon-1),2:Max.Index], xlab='Time', ylab='x', zlab='Optimum', theta=20, ph=25, lwd=1)
-image(x, y, Best.Patch[1:(Horizon-1),2:Max.Index], col=terrain.colors(50), xlab='Time', ylab='x', las=1)
-
-# Output data
-DATA <- cbind(x, Best.Patch[1:(Horizon-1),41])
-DATA <- t(DATA)
-write(DATA, file="Oviposition.dat", nc=2)
-
-# write data files for each host
-for(i in 1:4) {
-    filename <- paste("DM", i, ".dat", sep="")
-    print(paste("Writing file:", filename))
-    DATA <- t(Best.Patch[1:(Horizon-1),2:41])
-    write(DATA, file=filename, nc=40)
-}          
-
 
