@@ -37,6 +37,16 @@
 ;; ************************************************
 (print '(1.3 Lists))
 
+;; E1.3.1
+(list 'big 'cat 'sat)
+(cons 'the (list 'big 'cat 'sat))
+(list 'all (list 'good 'people) 'should (list 'go 'ahead))
+
+;; 1.3.2
+(car (cdr '(a b c d)))
+(car (cdr (car '((a b) c d))))
+(cdr (car (cdr '(a (b c) d))))
+
 
 ;; ************************************************
 (print '(1.4 The Lisp Evaluation Rule))
