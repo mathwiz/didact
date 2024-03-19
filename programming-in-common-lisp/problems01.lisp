@@ -6,6 +6,7 @@
 
 (print (dot-product '(1.2 2.4 -0.3) '(0.0 4.5 3.8)))
 (print (dot-product '(1 3 -5) '(4 -2 -1)))
+(print (dot-product '(1 1 1) '(1 2 3)))
 
 
 (print 'p2)
