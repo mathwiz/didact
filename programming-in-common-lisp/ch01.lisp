@@ -51,14 +51,43 @@
 ;; ************************************************
 (print '(1.4 The Lisp Evaluation Rule))
 
+(+ (car (cdr (list 2 3))) 4)
+
 
 ;; ************************************************
 (print '(1.5 Quote- The Evaluation Blocker))
+
+(quote a)
+(quote (x y))
+(cons 3 (quote (x y)))
+(cons 3 (quote (plus 5 7)))
+(quote (a b (quote c) d))
+'(a b 'c d)
+''a
+(quote (quote a))
+'a
+(+ 3 4)
+(+ '3 '4)
+(set 'a '(x y))
+a
+(car a)
+(set 'b '3)
+(set 'y 'a)
+y
+(set 'z a)
+z
+(setq a '(a b))
+(setq b 'x)
+(set b 'y)
+b
+x
 
 ;; compare to using setf
 (setq a '(u v w))
 (set (car (cdr a)) 'b)
 (print (cons v a))
+(print v)
+(print a)
 
 
 (setq a '(u v w))
@@ -72,4 +101,29 @@
 
 
 (print (list (list 'a 'b) '(list 'a 'b)))
+
+
+;; ************************************************
+(print '(1.6 Eval- The Evaluator Itself))
+
+(setq a (list '+ 5 6))
+a
+(cons a '(is the answer))
+(cons (eval a) '(is the answer))
+
+
+;; ************************************************
+(print '(1.7 User-Defined Functions))
+
+(defun square (x) (* x x))
+(square 65)
+
+(defun my-third (list) (car (cdr (cdr list))))
+(my-third '(1 2 3 4 5))
+(my-third (my-third '(a (b c) (d e f) (g h i j))))
+
+(defun cylinder-volume (length radius)
+  (* length (* 3.14159265 (square radius))))
+(cylinder-volume 2.5 2.0)
+
 
