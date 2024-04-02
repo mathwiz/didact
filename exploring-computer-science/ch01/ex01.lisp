@@ -1,0 +1,10 @@
+(setq computer "a machine that runs programs")
+(setq hardware "the machine")
+(setq software "programs")
+(setq operating-system "software that lets other software interact with the machine")
+(setq compiler "a program that converts from one language (usually high-level) to another (usually machine)")
+(setq database-management-system "software to organize and help retrieve data")
+(setq artificial-intelligence "software to perform tasks similarly to humans")
+(setq soft-computing "creating software without explicit design")
+(setq graphics "visuals controlled by computer")
+
