@@ -126,4 +126,15 @@ a
   (* length (* 3.14159265 (square radius))))
 (cylinder-volume 2.5 2.0)
 
+(defun double (x) (* 2 x))
+(double 2.358)
 
+(defun times-square (x y) (* x y y))
+(times-square 4 3)
+
+(defun times-cube (x y) (* x y y y))
+(times-cube 3 2)
+
+
+;; ************************************************
+(print '(1.8 Variables and Reference))
