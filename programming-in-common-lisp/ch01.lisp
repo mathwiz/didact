@@ -138,3 +138,44 @@ a
 
 ;; ************************************************
 (print '(1.8 Variables and Reference))
+
+(setq x 3)
+(square 4)
+x
+
+
+;; ************************************************
+(print '(1.9 Predicates))
+
+(atom '3)
+(consp '3)
+(listp '3)
+
+(atom 'x)
+(consp 'x)
+(listp 'x)
+
+(atom 'nil)
+(consp 'nil)
+(listp 'nil)
+
+(atom '(x y))
+(consp '(x y))
+(listp '(x y))
+
+(defun len (list)
+  (if (null list)
+      0
+      (1+ (len (cdr list)))))
+
+(len '())
+(len '(a))
+(len '(b a))
+(len '(c b a))
+(len '((a b c d e f) g h (i j) k))
+(len (car '((a b c d e f) g h (i j) k)))
+
+
+
+
+
