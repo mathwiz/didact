@@ -22,4 +22,12 @@
 (setq a (my-append x y))
 (setq b (my-append x y))
 
+(my-append '(a a a) '(a a))
+(my-append '(a a a) 'nil)
+(my-append '(a (b c)) '(b c))
+(my-append 'nil '(adds nothing))
+
+
+;; ************************************************
+(print '(2.2 Recursive Functions and Debugging))
 
