@@ -1,0 +1,18 @@
+* (require "asdf")
+("ASDF" "asdf" "UIOP" "uiop")
+* (defun main () (print "hello"))
+MAIN
+* (setq uiop:*image-entry-point* #'main)
+#<FUNCTION MAIN>
+* (uiop:dump-image "hello.exe" :executable t)
+[undoing binding stack and other enclosing state... done]
+[performing final GC... done]
+[defragmenting immobile space... (inst,fdefn,code,sym)=828+16731+18346+26762... done]
+[saving current Lisp image into hello.exe:
+writing 1936 bytes from the static space at 0000000020020000
+writing 18743296 bytes from the dynamic space at 0000001000000000
+writing 6786336 bytes from the read-only space at 0000000fff980000
+writing 1937408 bytes from the fixedobj space at 0000000020120000
+writing 11816960 bytes from the text space at 0000000021a20000
+done]
+
