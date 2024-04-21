@@ -31,3 +31,21 @@
 ;; ************************************************
 (print '(2.2 Recursive Functions and Debugging))
 
+(trace my-append)
+(my-append '(a b c) '(d e f))
+
+;; Tracing function MY-APPEND.
+;; 1. Trace: (MY-APPEND '(A B C) '(D E F))
+;; 2. Trace: (MY-APPEND '(B C) '(D E F))
+;; 3. Trace: (MY-APPEND '(C) '(D E F))
+;; 4. Trace: (MY-APPEND 'NIL '(D E F))
+;; 4. Trace: MY-APPEND ==> (D E F)
+;; 3. Trace: MY-APPEND ==> (C D E F)
+;; 2. Trace: MY-APPEND ==> (B C D E F)
+;; 1. Trace: MY-APPEND ==> (A B C D E F)
+
+(untrace my-append)
+
+
+;; ************************************************
+(print '(2.3 Reversing a List))
