@@ -45,7 +45,30 @@
 ;; 1. Trace: MY-APPEND ==> (A B C D E F)
 
 (untrace my-append)
+(untrace)  ;; untrace all
+
+;;(load "filename")  ;; load forms from file
 
 
 ;; ************************************************
 (print '(2.3 Reversing a List))
+
+(load "my-reverse.lisp")
+
+(trace bad-reverse my-reverse reverse-aux)
+
+(bad-reverse '(a b c))
+(bad-reverse '(a (b c) (d e) f g))
+(bad-reverse '((a (b c)) d ((e f g) h)))
+
+(my-reverse '(a b c))
+(my-reverse '(a (b c) (d e) f g))
+(my-reverse '((a (b c)) d ((e f g) h)))
+
+(untrace)
+
+
+;; ************************************************
+(print '(2.4 Global Variables))
+
+
