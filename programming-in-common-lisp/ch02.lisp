@@ -111,6 +111,7 @@
 (print '(2.5 EQ Identical Equality))
 
 (eq 2 (+ 1 1))
+(eq 3 3.0)
 (eq 2.3 2.3)
 (eq 2.3 (+ 1.1 1.2))
 (eq (/ 22 7) (/ 22 7))
