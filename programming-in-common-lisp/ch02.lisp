@@ -71,4 +71,69 @@
 ;; ************************************************
 (print '(2.4 Global Variables))
 
+(defvar foo 'bar)
+(defvar *count* 0)
+
+(defun count-cons (x y)
+  (progn
+    (setq *count* (+ 1 *count*))
+    (cons x y))
+)
+
+(defun count-append (x y)
+  (if (null x)
+      y
+      (count-cons (car x) (count-append (cdr x) y))))
+
+(setq *count* 0)
+
+(count-append '(a b c) '(d e f))
+
+(print *count*)
+
+(setq *count* 0)
+
+(count-append '(a b) '(c d e f))
+
+(print *count*)
+
+(defun report-append (x y)
+  (progn
+    (setq *count* 0)
+    (count-append x y)
+    *count*)
+)
+
+(report-append '(a b) '(c d e f))
+
+
+;; ************************************************
+(print '(2.5 EQ Identical Equality))
+
+(eq 2 (+ 1 1))
+(eq 2.205 2.205)
+(eq (/ 22 7) (/ 22 7))
+
+(setq c '(f 2.3))
+(setq d '(f 2.3))
+
+(eq c d)
+(eq c c)
+(eq d d)
+(eq d (car (cons d c)))
+
+(setq x '(r s t))
+(setq y '(u v w))
+(setq a (append x y))
+(setq b (append x y))
+
+(eq a b)
+(eq (cdr (cdr a)) (cdr (cdr b)))
+(eq (cdr (cdr (cdr a))) (cdr (cdr (cdr b))))
+
+(eq (car a) (car b))
+(eq (car (cdr (cdr a))) (car (cdr (cdr b))))
+
+
+
 
