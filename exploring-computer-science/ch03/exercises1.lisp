@@ -63,9 +63,44 @@
 (print "3.17 A function that gives the next year of the dragon given a previous dragon year and the present year")
 
 (defun next-yod (yod now)
-  (+ (* c (/ 9 5)) 32.0))
+  (if (= (rem (- now yod) 12) 0)
+      now
+      (+ (- 12 (rem (- now yod) 12)) now)))
 
+(print (next-yod 1964 2012))
 (print (next-yod 1964 2023))
+(print (next-yod 1964 2028))
+
+(print "3.18 A function to compute annual spending from daily, weekly, and monthly spending")
+
+(defun annual-spending (daily weekly monthly)
+  (+
+      (* daily 365)
+      (* weekly 52)
+      (* monthly 12)))
+
+(print (annual-spending 25 300 1400))
+
+(print "3.19 A function to calculate the number of years to live on a given quantity of money")
+
+(defun years-on-spending (assets)
+  (+ 0.0
+     (/ assets (annual-spending 25 500 1400))))
+
+(print (years-on-spending (* (expt 10.0 6) 1.5)))
+
+(print "3.20 A function to convert Thai baht to US dollars")
+
+(defun baht-to-dollars (baht)
+  (/ (* baht 4)
+     100.0))
+
+(print (baht-to-dollars (* (expt 10.0 6) 1.5)))
+
+
+
+
+
 
 
 
