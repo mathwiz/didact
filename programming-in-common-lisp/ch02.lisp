@@ -89,13 +89,9 @@
 
 (count-append '(a b c) '(d e f))
 
-(print *count*)
-
 (setq *count* 0)
 
 (count-append '(a b) '(c d e f))
-
-(print *count*)
 
 (defun report-append (x y)
   (progn
@@ -108,7 +104,7 @@
 
 
 ;; ************************************************
-(print '(2.5 EQ Identical Equality))
+(print '(2.5 EQ - Identical Equality))
 
 (eq 2 (+ 1 1))
 (eq 3 3.0)
@@ -135,6 +131,51 @@
 
 (eq (car a) (car b))
 (eq (car (cdr (cdr a))) (car (cdr (cdr b))))
+
+(eq '(a b (c d)) '(a b (c d)))
+
+
+;; ************************************************
+(print '(2.6 EQL - An Intermediate Equality Tester))
+
+(typep 'ztekjo 'symbol)
+(typep 'ztekjo 'number)
+(typep 'ztekjo 'atom)
+(typep '2 'symbol)
+(typep '2 'number)
+(typep '2 'atom)
+(typep -4.34 'fixnum)
+(typep -4.34 'single-float)
+
+(eql 'a 'a)
+(eql '(a b) (list 'a 'b))
+(eql 2 3)
+(eql 3 3)
+
+(progn
+  (setq *list* (list 'a 'b))
+  (setq *big* (list 'c *list*))
+  (eql *list* (car (cdr *big*)))
+)
+
+(load "my-eql.lisp")
+
+(eql 2.3 (+ 1.1 1.2))
+(eql 2 (+ 1 1))
+(eql '(a b (c d)) '(a b (c d)))
+(eql 3 3.0)
+
+(my-eql 2.3 (+ 1.1 1.2))
+(my-eql 2 (+ 1 1))
+(my-eql '(a b (c d)) '(a b (c d)))
+(my-eql 3 3.0)
+
+
+;; ************************************************
+(print '(2.7 EQUAL - Equalness of Lisp Objects))
+
+
+
 
 
 
