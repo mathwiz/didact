@@ -128,12 +128,40 @@
 (print "3.21 A function to take a single number representing a century and returning the palindrome year in that century")
 
 (defun palindrome-in-century (cent)
-  0)
+  ;; only works for 4 digit years
+  (let* ((left (- cent 1))
+         (two (rem left 10))
+         (one (/ (- left two) 10)))
+     (+ (* one 1000) (* two 100) (* two 10) one)))
+
+(palindrome-in-century 20)
+(palindrome-in-century 21)
+(palindrome-in-century 17)
+(palindrome-in-century 10)
+(palindrome-in-century 11)
 
 (print "3.22 A function to take a number of pennies and returning the equivalent value as a number starting with the maximal number of quarters in the leading digits, the maximal number of nickels in the tens digit, and the remaining pennies in the ones digit")
 
-(defun piggy-bank (cent)
-  0)
+(defun piggy-bank (pennies)
+  (let* ((less-q (rem pennies 25))
+         (p (rem less-q 5))
+         (n (/ (- less-q p) 5))
+         (q (/ (- pennies less-q) 25)))
+    (+ (* q 100) (* n 10) p)))
+
+(piggy-bank 273)
+(piggy-bank 112)
+(piggy-bank 77)
+(piggy-bank 69)
+(piggy-bank 49)
+(piggy-bank 33)
+(piggy-bank 25)
+(piggy-bank 24)
+(piggy-bank 26)
+(piggy-bank 24)
+(piggy-bank 10)
+(piggy-bank 5)
+(piggy-bank 4)
 
 
 
