@@ -98,6 +98,43 @@
 (print (baht-to-dollars (* (expt 10.0 6) 1.5)))
 
 
+(print "Section 3.11 Using let to Create Local Variables")
+
+(setq base 4)
+
+(let ((base 2)
+      (power 3))
+  (print "notice shadowing")
+  (expt base power))
+
+(defun tax-amount1 (work-income interest-income standard-deduction withholding tax-credits)
+  (Let ((total-debits (* (+ work-income interest-income
+                            (- standard-deduction))
+                         0.15))
+        (total-credits (+ withholding tax-credits)))
+    (- total-debits total-credits)))
+
+(defun tax-amount2 (work-income interest-income standard-deduction withholding tax-credits)
+  (Let* ((taxable-income (+ work-income interest-income
+                            (- standard-deduction)))
+         (total-debits (* taxable-income 0.15))
+         (total-credits (+ withholding tax-credits)))
+    (- total-debits total-credits)))
+
+(print "Should be -910.232")
+(tax-amount1 25174.65 132.67 6050.00 3673.83 125.00)
+(tax-amount2 25174.65 132.67 6050.00 3673.83 125.00)
+
+(print "3.21 A function to take a single number representing a century and returning the palindrome year in that century")
+
+(defun palindrome-in-century (cent)
+  0)
+
+(print "3.22 A function to take a number of pennies and returning the equivalent value as a number starting with the maximal number of quarters in the leading digits, the maximal number of nickels in the tens digit, and the remaining pennies in the ones digit")
+
+(defun piggy-bank (cent)
+  0)
+
 
 
 
