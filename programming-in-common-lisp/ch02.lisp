@@ -174,6 +174,43 @@
 ;; ************************************************
 (print '(2.7 EQUAL - Equalness of Lisp Objects))
 
+(setq x '(r s t))
+(setq y '(u v w))
+
+(eq (append x y) (append x y))
+(eql (append x y) (append x y))
+(equal (append x y) (append x y))
+
+(eq 4.5 (+ 1.2 3.3))
+(eql 4.5 (+ 1.2 3.3))
+(equal 4.5 (+ 1.2 3.3))
+
+(load "my-equal.lisp")
+
+(trace my-equal)
+
+(my-equal '(f 2.3) '(f 2.3))
+
+(equal 'a 'a)
+(equal '(a b) (list 'a 'b))
+(equal 2 3)
+(equal 2 2)
+(progn
+  (setq *list* (list 'a 'b))
+  (setq *big* (list 'c *list*))
+  (equal *list* (car (cdr *big*)))
+  )
+(equal 2.3 (+ 1.1 1.2)) ;why nil?
+(equal '(a b (c d)) '(a b (c d)))
+(equal 3 3.0)
+
+
+;; ************************************************
+(print '(2.8 List Creation and Access Functions))
+
+
+
+
 
 
 
