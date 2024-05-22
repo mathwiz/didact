@@ -208,8 +208,62 @@
 ;; ************************************************
 (print '(2.8 List Creation and Access Functions))
 
+(list* 'a 'b 'c '(d e))
+(list* 'a 'b 'c )
+
+(setq clist '(a (b c d) (e f) g))
+(cadr clist)
+(caadr clist)
+(cadadr clist)
+(cdaddr clist)
+
+(nth 0 clist)
+(nth 3 clist)
+(nth 4 clist)
+
+(nthcdr 0 clist)
+(nthcdr 1 clist)
+(nthcdr 2 clist)
+(nthcdr 3 clist)
+(nthcdr 4 clist)
+
+(first clist)
+(second clist)
+(third clist)
+(fourth clist)
+(fifth clist)
+(sixth '(1 2 3 4 5 6))
+(seventh (append clist clist))
+(eighth (append clist clist))
+(ninth (append clist clist '(1)))
+(tenth (append clist clist '(1 2)))
+
+(rest clist)
+
+(last clist)
+(car (last clist))
+
+(print "E2.8.2 Write two different s-expressions to access symbol c for each of the following lists")
+
+(setq a '(a b c d e))
+(nth 2 a)
+(caddr a)
+
+(setq b '((a b c) (d e f)))
+(first (last (first b)))
+(caddar b)
+
+(setq c '((a b) (c d) (e f)))
+(caar (nthcdr 1 c))
+(caadr c)
+
+(setq d '(a (b c d) e f))
+(second (second d))
+(cadadr d)
 
 
+;; ************************************************
+(print '(2.9 RPLACA and RPLACD - Surgery on Cons Cells))
 
 
 
