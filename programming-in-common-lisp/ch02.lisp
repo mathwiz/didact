@@ -265,7 +265,62 @@
 ;; ************************************************
 (print '(2.9 RPLACA and RPLACD - Surgery on Cons Cells))
 
+(setq a '(x y))
 
+(rplaca a 'f)
+
+(rplacd a '(g))
+
+(setq x '(r s t))
+(setq y '(u v w))
+
+(setq a (append x y))
+(setq b (append x y))
+
+(rplaca y 'new)
+a
+b
+
+(rplacd (cdddr a) 'end)
+a
+b
+y
+
+(rplaca a 'start)
+a
+b
+
+
+(print "E2.9.1 Evaluate each of the following")
+
+(setq x '(a b c))
+(setq y (append '(1 2 3) x))
+(rplaca x '4)
+y
+(rplacd x 'nil)
+y
+
+(print "E2.9.2 How would you change C so SEE in each of the following lists?")
+
+(setq x '(a b c d e))
+(rplaca (cddr x) 'see)
+x
+
+(setq x '((a b c) (d e f)))
+(rplacd (cddar x) '(see))
+x
+
+(setq x '((a b) (c d) (e f)))
+(rplaca (cadr x) 'see)
+x
+
+(setq x '(a (b c d) e f))
+(rplaca (cdadr x) 'see)
+x
+
+
+;; ************************************************
+(print '(2.10 NCONC and NREVERSE - Desstructive Appending and Reversing))
 
 
 
