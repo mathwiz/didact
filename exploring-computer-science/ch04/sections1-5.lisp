@@ -18,6 +18,7 @@
 '()
 
 #'sqrt
+(apply #'sqrt '(7))
 
 (setq num 3.3)
 num 
@@ -47,9 +48,39 @@ num
 
 (print "Exercises 4.4.1")
 
+'(rock
+  (Rolling_Stones
+   (Black_and_Blue
+    Its_Only_Rock_and_Roll))
+  jazz
+  (Pat_Metheney
+   (First_Circle)
+   Andy_Narell
+   (The_Hammer)))
 
 
+(print "4.4 What other ways can you think of to organize a collection of CDs?")
 
+(print "4.5 What advantages and/or disadvantages does your data structure have compared to this one?")
+
+(print "4.6 Design a data structure that you could use to maintain information on students: name, student ID number, year in school, address, grades, grade point average, etc.")
+
+'(class
+  (Emma_Woodhouse
+   (Hartfield
+    Highbury)
+   1
+   First
+   (A B+ C A-))
+  (Jane_Fairfax
+   (Campbell's
+    London)
+   2
+   Second
+   (A A+ B+ A)))
+
+
+(print "4.5 Taking Lists Apart")
 
 
 
