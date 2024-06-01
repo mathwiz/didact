@@ -82,6 +82,42 @@ num
 
 (print "4.5 Taking Lists Apart")
 
+(length '(1 2 3 (4 5) 6))
+(first '((1 a) 2 3 4 6))
+(rest '(1 2 3 (4 5) 6))
+(last '(1 2 3 (4 5) 6))
+(nth 3 '(1 2 3 (4 5) 6))
+
+(defun last-elem (lst)
+  (nth (1- (length lst)) lst))
+
+(last-elem '(1 2 3 (4 5) 6))
+
+(print "4.5.1 Example: Extracting random elements from a data structure")
+
+(setq retort
+'(
+(i am sorry but we are closed now)
+(talk to the person at the end of the hall)
+(you need form 1044-A and not 1044-B)
+(we cannot take personal checks)
+(i am sorry we need exact change)
+(oh you only had to fill out this one form not those 20 others)
+))
+
+(defun get-random-element (lst)
+  (nth (random (length lst)) lst))
+
+(get-random-element retort)
+
+(print "4.5.2 Exercises")
+
+(print "4.7 What do the following expressions return?")
+
+(car '())
+(cdr '())
+
+
 
 
 
