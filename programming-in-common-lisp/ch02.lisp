@@ -320,9 +320,45 @@ x
 
 
 ;; ************************************************
-(print '(2.10 NCONC and NREVERSE - Desstructive Appending and Reversing))
+(print '(2.10 NCONC and NREVERSE - Destructive Appending and Reversing))
+
+(setq x '(r s t))
+(setq y '(u v w))
+
+(setq a (nconc x y))
+x
+y
+(eq x a)
+
+;; the following happens in nconc
+(defun my-nconc (x y)
+  (if (null x)
+      y
+      (progn (nconc-aux x y)
+             x)))
+
+(defun nconc-aux (x y)
+  (if (null (cdr x))
+      (rplacd x y)
+      (nconc-aux (cdr x) y)))
+
+;; analogously for reverse, 
+;; we can resuse the existing cons cells with reversed pointers
+;; rather than a list of new cells
+(defun my-nreverse (x)
+  (nreverse-aux x 'nil))
+
+(defun nreverse-aux (rem sofar)
+  (if (null rem)
+      sofar
+      (nreverse-aux (cdr rem)
+                    (progn (rplacd rem sofar)
+                           rem))))
 
 
+(setq l '(a b c))
 
+(nreverse l)
+l
 
 
