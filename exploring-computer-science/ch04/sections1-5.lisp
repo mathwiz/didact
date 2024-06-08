@@ -116,6 +116,38 @@ num
 
 (car '())
 (cdr '())
+(third (subseq '((4 5) 1/3 67.89 (78) value) 1))
+(rest (subseq '(how (strange) (((this)) may) seem) 1 4))
+(length '('a '(1 2)))
+(length '((3 elements here)))
+(length '((yet ((another)) strange (list))))
+(car '((yet ((another)) strange (list))))
+(cdr '((yet ((another)) strange (list))))
+(car (car '((yet ((another)) strange (list)))))
+(car (cdr (cdr (car '((yet ((another)) strange (list)))))))
+
+(print "4.8 Assume the function extract will be called with a list of lists of atoms. Create versions so that it returns a) the first list of atoms, b) the first atom.")
+
+(let 
+    ((list-of-lists '((a b c) (1 2 3))))
+(print ((lambda (lol) (first lol)) list-of-lists))
+(print ((lambda (lol) (first (first lol))) list-of-lists))
+'nil
+)
+
+(print "4.9 Write an expression that returns the third element of a list.")
+
+(let ((a-list (list 1 2 3 4 5 6)))
+  (third a-list))
+
+(print "4.10 Write an expression that returns element number (+ value 2) of the list a-list.")
+
+(let ((a-list (list 1 2 3 4 5 6))
+      (value 3))
+  (third a-list))
+
+
+
 
 
 
