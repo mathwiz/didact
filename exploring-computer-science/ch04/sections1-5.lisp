@@ -138,18 +138,109 @@ num
 (print "4.9 Write an expression that returns the third element of a list.")
 
 (let ((a-list (list 1 2 3 4 5 6)))
-  (third a-list))
+  (third a-list)
+)
 
 (print "4.10 Write an expression that returns element number (+ value 2) of the list a-list.")
 
 (let ((a-list (list 1 2 3 4 5 6))
       (value 3))
-  (third a-list))
+  (car (subseq a-list (+ value 1) (+ value 2)))
+)
 
+(print "4.11 Write an expression that returns the list of CDs from the second jazz artist.")
 
+(let 
+((struct 
+  '(rock
+  (Rolling_Stones
+   (Black_and_Blue
+    Its_Only_Rock_and_Roll))
+  jazz
+  (Pat_Metheney
+   (First_Circle)
+   Andy_Narell
+   (The_Hammer)))
+))
+(first (subseq (fourth struct) 2 3))
+)
 
+(print "4.12 Write your own version of list-ref using the other list functions.")
 
+(let ((a-list (list 1 2 3 4 5 6)))
+(flet ((list-ref (xs zero-index)
+         (nth zero-index xs))
+)
+(list-ref a-list 4)
+))
 
+(print "4.13 Write a function but-last that takes two arguments, a-list and num, and returns a list of all but the last num elements of a-list.")
 
+(let ((a-list (list 1 2 3 4 5 6)))
+(flet ((but-last (xs num)
+         (subseq xs 0 (- (length xs) num)))
+)
+(but-last a-list 4)
+))
 
+(print "4.14 Write a function start that takes two arguments, a-list and num, and returns the first num elements from a-list.")
+
+(let ((a-list (list 1 2 3 4 5 6)))
+(flet ((start (xs num)
+         (subseq xs 0 num))
+)
+(start a-list 4)
+))
+
+(print "4.15 Write a function end that takes two arguments, a-list and num, and returns the last num elements from a-list.")
+
+(let ((a-list (list 1 2 3 4 5 6)))
+(flet ((end (xs num)
+         (subseq xs (- (length xs) num)))
+)
+(end a-list 4)
+))
+
+(print "4.16 Fix the function month so that it returns the month corresponding to month-num.")
+
+(defun month (month-num)
+  (nth (1- month-num)
+       '(January
+         February
+         March
+         April
+         May
+         June
+         July
+         August
+         September
+         October
+         November
+         December)))
+
+(print (month 4))
+
+(print "4.17 The function replace-element takes a-list, position, and element, an atom that will replace the element at position in a-list.")
+
+(defun replace-element (a-list position element)
+  (append
+   (subseq a-list 0 position)
+   (cons element (subseq a-list (1+ position)))
+))
+
+(print (replace-element '(this list is very mundane i think) 4 'exciting))
+
+(print "4.18 Fill in the functions and arguments so that the output shown is produced. There may be zero or more arguments.")
+
+(let ((a-list '(a list of sorts)))
+(print a-list)
+(print '(a list))
+(print (subseq a-list 0 2))
+(print '(list of))
+(print (subseq a-list 1 3))
+(print '(of sorts))
+(print (subseq a-list 2 4))
+(print 'list)
+(print (nth 1 a-list))
+)
 
