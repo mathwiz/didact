@@ -20,13 +20,15 @@
   (if (null rem)
       sofar
       (reverse-aux (cdr rem)
-                       (progn
-                         (rplacd rem sofar)
-                         rem))))
+                   (cons (if (atom (car rem))
+                             (car rem)
+                             (all-reverse-aux (car rem) 'nil))
+                         sofar))))
 
 (equal (all-reverse '(a b c d)) '(d c b a))
 (equal (all-reverse '(a (b c) (d e))) '((e d) (c b) a))
 (equal (all-reverse '(a (b c) d (e f g) h)) '(h (g f e) d (c b) a))
 
-(all-reverse '((b c) (d e) a))
-(all-reverse '(a b c))
+
+(print "P2.3 .")
+
