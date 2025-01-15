@@ -14,17 +14,18 @@
 (print "P2.2 Write a function ALL-REVERSE of one argument that reverses a list at all levels and thus results in the following transformations.")
 
 (defun all-reverse (xs)
-  (if (atom xs)
-      xs
-      (all-reverse-aux (reverse xs))))
+  (all-reverse-aux xs 'nil))
 
-(defun all-reverse-aux (xs)
-  (if (null (cdr xs))
-      (car xs)
-      (cons (all-reverse (car xs))
-            (all-reverse (cdr xs)))))
+(defun all-reverse-aux (rem sofar)
+  (if (null rem)
+      sofar
+      (all-reverse-aux (cdr rem)
+                       (progn
+                         (rplacd rem sofar)
+                         rem))))
 
 (equal (all-reverse '(a b c d)) '(d c b a))
 (equal (all-reverse '(a (b c) (d e))) '((e d) (c b) a))
 (equal (all-reverse '(a (b c) d (e f g) h)) '(h (g f e) d (c b) a))
 
+(all-reverse '(a (b c) (d e)))
