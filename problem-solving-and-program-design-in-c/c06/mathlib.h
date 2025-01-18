@@ -43,10 +43,12 @@ multiply_fractions(int n1, int d1, int n2, int d2, int *n_ansp, int *d_ansp) {
   /* set result */
   *n_ansp = numer;
   *d_ansp = denom;
-
 }
 
 void 
 reduce_fraction(int *np, int *dp) {
-  printf("reduce_fraction");
+  int gcd;
+  gcd = find_gcd(*np, *dp);
+  *np = *np / gcd;
+  *dp = *dp / gcd;
 }
