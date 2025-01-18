@@ -15,7 +15,17 @@ find_gcd (int u, int v) {
 
 void 
 add_fractions(int n1, int d1, int n2, int d2, int *n_ansp, int *d_ansp) {
-  printf("add_fractions");
+  int denom, numer, sign_factor; /* -1 for negative, 1 otherwise */
+
+  denom = d1 * d2;
+  numer = n1 * d2 + n2 * d1;
+  sign_factor = (numer * denom < 0) ? -1 : 1;
+  numer = sign_factor * abs(numer);
+  denom = abs(denom);
+
+  /* set result */
+  *n_ansp = numer;
+  *d_ansp = denom;
 }
 
 void 

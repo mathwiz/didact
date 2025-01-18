@@ -39,5 +39,5 @@ scan_fraction(int *nump, int *denomp) {
 
 void 
 print_fraction(int num, int denom) {
-  printf("print_fraction");
+  printf("%d/%d", num, denom);
 }

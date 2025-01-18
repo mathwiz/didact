@@ -15,10 +15,16 @@ int main(void) {
 
   /* while the user wants to continue, repeat */
   do {
+    scan_fraction(&n1, &d1);
     op = get_operator();
+    scan_fraction(&n2, &d2);
+
     switch (op) {
       case '+':
         add_fractions(n1, d1, n2, d2, &n_ans, &d_ans);
+        break;
+      case '-':
+        add_fractions(n1, d1, -n2, d2, &n_ans, &d_ans);
         break;
       default:
         printf("Should not reach here. Received operator %c\n", op);
