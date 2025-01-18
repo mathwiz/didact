@@ -3,6 +3,7 @@
 void scan_fraction(int *nump, int *denomp);
 void print_fraction(int num, int denom);
 
+/* ----------------- */
 
 void 
 scan_fraction(int *nump, int *denomp) {
@@ -36,7 +37,7 @@ scan_fraction(int *nump, int *denomp) {
 
 }
 
-
 void 
 print_fraction(int num, int denom) {
+  printf("print_fraction");
 }

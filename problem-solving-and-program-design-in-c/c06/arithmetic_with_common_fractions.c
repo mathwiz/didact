@@ -15,6 +15,24 @@ int main(void) {
 
   /* while the user wants to continue, repeat */
   do {
+    op = get_operator();
+    switch (op) {
+      case '+':
+        add_fractions(n1, d1, n2, d2, &n_ans, &d_ans);
+        break;
+      default:
+        printf("Should not reach here. Received operator %c\n", op);
+    }
+    reduce_fraction(&n_ans, &d_ans);
+
+    /* output result */
+    printf("\n");
+    print_fraction(n1, d1);
+    printf(" %c ", op);
+    print_fraction(n2, d2);
+    printf(" = ");
+    print_fraction(n_ans, d_ans);
+
     printf("\nDo another problem? (y/n)> ");
     scanf(" %c", &again);
   } while (again == 'y' || again == 'Y');
