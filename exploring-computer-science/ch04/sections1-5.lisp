@@ -2,7 +2,7 @@
 
 (print "4.1 Lists in Scheme")
 
-((a b c) (1 2 3))
+((a b c) (1 2 3)) ;error
 
 (sqrt 4)
 
