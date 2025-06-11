@@ -12,6 +12,7 @@
 (defun add-to-end (it lst)
   (append lst (list it)))
 
+
 (print "4.7.1 Exercises")
 
 (print "4.19 What do the following expressions evaluate to? Some of them may produce errors.")
@@ -38,6 +39,39 @@
 ((2 4 6) (q e d) (((13))))
 ((2 4 6) q e d ((13)))
 ")
+
+;; (2 4 6 q e d ((13)))
+(append numbers letters deep-list)
+
+;; ((2 4 6) (q e d) ((13)))
+(append (list numbers) (list letters) deep-list)
+
+;; (2 4 6 (q e d) ((13)))
+(append numbers (list letters) deep-list)
+
+;; ((2 4 6) (q e d) (((13))))
+(append (list numbers) (list letters) (list deep-list))
+
+;; ((2 4 6) q e d ((13)))
+(append (list numbers) letters deep-list)
+
+
+(print "4.21 Fill in the blanks with functions and arguments so that the output shown would be produced.")
+
+;; (alas all lists are not created equal)
+(append '(alas all lists are) '(not created equal))
+
+;; ((alas all lists are) not created equal)
+(append (list '(alas all lists are)) '(not created equal))
+
+;; (lists (not created equal))
+(list (third '(alas all lists are)) '(not created equal))
+
+;; ((lists) (not created equal))
+(list (subseq '(alas all lists are) 2 3) '(not created equal))
+
+
+(print "4.22 Write a function that takes a list a-list and returns a list of only the first element of a-list. Note: this is not the same as first or car. For example, given the list (an apple a day), your function should return (an).")
 
 
 
