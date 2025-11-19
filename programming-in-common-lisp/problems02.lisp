@@ -67,10 +67,10 @@ You may have to write auxilliary functions to achieve this. Do no use any global
     (print "Counting reverses on")
     (print lst)
     (setq *COUNT* 0)
-    (count-reverse-1 lst)
+    (print (count-reverse-1 lst))
     (print *COUNT*)
     (setq *COUNT* 0)
-    (count-reverse-2 lst)
+    (print (count-reverse-2 lst))
     (print *COUNT*)
     'nil
 ))
@@ -85,10 +85,22 @@ You may have to write auxilliary functions to achieve this. Do no use any global
 T
 (EQUAL-SYMBOLS 2.2 'A)
 nil
-(EQUAL-SYMBOLS '(B 4 (C D (2.2)) E) '(B 2 (C D (0)) E)))
+(EQUAL-SYMBOLS '(B 4 (C D (2.2)) E) '(B 2 (C D (0)) E))
 T
-(EQUAL-SYMBOLS '(B 4 (C D (2.2)) E) '(B 2 (3 D (0)) E)))
+(EQUAL-SYMBOLS '(B 4 (C D (2.2)) E) '(B 2 (3 D (0)) E))
 nil
 ")
 
+
+(defun equal-symbols (a b)
+  (cond ((and (numberp a) (numberp b)) t)
+        ((and (atom a) (atom b)) (eq a b))
+        
+        (t (eq a b)))
+)
+
+(print (EQUAL-SYMBOLS 2.2 3))
+(print (EQUAL-SYMBOLS 2.2 'A))
+(print (EQUAL-SYMBOLS '(B 4 (C D (2.2)) E) '(B 2 (C D (0)) E)))
+(print (EQUAL-SYMBOLS '(B 4 (C D (2.2)) E) '(B 2 (3 D (0)) E)))
 
