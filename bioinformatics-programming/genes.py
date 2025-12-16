@@ -4,8 +4,8 @@ RNA_codon_table = {
 # U
 'UUU': 'Phe', 'UCU': 'Ser', 'UAU': 'Tyr', 'UGU': 'Cys', # UxU
 'UUC': 'Phe', 'UCC': 'Ser', 'UAC': 'Tyr', 'UGC': 'Cys', # UxC
-'UUA': 'Leu', 'UCA': 'Ser', 'UAA': '---', 'UGA': '---', # UxA
-'UUG': 'Leu', 'UCG': 'Ser', 'UAG': '---', 'UGG': 'Urp', # UxG
+'UUA': 'Leu', 'UCA': 'Ser', 'UAA': 'Stop', 'UGA': 'Stop', # UxA
+'UUG': 'Leu', 'UCG': 'Ser', 'UAG': 'Stop', 'UGG': 'Urp',  # UxG
 # C
 'CUU': 'Leu', 'CCU': 'Pro', 'CAU': 'His', 'CGU': 'Arg', # CxU
 'CUC': 'Leu', 'CCC': 'Pro', 'CAC': 'His', 'CGC': 'Arg', # CxC
