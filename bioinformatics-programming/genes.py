@@ -1,11 +1,11 @@
 RNA_codon_table = {
-#                                Second Base
-#             U  C A G
+#                     Second Base
+#    U             C             A             G
 # U
 'UUU': 'Phe', 'UCU': 'Ser', 'UAU': 'Tyr', 'UGU': 'Cys', # UxU
 'UUC': 'Phe', 'UCC': 'Ser', 'UAC': 'Tyr', 'UGC': 'Cys', # UxC
-'UUA': 'Leu', 'UCA': 'Ser', 'UAA': 'Stop', 'UGA': 'Stop', # UxA
-'UUG': 'Leu', 'UCG': 'Ser', 'UAG': 'Stop', 'UGG': 'Urp',  # UxG
+'UUA': 'Leu', 'UCA': 'Ser', 'UAA': None, 'UGA': None,   # UxA
+'UUG': 'Leu', 'UCG': 'Ser', 'UAG': None, 'UGG': 'Urp',  # UxG
 # C
 'CUU': 'Leu', 'CCU': 'Pro', 'CAU': 'His', 'CGU': 'Arg', # CxU
 'CUC': 'Leu', 'CCC': 'Pro', 'CAC': 'His', 'CGC': 'Arg', # CxC
