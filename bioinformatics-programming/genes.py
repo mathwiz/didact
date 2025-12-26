@@ -4,8 +4,8 @@ RNA_codon_table = {
 # U
 'UUU': 'Phe', 'UCU': 'Ser', 'UAU': 'Tyr', 'UGU': 'Cys', # UxU
 'UUC': 'Phe', 'UCC': 'Ser', 'UAC': 'Tyr', 'UGC': 'Cys', # UxC
-'UUA': 'Leu', 'UCA': 'Ser', 'UAA': None, 'UGA': None,   # UxA
-'UUG': 'Leu', 'UCG': 'Ser', 'UAG': None, 'UGG': 'Urp',  # UxG
+'UUA': 'Leu', 'UCA': 'Ser', 'UAA': None,  'UGA': None,  # UxA
+'UUG': 'Leu', 'UCG': 'Ser', 'UAG': None,  'UGG': 'Urp', # UxG
 # C
 'CUU': 'Leu', 'CCU': 'Pro', 'CAU': 'His', 'CGU': 'Arg', # CxU
 'CUC': 'Leu', 'CCC': 'Pro', 'CAC': 'His', 'CGC': 'Arg', # CxC
@@ -24,4 +24,4 @@ RNA_codon_table = {
 }
 
 def rna_to_aa(codon):
-  return RNA_codon_table[codon]
+  return RNA_codon_table.get(codon, None)
