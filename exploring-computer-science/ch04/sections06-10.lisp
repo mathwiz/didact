@@ -73,5 +73,12 @@
 
 (print "4.22 Write a function that takes a list a-list and returns a list of only the first element of a-list. Note: this is not the same as first or car. For example, given the list (an apple a day), your function should return (an).")
 
+(defun first-as-list (a-list)
+  (cond ((null a-list) nil)
+        (t (list (first a-list)))))
+
+;; (an)
+(first-as-list '(an apple a day))
 
 
+(print "4.23 ")
