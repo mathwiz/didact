@@ -81,4 +81,25 @@
 (first-as-list '(an apple a day))
 
 
-(print "4.23 ")
+(print "4.23 Write and function add-third that takes two arguments, element and a-list, and returns a-list with element as the new third element. The original third element of a-list becomes the new fourth element, and so on for the remaining elements in a-list. For example, given the symbol eaten and the list (an apple a day), your function should return (an apple eaten a day). Assume that a-list has at least three elements.")
+
+(defun add-third (element a-list)
+  (cons (first a-list) (cons (second a-list) (cons element (cddr a-list)))) 
+)
+
+;; (an apple eaten a day)
+(add-third 'eaten '(an apple a day))
+
+
+(print "4.24 Write a function remove-third that takes a list and returns the list without its third element. For example, given the list (an apple a day), your function should return (an apple day). Assume that the list has at least three elements.")
+
+(defun remove-third (a-list)
+  (cons (first a-list) (cons (second a-list) (cdddr a-list))) 
+)
+
+;; (an apple  day)
+(remove-third '(an apple a day))
+
+
+(print "4.25 Write a function switch-first-and-second that takes a list and returns the list with the first and second elements switched. For example, given the list (an apple a day), your function should return (apple an a day). Assume that the list has at least two elements.")
+
