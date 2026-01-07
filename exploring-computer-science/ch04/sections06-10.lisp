@@ -97,9 +97,18 @@
   (cons (first a-list) (cons (second a-list) (cdddr a-list))) 
 )
 
-;; (an apple  day)
+;; (an apple day)
 (remove-third '(an apple a day))
 
 
 (print "4.25 Write a function switch-first-and-second that takes a list and returns the list with the first and second elements switched. For example, given the list (an apple a day), your function should return (apple an a day). Assume that the list has at least two elements.")
+
+(defun switch-first-and-second (a-list)
+  (cons (second a-list) (cons (first a-list) (cddr a-list))))
+
+;; (an apple a  day)
+(switch-first-and-second '(an apple a day))
+
+
+
 
