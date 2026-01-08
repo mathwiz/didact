@@ -110,5 +110,29 @@
 (switch-first-and-second '(an apple a day))
 
 
+(print "4.8 Representing and Manipulating Text with Lists")
 
 
+(print "4.8.1 Exercises")
+
+
+(print "4.26 Why was the list (kim) used to represent a noun phrase instead of the symbol kim, which could be consed onto the verb and object phrases?")
+
+(print "A list is a more general reprsentation. It handles the cases of multiple words or a single word in the noun phrase equally well.")
+
+
+(print "4.27 How might you further define a generic sentence to allow more variation in the sentences that could be produced?")
+
+(print "All three parts could be given to the sentence-builder: noun-phrase verb object phrase.")
+
+
+(print "4.28 Write a function add-words that takes sentence, a list representing a sentence, words, another list representing words to add to sentence, and position, a number denoting a position in tehsentence. add-words should return a list made by adding the words in words to sentence immediately before the word at position in sentence. For example,
+
+> (add-words '(the dog barks loudly) '(with huge fangs) 2)
+(the dog with huge fangs barks loudly")
+
+(defun add-words (sentence words position)
+  (append (append (subseq sentence 0 position) words) (subseq sentence position))
+)
+
+(add-words '(the dog barks loudly) '(with huge fangs) 2)
