@@ -11,5 +11,6 @@
 int main(int argc, const char * argv[]) {
     // insert code here...
     std::cout << hello_phrase() << std::endl;
+    std::cout << "exiting..." << std::endl;
     return EXIT_SUCCESS;
 }
