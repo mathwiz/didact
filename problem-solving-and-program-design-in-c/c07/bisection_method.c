@@ -15,7 +15,7 @@ int
 main(void) {
 
   double xleft, xright, epsilon, root;
-  int error;
+  int error = FALSE;
 
   printf("\nEnter interval endpoints> ");
   scanf("%lf%lf", &xleft, &xright);
