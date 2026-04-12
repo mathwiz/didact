@@ -33,7 +33,7 @@ void die(const char *message) {
 }
 
 void Book_print(struct Book *x) {
-  printf("%2u: %s %s\n", x->id, x->title, x->author);
+  printf("%2u: %s; %s\n", x->id, x->title, x->author);
 }
 
 void Database_load(struct Connection *conn) {
@@ -45,6 +45,9 @@ struct Connection *Database_open(const char *filename, char mode) {
   struct Connection *conn = malloc(sizeof(struct Connection));
 
   if (!conn) die("Memory error");
+
+  conn->db = malloc(sizeof(struct Database));
+  if (!conn->db) die("Memory error");
 
   if (mode == 'c') {
     conn->file = fopen(filename, "w");
