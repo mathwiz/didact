@@ -7,7 +7,7 @@ int THE_SIZE = 1000;
 static int THE_AGE = 57;
 
 int get_age() { return THE_AGE; }
-int set_age(int age) { THE_AGE = age; }
+void set_age(int age) { THE_AGE = age; }
 
 double update_ratio(double new_ratio) {
   static double ratio = 1.0;

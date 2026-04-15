@@ -1,4 +1,4 @@
-#include "ex22.h"
+#include "ex22.c"
 #include "dbg.h"
 
 const char *MY_NAME = "Wile E. Coyote";
@@ -16,7 +16,9 @@ void scope_demo(int count) {
 
 int main(int argc, char *argv[]) {
   log_info("My name: %s, age: %d", MY_NAME, get_age());
+
   set_age(100);
+  log_info("My age after assignment is: %d", get_age());
 
   // test THE_SIZE extern
   log_info("THE_SIZE is: %d", THE_SIZE);
@@ -27,8 +29,8 @@ int main(int argc, char *argv[]) {
   print_size();
 
   // test the ratio function static
-  log_info("Ratio at first: %f", update_ratio(1.0));
-  log_info("Ratio again: %f", update_ratio(20.0));
+  log_info("Ratio at first: %f", update_ratio(2.0));
+  log_info("Ratio again: %f", update_ratio(10.0));
   log_info("Ratio once more: %f", update_ratio(300.0));
 
   // test the scope demo
