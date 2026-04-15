@@ -9,17 +9,17 @@ void test_debug() {
 
 void test_log_err() {
   log_err("I believe everything is broken.");
-  log_err("There are %d problems in %s.", -1, "space");
+  log_err("There are %d problems in %s.", 0, "space");
 }
 
 void test_log_warn() {
-  log_err("Maybe somthing is broken.");
-  log_err("There are %d problems in %s.", 1, "my country");
+  log_warn("You can safely ignore this.");
+  log_warn("Maybe consider looking at: %s", "/etc/passwd");
 }
 
 void test_log_info() {
-  log_err("I believe nothing is broken.");
-  log_err("There are %d problems in %s.", 0, "heaven");
+  log_info("Well I did someting mundane.");
+  log_info("It happened %f times today.", 1.3f);
 }
 
 int test_check(char *file_name) {
@@ -29,7 +29,7 @@ int test_check(char *file_name) {
   check_mem(block);
 
   input = fopen(file_name, "r");
-  check(input, "Failed to open %s.", file_name);
+  check(input, "Failed to open '%s'.", file_name);
 
   free(block);
   fclose(input);
@@ -47,7 +47,7 @@ int test_sentinel(int code) {
 
   switch (code) {
   case 1:
-    log_info("It worked.");
+    log_info("Sentinel worked.");
     break;
   default:
     sentinel("I shouldn't run");
@@ -89,8 +89,8 @@ int main(int argc, char *argv[]) {
   test_log_warn();
   test_log_info();
 
-  check(test_check("ex19.c") == 0, "failed with this file");
-  check(test_check(argv[1]) == 1, "failed with argv");
+  check(test_check("ex19.c") == 0, "failed with ex19.c");
+  check(test_check(argv[1]) == -1, "failed with argv");
   check(test_sentinel(1) == 0, "test_sentinel failed");
   check(test_sentinel(100) == -1, "test_sentinel failed");
   check(test_check_mem() == -1, "test_check_mem failed");
