@@ -98,24 +98,24 @@ int main(int argc, char *argv[]) {
   memset(to, 'y', SIZE);
 
   // duff
-  debug("to before Duff");
+  printf("to before Duff\n");
   printf("%s\n", to);
   rc = duffs_device(from, to, SIZE);
   check(rc == SIZE, "Duff's copy failed: %d", rc);
   check(valid_copy(to, SIZE, 'x'), "Duff's copy failed.");
-  debug("to after Duff");
+  printf("to after Duff\n");
   printf("%s\n", to);
 
   // reset
   memset(to, 'y', SIZE);
 
   // zed
-  debug("to before Zed");
+  printf("to before Zed\n");
   printf("%s\n", to);
   rc = zeds_device(from, to, SIZE);
   check(rc == SIZE, "Zed's copy failed: %d", rc);
   check(valid_copy(to, SIZE, 'x'), "Zed's copy failed.");
-  debug("to after Zed");
+  printf("to after Zed\n");
   printf("%s\n", to);
 
   // reset
