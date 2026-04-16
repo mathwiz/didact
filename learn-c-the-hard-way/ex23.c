@@ -14,7 +14,9 @@ int duffs_device(char *from, char *to, int count) {
   {
     int n = (count + 7) / 8;
     switch (count % 8) {
+    case 0:
       do {
+      debug("duff n: %3d, char: %c", n, to[n]);
         *to++ = *from++;
         case 7:
         *to++ = *from++;
@@ -43,6 +45,7 @@ int zeds_device(char *from, char *to, int count) {
     switch (count % 8) {
         case 0:
 again:  *to++ = *from++;
+      debug(" zed n: %3d: char: %c", n, to[n]);
 
         case 7:
         *to++ = *from++;
@@ -69,7 +72,7 @@ int valid_copy(char *data, int count, char expects) {
   int i = 0;
   for (i = 0; i < count; i++) {
     if (data[i] != expects) {
-      log_err("[%d] %c != %c", i, data[i], expects);
+      log_err("[pos in data %d] '%c' (from) != '%c' (expected)", i, data[i], expects);
       return 0;
     }
   }
@@ -95,17 +98,25 @@ int main(int argc, char *argv[]) {
   memset(to, 'y', SIZE);
 
   // duff
+  debug("to before Duff");
+  printf("%s\n", to);
   rc = duffs_device(from, to, SIZE);
   check(rc == SIZE, "Duff's copy failed: %d", rc);
   check(valid_copy(to, SIZE, 'x'), "Duff's copy failed.");
+  debug("to after Duff");
+  printf("%s\n", to);
 
   // reset
   memset(to, 'y', SIZE);
 
   // zed
+  debug("to before Zed");
+  printf("%s\n", to);
   rc = zeds_device(from, to, SIZE);
   check(rc == SIZE, "Zed's copy failed: %d", rc);
   check(valid_copy(to, SIZE, 'x'), "Zed's copy failed.");
+  debug("to after Zed");
+  printf("%s\n", to);
 
   // reset
   memset(to, 'y', SIZE);
