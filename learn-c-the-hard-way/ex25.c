@@ -36,6 +36,7 @@ error:
   return ERROR_CODE;
 }
 
+/* Custom substitute for scanf */
 int read_scan(const char *fmt, ...) {
   int i = 0;
   int rc = 0;
