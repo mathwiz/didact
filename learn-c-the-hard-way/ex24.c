@@ -34,8 +34,11 @@ int main(int argc, char *argv[])
   check(in != NULL, "Failed to read first name.");
 
   printf("What's your last name? ");
-  in = fgets(you.last_name, MAX_DATA - 1, stdin);
-  check(in != NULL, "Failed to read last name.");
+//  see the difference in fscanf for strings
+//  in = fgets(you.last_name, MAX_DATA - 1, stdin);
+//  check(in != NULL, "Failed to read last name.");
+  rc = fscanf(stdin, "%s", you.last_name);
+  check(rc > 0, "Failed to read last name.");
 
   printf("How old are you? ");
   rc = fscanf(stdin, "%d", &you.age);
@@ -57,7 +60,7 @@ int main(int argc, char *argv[])
 
   printf("----- RESULTS -----\n");
   printf("First name: %s", you.first_name);
-  printf("Last name: %s", you.last_name);
+  printf("Last name: %s\n", you.last_name);
   printf("Age: %d\n", you.age);
   printf("Eyes: %s\n", EYE_COLOR_NAMES[you.eyes]);
   printf("Income: %f\n", you.income);
