@@ -1,8 +1,6 @@
 permutation_matrix <-
 function(nrow = 1, ncol = 1) {
-    data <- permutations(nrow, ncol)
-    mat <- matrix(data, nrow, ncol, byrow=TRUE)
-    return(mat)
+    return (matrix(permutations(nrow, ncol), nrow, ncol, byrow=TRUE))
 }
 
 permutations <-
