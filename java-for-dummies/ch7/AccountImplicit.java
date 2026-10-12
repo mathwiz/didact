@@ -9,5 +9,7 @@ void main() {
     acct2.balance = 10032.89;
 
     IO.println("My account: " + acct1);
+    IO.println("Plus $" + acct1.getInterest(5.25) + " interest");
     IO.println("Your account: " + acct2);
+    IO.println("Plus $" + acct2.getInterest(7.00) + " interest");
 }
