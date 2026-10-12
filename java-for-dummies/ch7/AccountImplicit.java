@@ -8,8 +8,12 @@ void main() {
     acct2.address = "15 Shorthair, Gotham City 27001";
     acct2.balance = 10032.89;
 
-    IO.println("My account: " + acct1);
-    IO.println("Plus $" + acct1.getInterest(5.25) + " interest");
-    IO.println("Your account: " + acct2);
-    IO.println("Plus $" + acct2.getInterest(7.00) + " interest");
+    IO.println("My account: " + acct1 + " has " + dollarize(acct1.balance));
+    IO.println("Plus " + dollarize(acct1.getInterest(5.25)) + " interest");
+    IO.println("Your account: " + acct2 + " has " + dollarize(acct2.balance));
+    IO.println("Plus " + dollarize(acct2.getInterest(7.00)) + " interest");
+}
+
+String dollarize(double val) {
+    return String.format("$%.2f", val);
 }

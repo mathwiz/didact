@@ -8,6 +8,6 @@ public class Account {
     }
 
     public String toString() {
-        return name + " (" + address + ") has $" + balance;
+        return name + " (" + address + ")";
     }
 }
