@@ -6,4 +6,5 @@ void main() {
     var emp = new Employee(name, jobTitle);
     var amount = keyboard.nextDouble();
     emp.cutCheck(amount);
+    keyboard.close();
 }
