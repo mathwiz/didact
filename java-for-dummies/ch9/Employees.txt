@@ -1,0 +1,9 @@
+LeBron James
+PF
+6100000
+Jalen Brown
+SF
+55000000
+Tyrese Maxey
+PG
+23000000
