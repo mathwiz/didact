@@ -1,7 +1,22 @@
-Shohei Ohtani .290
-Mike Trout .230
-Tony Gwynn .342
-Ted Williams .406
-Joe DiMaggio .310
-George Brett .390
-Barry Bonds .290
+Shohei Ohtani
+.290
+Mike Trout
+.230
+Tony Gwynn
+.346
+Ted Williams
+.406
+Joe DiMaggio
+.310
+George Brett
+.390
+Barry Bonds
+.290
+Mike Schmidt
+.273
+Dave Parker
+.299
+Dave Winfield
+.311
+Paul Molitor
+.329
